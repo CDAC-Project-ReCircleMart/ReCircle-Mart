@@ -102,3 +102,63 @@
   mask-composite: exclude;
   z-index: -1;
 }
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 768px) {
+  .olx-header {
+    padding: 10px 10px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .logo {
+    font-size: 18px;
+  }
+
+  .search-bar {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .main-search {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .city-search {
+    display: none; /* Hide city search on mobile */
+  }
+
+  .header-icons {
+    gap: 10px;
+  }
+
+  .profile {
+    font-size: 12px;
+  }
+
+  .sell-btn {
+    padding: 5px 12px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .olx-header {
+    padding: 8px 5px;
+  }
+
+  .logo {
+    font-size: 16px;
+  }
+
+  .main-search {
+    max-width: 250px;
+  }
+
+  .header-icons {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
