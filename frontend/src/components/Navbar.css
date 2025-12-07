@@ -1,0 +1,104 @@
+.olx-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background: #fff;
+  border-bottom: 4px solid #ffce32;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  font-family: Arial, sans-serif;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: bold;
+  color: #002f34;
+  text-decoration: none;
+}
+
+/* SEARCH BAR */
+.search-bar {
+  display: flex;
+  gap: 10px;
+}
+
+.city-search,
+.main-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 6px;
+  padding: 6px 10px;
+  background: #fff;
+  border: 2px solid #002f34;
+}
+
+.city-search i {
+  color: #002f34;
+  font-size: 16px;
+}
+
+.city-search input,
+.main-search input {
+  border: none;
+  outline: none;
+  font-size: 14px;
+  width: 100%;
+  background: transparent;
+  padding: 0;
+}
+
+/* Set fixed height for inputs to make uniform */
+.city-search input,
+.main-search input {
+  height: 20px;
+}
+
+.main-search {
+  width: 350px;
+}
+
+/* PROFILE + SELL */
+.header-icons {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.profile {
+  text-decoration: none;
+  color: #002f34;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* SELL BUTTON */
+.sell-btn {
+  position: relative;
+  padding: 6px 18px;
+  font-weight: bold;
+  background: white;
+  border-radius: 30px;
+  cursor: pointer;
+  border: none;
+  z-index: 1;
+  text-decoration: none;
+  color: #000;
+  font-size: 14px;
+}
+
+/* Gradient border */
+.sell-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 3px; /* Reduced thickness for compact look */
+  border-radius: 30px;
+  background: linear-gradient(45deg, yellow, blue, aquamarine);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  z-index: -1;
+}

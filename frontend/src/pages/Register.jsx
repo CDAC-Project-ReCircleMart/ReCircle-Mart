@@ -1,17 +1,24 @@
 import React, { useState } from "react";
 import API from "../api/api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import "./Register.css";
 
 export default function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const nav = useNavigate();
 
   async function submit(e) {
     e.preventDefault();
+    if (password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
     try {
-      await API.post("/auth/register", { name, email, password });
+      await API.post("/auth/register", { name, email, phone, password });
       alert("Registered! Wait for admin approval.");
       nav("/login");
     } catch (err) {
@@ -20,46 +27,51 @@ export default function Register() {
   }
 
   return (
-    <div className="container mt-4">
-      <h3 className="mb-4">Register</h3>
-      <div className="row justify-content-center">
-        <div className="col-md-6">
-          <form onSubmit={submit} className="card p-4 shadow-sm">
-            <div className="mb-3">
-              <input
-                type="text"
-                className="form-control"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Name"
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <input
-                type="email"
-                className="form-control"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email"
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <input
-                type="password"
-                className="form-control"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Password"
-                required
-              />
-            </div>
-            <button type="submit" className="btn btn-primary">
-              Register
-            </button>
-          </form>
-        </div>
+    <div className="background">
+      <div className="form-container">
+        <h2>Create Your Account</h2>
+        <p className="subtitle">Join the fastest growing marketplace today!</p>
+        <form onSubmit={submit}>
+          <input
+            type="text"
+            placeholder="Full Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+          <input
+            type="email"
+            placeholder="Email ID"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="tel"
+            placeholder="Mobile Number (OTP verification)"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
+          <button type="submit">Sign Up</button>
+        </form>
+        <p className="signup-text">
+          Already have an account? <Link to="/login">Login</Link>
+        </p>
       </div>
     </div>
   );

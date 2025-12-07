@@ -1,80 +1,59 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import "./Navbar.css";
 
 export default function Navbar() {
+  const { isLoggedIn, logout } = useAuth();
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div className="container-fluid">
-        <Link
-          className="navbar-brand"
-          to="/"
-          style={{ fontFamily: "Arial, sans-serif", fontWeight: "bold" }}
-        >
-          OLX Clone
-        </Link>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav me-auto">
-            <li className="nav-item">
-              <Link className="nav-link" to="/">
-                🏠 Home
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/search">
-                🔍 Search Listings
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/buyer-dashboard">
-                🛒 Buyer Dashboard
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/seller-dashboard">
-                💼 Seller Dashboard
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/admin-dashboard">
-                ⚙️ Admin Dashboard
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/messages">
-                💬 Messages
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/create-listing">
-                ➕ Create Listing
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/register">
-                📝 Register
-              </Link>
-            </li>
-          </ul>
-          <ul className="navbar-nav">
-            <li className="nav-item">
-              <Link className="nav-link" to="/profile">
-                👤 Profile
-              </Link>
-            </li>
-          </ul>
+    <header className="olx-header">
+      {/* Logo */}
+      <Link to="/" className="logo">
+        OLX Ecommerce
+      </Link>
+
+      <div className="search-bar">
+        <div className="city-search">
+          <i className="fa fa-location-dot"></i>
+          <input type="text" placeholder="Search city, area or location" />
+        </div>
+
+        <div className="main-search">
+          <i className="fa fa-search"></i>
+          <input type="text" placeholder="Find Cars, Mobile Phones and more" />
         </div>
       </div>
-    </nav>
+
+      {/* Right Side */}
+      <div className="header-icons">
+        {isLoggedIn ? (
+          <>
+            <Link to="/profile" className="profile">
+              <i className="fa fa-user"></i> Profile
+            </Link>
+            <Link to="/seller-dashboard" className="profile">
+              Dashboard
+            </Link>
+            <button onClick={logout} className="logout-btn">
+              Logout
+            </button>
+          </>
+        ) : (
+          <>
+            <Link to="/login" className="login-btn">
+              Login
+            </Link>
+            <Link to="/register" className="register-btn">
+              Register
+            </Link>
+          </>
+        )}
+
+        <Link to="/create-listing" className="sell-btn">
+          + SELL
+        </Link>
+      </div>
+    </header>
   );
 }

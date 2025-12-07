@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import API from "../api/api";
 import ListingCard from "../components/ListingCard";
 import { Link } from "react-router-dom";
+import "./SellerDashboard.css";
 
 export default function SellerDashboard() {
   const [listings, setListings] = useState([]);

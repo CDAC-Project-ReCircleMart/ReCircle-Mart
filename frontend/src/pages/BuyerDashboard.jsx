@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import API from "../api/api";
 import { Link } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 export default function BuyerDashboard() {
   const [purchases, setPurchases] = useState([]);
