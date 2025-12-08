@@ -162,3 +162,20 @@
     justify-content: center;
   }
 }
+.olx-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background: #fff;
+  border-bottom: 4px solid #ffce32;
+
+  /* 🔽 change these 3 lines */
+  position: fixed;   /* was: sticky */
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+
+  font-family: Arial, sans-serif;
+}
