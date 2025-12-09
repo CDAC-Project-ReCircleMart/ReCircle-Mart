@@ -33,7 +33,7 @@ It was developed as part of the CDAC academic project to demonstrate full-stack 
 
 ---
 
-## 📡 API Endpoints (Summary)
+## 📡 API Endpoints
 
 ### **Auth Routes**
 | Method | Endpoint        | Description               |
