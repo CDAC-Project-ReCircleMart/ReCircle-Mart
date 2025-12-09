@@ -27,8 +27,8 @@ export default function Navbar() {
         </div>
 
         <div className="right-head">
-          <i className="fa-regular fa-comments icon"></i>
-          <i className="fa-regular fa-bell icon"></i>
+          <i className="fa-regular fa-comments icon" onClick={() => navigate("/messages")}></i>
+          <i className="fa-regular fa-bell icon" onClick={() => navigate("/notifications")} ></i>
           <i className="fa-regular fa-heart icon"></i>
 
           <button className="nav-link" onClick={() => navigate("/login")}>
@@ -57,7 +57,7 @@ export default function Navbar() {
             <a href="#">Furniture</a>
             <a href="#">Properties</a>
             <a href="#">Jobs</a>
-          
+
           </div>
         </div>
 
