@@ -1,0 +1,149 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  background: #f4f6f8;
+}
+
+.container {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* LEFT */
+.left {
+  flex: 1;
+  background: linear-gradient(135deg, #0a63ff, #00c6ff);
+  color: white;
+  padding: 60px;
+  border-radius: 0 40px 40px 0;
+}
+
+.left h1 {
+  font-size: 42px;
+  line-height: 1.2;
+}
+
+.left p {
+  margin-top: 20px;
+  font-size: 15px;
+  max-width: 400px;
+}
+
+.illustration img {
+  margin-top: 40px;
+  width: 300px;
+}
+
+/* RIGHT */
+.right {
+  flex: 1;
+  padding: 60px 80px;
+  background: white;
+}
+
+.logo {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 40px;
+}
+
+.logo span {
+  margin-left: 6px;
+}
+
+.right h2 {
+  font-size: 28px;
+}
+
+.subtitle {
+  color: gray;
+  margin-bottom: 30px;
+}
+
+form input {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 18px;
+  border-radius: 10px;
+  border: none;
+  background: #f3f5f7;
+  font-size: 15px;
+}
+
+.forgot {
+  text-align: right;
+  margin-bottom: 20px;
+}
+
+.forgot a {
+  font-size: 13px;
+  text-decoration: none;
+  color: #333;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  background: #0a63ff;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* divider */
+.divider {
+  text-align: center;
+  margin: 30px 0;
+  color: gray;
+  font-size: 13px;
+}
+
+/* social */
+.social-buttons {
+  display: flex;
+  gap: 15px;
+}
+
+.social-buttons button {
+  flex: 1;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.signup {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.signup a {
+  color: #0a63ff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .container {
+    flex-direction: column;
+  }
+  .left {
+    border-radius: 0;
+    text-align: center;
+  }
+}
+.welcome {
+  text-align: center;
+  margin-bottom: 30px;
+}
