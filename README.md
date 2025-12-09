@@ -33,29 +33,6 @@ It was developed as part of the CDAC academic project to demonstrate full-stack 
 
 ---
 
-## 📡 API Endpoints (Summary)
-
-### **Auth Routes**
-| Method | Endpoint        | Description               |
-|--------|----------------|---------------------------|
-| POST   | `/auth/register` | Register new user        |
-| POST   | `/auth/login`    | Login & generate token   |
-
-### **Product Routes**
-| Method | Endpoint             | Description                  |
-|--------|----------------------|------------------------------|
-| POST   | `/products`         | Create new listing           |
-| GET    | `/products`         | Get all products (with filters) |
-| GET    | `/products/:id`     | Get single product details    |
-| PUT    | `/products/:id`     | Update listing                |
-| DELETE | `/products/:id`     | Delete listing                |
-
-### **Upload Route**
-| Method | Endpoint         | Description               |
-|--------|-------------------|---------------------------|
-| POST   | `/upload/image`   | Upload product image      |
-
----
 
 ## ⚙️ How to Run Locally
 
