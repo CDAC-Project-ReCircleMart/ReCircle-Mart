@@ -1,19 +1,21 @@
 # Olx-Style-WebApplication
 
 This project is an online marketplace where users can buy and sell products, similar to OLX.  
-It was developed as part of the CDAC academic project to demonstrate full-stack web development using modern technologies.
+It was developed as part of the CDAC academic project to demonstrate full-stack web development using modern technologies like mern stack.
 
 ---
 
 ## 👥 Team Members
-- Prashant Kumar  
-- Rohit Kavethekar  
-- Harsh Kumar  
-- Om Dhavale  
+
+- Prashant Kumar
+- Rohit Kavethekar
+- Harsh Kumar
+- Om Dhavale
 
 ---
 
 ## 🧰 Tech Stack
+
 - **Frontend:** React.js (Vite)
 - **Backend:** Express.js, Node.js
 - **Database:** MySQL
@@ -22,11 +24,12 @@ It was developed as part of the CDAC academic project to demonstrate full-stack 
 ---
 
 ## 🚀 Features
-- User Registration & Login  
-- Post, Edit & Delete Product Listings  
-- Product Search and Filtering  
-- Image Upload Functionality  
-- Responsive and User-Friendly Interface  
+
+- User Registration & Login
+- Post, Edit & Delete Product Listings
+- Product Search and Filtering
+- Image Upload Functionality
+- Responsive and User-Friendly Interface
 
 ---
 
@@ -45,3 +48,4 @@ npm install
 
 # Start the development server
 npm run dev
+```
