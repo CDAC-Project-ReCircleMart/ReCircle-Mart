@@ -8,8 +8,6 @@ export default function Favourites() {
 
   return (
     <>
-      <Navbar />
-
       <div className="container py-4">
         <h4 className="fw-bold mb-3">My Favourites</h4>
 

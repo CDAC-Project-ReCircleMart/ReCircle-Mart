@@ -1,7 +1,8 @@
 body {
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background-color: #fff;
+  font-family: "Inter Tight", "Inter", sans-serif;
+  background-color: #f2f3f5;
+  color: #111;
 }
 
 /* Layout: Sidebar + Content */
@@ -11,4 +12,11 @@ body {
   gap: 20px;
   padding: 20px;
   align-items: flex-start;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter Tight", sans-serif;
+  background-color: #f2f3f5;
+  color: #111; /* Main text BLACK */
 }

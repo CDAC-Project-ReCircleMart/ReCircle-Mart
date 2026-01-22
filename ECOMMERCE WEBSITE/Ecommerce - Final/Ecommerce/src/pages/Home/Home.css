@@ -1,22 +1,77 @@
 /**
  * Home.css
- * Home page–specific styles only
+ * OLX-style layout with fixed sidebar + 4-column grid
  */
 
-.home-container {
-  margin-top: 20px;
+.home-page {
+  background: #f2f3f5;
+  min-height: 100vh;
 }
 
+/* Center the whole layout */
+.main-layout {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  gap: 25px;
+  padding: 25px 30px;
+}
+
+/* SIDEBAR */
+.sidebar-wrapper {
+  width: 260px;
+  min-width: 260px;
+  flex-shrink: 0;
+}
+
+/* RIGHT LISTINGS SECTION */
+.listings {
+  flex: 1;
+}
+
+/* Page title */
 .home-title {
+  font-size: 22px;
   font-weight: 600;
-  color: #002f34;
+  color: #111;
+  margin-bottom: 20px;
 }
 
-.home-link {
-  text-decoration: none;
-  color: inherit;
+/* 🔥 MAIN GRID — EXACT 4 CARDS PER ROW */
+.listings-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* ALWAYS 4 COLUMNS */
+  gap: 22px;
 }
 
-.home-link:hover {
-  color: inherit;
+/* RESPONSIVE BREAKPOINTS */
+
+/* Tablets → 3 cards */
+@media (max-width: 1200px) {
+  .listings-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Small tablets → 2 cards */
+@media (max-width: 900px) {
+  .main-layout {
+    flex-direction: column;
+  }
+
+  .sidebar-wrapper {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .listings-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile → 1 card */
+@media (max-width: 500px) {
+  .listings-grid {
+    grid-template-columns: 1fr;
+  }
 }

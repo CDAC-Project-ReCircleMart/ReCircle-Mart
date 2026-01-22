@@ -1,13 +1,3 @@
-/**
- * App.jsx
- * Root component of the app
- * All page routes are defined here
- *
- * For now:
- * - Only Home page is active
- * - Other routes are placeholders so navigation doesn't break
- */
-
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
 
@@ -17,29 +7,53 @@ import Messages from "./pages/Messages/Messages.jsx";
 import Notifications from "./pages/Notifications/Notifications.jsx";
 import Favourites from "./pages/Favourites/Favourites";
 import Login from "./pages/Login/Login";
+import Sell from "./pages/Sell/Sell";
+import CarForm from "./pages/Sell/SubCategory/CarForm.jsx";
+import BikeForm from "./pages/Sell/SubCategory/BikeForm.jsx";
 import ProductDetail from "./pages/Product/ProductDetail.jsx";
+import ScooterForm from "./pages/Sell/SubCategory/ScooterForm";
+import BicycleForm from "./pages/Sell/SubCategory/BicycleForm";
+import FurnitureForm from "./pages/Sell/SubCategory/FurnitureForm";
 
-<Route path="/product/:id" element={<ProductDetail />} />
-
+// Navbar
+import Navbar from "./components/Navbar/Navbar";
 
 export default function App() {
   return (
     <div className="app-wrapper">
+      {/* NAVBAR ALWAYS ON TOP */}
+      <Navbar />
+
+      {/* PAGE CONTENT */}
       <Routes>
-        {/* Home page */}
+        {/* Home */}
         <Route path="/" element={<Home />} />
 
-        {/* Temporary placeholder routes (so links work) */}
-
+        {/* Auth */}
         <Route path="/login" element={<Login />} />
-
         <Route path="/register" element={<div>Register Page</div>} />
-        <Route path="/product/:id" element={<div>Product Detail Page</div>} />
-        <Route path="/sell" element={<div>Sell Page</div>} />
+
+        {/* Product detail */}
+        <Route path="/product/:id" element={<ProductDetail />} />
+
+        {/* NAV BAR LINKS */}
         <Route path="/messages" element={<Messages />} />
         <Route path="/notifications" element={<Notifications />} />
-        <Route path="/Favourites" element={<Favourites />} />
+        <Route path="/favourites" element={<Favourites />} />
 
+        {/* SELL CATEGORY PAGE */}
+        <Route path="/sell" element={<Sell />} />
+
+        {/* CAR FORM */}
+        <Route path="/sell/cars" element={<CarForm />} />
+
+        {/* BIKE FORMS – DYNAMIC SUB CATEGORY */}
+        <Route path="/sell/bikes/:type" element={<BikeForm />} />
+        <Route path="/sell/bikes/scooters" element={<ScooterForm />} />
+        <Route path="/sell/bikes/bicycles" element={<BicycleForm />} />
+
+        {/* furniture */}
+        <Route path="/sell/furniture" element={<FurnitureForm />} />
       </Routes>
     </div>
   );

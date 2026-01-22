@@ -65,9 +65,6 @@ export default function Messages() {
 
   return (
     <>
-      {/* ================= NAVBAR ================= */}
-      <Navbar />
-
       {/* ================= MESSAGES PAGE ================= */}
       <div className="container-fluid messages-page">
         <div className="row h-100">

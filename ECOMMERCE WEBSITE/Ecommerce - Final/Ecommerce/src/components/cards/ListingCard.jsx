@@ -1,49 +1,46 @@
-/**
- * ListingCard.jsx
- * Like (favourite) UI only
- */
-
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./ListingCard.css";
 
 export default function ListingCard({ item }) {
   const [liked, setLiked] = useState(false);
-
-  const toggleLike = (e) => {
-    e.stopPropagation(); // prevent card click
-    setLiked(!liked);
-  };
+  const navigate = useNavigate();
 
   return (
-    <div className="olx-card">
-      {/* Image */}
-      <div className="card-img">
-        <img
-          src={item?.image || "https://via.placeholder.com/300x200"}
-          alt={item?.title || "product"}
-        />
+    <div className="olx-card" onClick={() => navigate(`/product/${item.id}`)}>
+      {/* IMAGE AREA */}
+      <div className="card-img p-2">
+        <img src={item.image} alt={item.title} />
 
-        {/* Like icon */}
-        <span className={`fav ${liked ? "active" : ""}`} onClick={toggleLike}>
+        {/* FAV ICON */}
+        <div
+          className={`fav ${liked ? "active" : ""}`}
+          onClick={(e) => {
+            e.stopPropagation(); // stop card click
+            setLiked(!liked);
+          }}
+        >
           <i
             className={liked ? "fa-solid fa-heart" : "fa-regular fa-heart"}
           ></i>
-        </span>
+        </div>
       </div>
 
-      {/* Content */}
-      <div className="card-body">
-        <div className="price">{item?.price}</div>
-
-        <div className="meta">
-          {item?.year} · {item?.km}
+      {/* CARD BODY */}
+      <div className="card-body p-3">
+        {/* price */}
+        <div className="price">{item.price}</div>
+        {/* km and year */}
+        <div className="km_year">
+          {item.year} - {item.km}
         </div>
+        {/* title */}
+        <div className="title">{item.title}</div>
 
-        <div className="title">{item?.title}</div>
-
-        <div className="bottom">
-          <span>{item?.location}</span>
-          <span>{item?.date}</span>
+        {/* location and date */}
+        <div className="bottom mb-2">
+          <span>{item.location}</span>
+          <span>{item.date}</span>
         </div>
       </div>
     </div>

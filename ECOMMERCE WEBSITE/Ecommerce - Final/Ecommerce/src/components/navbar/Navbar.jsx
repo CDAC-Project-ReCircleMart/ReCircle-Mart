@@ -47,14 +47,14 @@ export default function Navbar() {
 
           <i
             className="fa-regular fa-heart icon"
-            onClick={() => navigate("/Favourites")}
+            onClick={() => navigate("/favourites")}
           ></i>
 
           <button className="nav-link" onClick={() => navigate("/login")}>
             Login
           </button>
 
-          <div className="sell-border" onClick={() => navigate("/sell")}>
+          <div className="sell-border" onClick={() => navigate("/Sell")}>
             <button className="sell-btn">
               <i className="fa-solid fa-plus"></i> SELL
             </button>
@@ -69,6 +69,7 @@ export default function Navbar() {
             ALL CATEGORIES <i className="fa-solid fa-chevron-down"></i>
           </button>
 
+          {/* Category Dropdown  */}
           <div className="dropdown-content">
             <a href="#">Cars</a>
             <a href="#">Bikes</a>
