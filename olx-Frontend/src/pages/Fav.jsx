@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import Footer from "../components/Footer";
 import ListingCard from "../components/ListingCard";
-import { listings } from "../data";
+import { listings } from "../fav_data";
 import { useNavigate } from "react-router-dom";
 
-export default function Home() {
+export default function Fav() {
     const [filteredListings, setFilteredListings] = useState(listings);
 
     const applyFilters = (filters) => {
@@ -38,9 +38,11 @@ export default function Home() {
         setFilteredListings(listings);
     }, []);
 
+
     return (
-        <>
+        <div>
             <div className="main-layout">
+
                 <Sidebar onFilterChange={applyFilters} />
 
                 <section className="listings">
@@ -51,6 +53,6 @@ export default function Home() {
             </div>
 
             <Footer />
-        </>
+        </div>
     );
 }

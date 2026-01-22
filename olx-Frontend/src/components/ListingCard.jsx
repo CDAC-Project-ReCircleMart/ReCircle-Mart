@@ -11,11 +11,11 @@ export default function ListingCard({ item }) {
         <img src={item.image} alt={item.title} />
 
         <span className="fav">
-          <i className="fa-regular fa-heart"></i>
+          <i className="fa-regular fa-heart" ></i>
         </span>
       </div>
 
-      {/* CONTENT */}
+
       <div className="card-body">
         <div className="price">{item.price}</div>
         <div className="meta">

@@ -1,9 +1,20 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../providers/AuthProvider";
 
 export default function Navbar() {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
+  const { logout } = useAuth()
+  const onLogout = () => {
+    // remove all the cached items
+    localStorage.removeItem('token')
 
+    // call the logout function
+    logout()
+
+    // redirect to Login page
+    navigate('/login')
+  }
   return (
     <>
       <header className="main-header">
@@ -29,10 +40,18 @@ export default function Navbar() {
         <div className="right-head">
           <i className="fa-regular fa-comments icon" onClick={() => navigate("/messages")}></i>
           <i className="fa-regular fa-bell icon" onClick={() => navigate("/notifications")} ></i>
-          <i className="fa-regular fa-heart icon"></i>
+          <i className="fa-regular fa-heart icon" onClick={() => navigate("/fav")}></i>
 
           <button className="nav-link" onClick={() => navigate("/login")}>
             Login
+          </button>
+
+          <button
+            onClick={onLogout}
+            className='nav-link'
+            aria-current='page'
+          >
+            Logout
           </button>
 
           <div className="sell-border" onClick={() => navigate("/sell")}>
