@@ -11,7 +11,7 @@ export async function login(email, password) {
 
     }
     catch (ex) {
-        console.log('exception : ' + ex)
+        return { error: "Invalid Credentials" }
     }
 }
 

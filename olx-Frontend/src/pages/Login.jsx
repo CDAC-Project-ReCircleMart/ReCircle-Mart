@@ -10,7 +10,7 @@ export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const { setUser } = useAuth()
+  const { login: loginUser } = useAuth()
 
   const navigate = useNavigate()
 
@@ -33,14 +33,14 @@ export default function Login() {
         // localStorage.setItem('lastName', response['data']['lastName'])
 
         // set the logged in user information
-        // setUser({
-        //   userName: response['data']['userName']
-        // })
+        loginUser({
+          userToken: response.token
+        })
 
         // navigate to the PropertyListing page
         navigate('/home')
       } else {
-        toast.error(response['error'])
+        toast.error("Login Credentials not matched")
       }
     }
   }

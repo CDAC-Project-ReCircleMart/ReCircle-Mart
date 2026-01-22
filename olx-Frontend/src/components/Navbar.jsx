@@ -1,9 +1,20 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../providers/AuthProvider";
 
 export default function Navbar() {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
+  const { logout } = useAuth()
+  const onLogout = () => {
+    // remove all the cached items
+    localStorage.removeItem('token')
 
+    // call the logout function
+    logout()
+
+    // redirect to Login page
+    navigate('/login')
+  }
   return (
     <>
       <header className="main-header">
@@ -33,6 +44,14 @@ export default function Navbar() {
 
           <button className="nav-link" onClick={() => navigate("/login")}>
             Login
+          </button>
+
+          <button
+            onClick={onLogout}
+            className='nav-link'
+            aria-current='page'
+          >
+            Logout
           </button>
 
           <div className="sell-border" onClick={() => navigate("/sell")}>
