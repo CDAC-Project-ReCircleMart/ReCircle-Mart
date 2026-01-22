@@ -1,0 +1,14 @@
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #fff;
+}
+
+/* Layout: Sidebar + Content */
+.main-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 20px;
+  padding: 20px;
+  align-items: flex-start;
+}

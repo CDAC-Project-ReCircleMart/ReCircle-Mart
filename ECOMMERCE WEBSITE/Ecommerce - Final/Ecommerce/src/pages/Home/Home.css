@@ -1,0 +1,22 @@
+/**
+ * Home.css
+ * Home page–specific styles only
+ */
+
+.home-container {
+  margin-top: 20px;
+}
+
+.home-title {
+  font-weight: 600;
+  color: #002f34;
+}
+
+.home-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.home-link:hover {
+  color: inherit;
+}

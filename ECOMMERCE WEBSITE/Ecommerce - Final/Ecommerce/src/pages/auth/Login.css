@@ -1,0 +1,93 @@
+/* Full screen center */
+.login-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+/* Card */
+.login-card {
+  width: 360px;
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+/* Logo */
+.login-logo {
+  width: 80px;
+  margin-bottom: 15px;
+}
+
+/* Inputs */
+.login-input {
+  width: 100%;
+  padding: 12px;
+  margin: 15px 0;
+  border-radius: 8px;
+  border: 2px solid #ccc;
+}
+
+/* Button */
+.login-btn {
+  width: 100%;
+  padding: 12px;
+  background: #002f34;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+/* OTP */
+.otp-box {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+
+.otp-box input {
+  width: 55px;
+  height: 55px;
+  font-size: 22px;
+  text-align: center;
+  border-radius: 8px;
+  border: 2px solid #ccc;
+}
+
+/* Text */
+.login-note,
+.otp-note {
+  font-size: 13px;
+  color: #666;
+}
+
+.resend {
+  display: block;
+  margin-top: 15px;
+  color: #0a58ca;
+  font-size: 14px;
+  cursor: pointer;
+}
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* Outline buttons like OLX */
+.login-outline-btn {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 8px;
+  background: #fff;
+  border: 2px solid #0a58ca;
+  font-weight: 600;
+  cursor: pointer;
+}

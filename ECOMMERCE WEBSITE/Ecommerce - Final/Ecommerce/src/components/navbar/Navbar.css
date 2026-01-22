@@ -1,0 +1,165 @@
+/**
+ * Navbar.css
+ * Styles only for Navbar component
+ */
+
+/* =========================
+   TOP NAVBAR
+   ========================= */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 25px;
+  align-items: center;
+  background: #f7f7f7;
+  border-bottom: 1px solid #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.left-head {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: 600;
+  color: #002f34;
+  font-family: "Poppins", sans-serif;
+  cursor: pointer;
+}
+
+/* Search boxes */
+.city-search,
+.main-search {
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 2px solid #002f34;
+  border-radius: 8px;
+  padding: 6px 10px;
+  gap: 8px;
+}
+
+.city-search input,
+.main-search input {
+  border: none;
+  outline: none;
+  font-size: 14px;
+  width: 180px;
+}
+
+.right-head {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.icon {
+  font-size: 20px;
+  cursor: pointer;
+  color: #002f34;
+}
+
+.nav-link {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+/* SELL button */
+.sell-border {
+  padding: 4px;
+  border-radius: 30px;
+  background: linear-gradient(90deg, #ffce32, #007bff, #7fffd4);
+  display: inline-block;
+  cursor: pointer;
+}
+
+.sell-btn {
+  padding: 10px 24px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #002f34;
+  background: #ffffff;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* =========================
+   CATEGORY BAR
+   ========================= */
+.category-wrapper {
+  background: white;
+  padding: 12px 25px;
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  border-bottom: 1px solid white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.07);
+  position: sticky;
+  top: 70px;
+  z-index: 999;
+}
+
+/* Dropdown */
+.dropdown {
+  position: relative;
+}
+
+.dropdown-btn {
+  background: none;
+  border: none;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  color: #002f34;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.dropdown-content {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  width: 170px;
+  display: none;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+}
+
+.dropdown-content a {
+  padding: 10px;
+  display: block;
+  text-decoration: none;
+  font-size: 14px;
+  color: #002f34;
+}
+
+.dropdown-content a:hover {
+  background: #f2f4f5;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Category text items */
+.category-wrapper span {
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  color: #002f34;
+}

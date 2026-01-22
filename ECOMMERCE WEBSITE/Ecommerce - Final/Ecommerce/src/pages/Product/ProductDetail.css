@@ -1,0 +1,97 @@
+/* ProductDetail page styles */ /**
+ * ProductDetail.css
+ * Styles only for Product Detail page
+ */
+
+.product-wrapper {
+  padding: 30px 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.product-card {
+  background: #ffffff;
+  display: flex;
+  gap: 24px;
+  max-width: 900px;
+  width: 100%;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.product-image {
+  width: 45%;
+  height: 320px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.product-info {
+  flex: 1;
+}
+
+.product-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #002f34;
+  margin-bottom: 8px;
+}
+
+.product-price {
+  font-size: 24px;
+  font-weight: 700;
+  color: #002f34;
+  margin-bottom: 15px;
+}
+
+.product-meta p {
+  font-size: 14px;
+  color: #444;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.product-meta i {
+  color: #002f34;
+}
+
+.product-description {
+  margin-top: 18px;
+}
+
+.product-description h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #002f34;
+}
+
+.product-description p {
+  font-size: 14px;
+  color: #444;
+  line-height: 1.5;
+}
+
+.post-btn {
+  margin-top: 20px;
+  padding: 12px 18px;
+  background: #002f34;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.post-btn:hover {
+  background: #01474e;
+}
+
+/* Not found state */
+.product-not-found {
+  text-align: center;
+}
