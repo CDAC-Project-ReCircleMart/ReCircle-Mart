@@ -14,4 +14,14 @@ export const categories = {
   Fashion: ["Men", "Women", "Kids"],
 
   Pets: ["Fishes & Aquarium", "Pet Food & Accessories", "Dogs", "Other Pets"],
+
+  Electronics: [
+    "Cameras & Lenses",
+    "Games & Entertainment",
+    "Fridges",
+    "Computer Accessories",
+    "Hard Disks, Printers & Monitors",
+    "ACs",
+    "Washing Machines",
+  ],
 };

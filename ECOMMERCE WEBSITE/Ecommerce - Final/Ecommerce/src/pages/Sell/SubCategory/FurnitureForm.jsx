@@ -7,7 +7,7 @@ export default function FurnitureForm() {
 
   const category = "Furniture";
 
-  // Sub category state (VERY IMPORTANT)
+  // Sub category state
   const [subCategory, setSubCategory] = useState("");
 
   // Photo slots
@@ -38,10 +38,9 @@ export default function FurnitureForm() {
     }
 
     const adData = {
-      category: category, // Furniture
-      subCategory: subCategory, // Sofa, Beds, Decor etc.
-
-      // other common fields later…
+      category: category,
+      subCategory: subCategory,
+      // add other fields later
     };
 
     console.log("Sending to server:", adData);
@@ -66,7 +65,7 @@ export default function FurnitureForm() {
 
       <h3>Include some details</h3>
 
-      {/* 🔥 SUB CATEGORY DROPDOWN INSIDE FORM */}
+      {/* SUB CATEGORY */}
       <div className="form-group">
         <label>Sub Category *</label>
         <select
@@ -85,14 +84,21 @@ export default function FurnitureForm() {
       {/* COMMON FIELDS */}
       <div className="form-group">
         <label>Ad Title *</label>
-        <input maxLength="70" />
+        <input
+          maxLength="70"
+          placeholder="Mention the key features of your item"
+        />
       </div>
 
       <div className="form-group">
         <label>Description *</label>
-        <textarea rows="4"></textarea>
+        <textarea
+          rows="4"
+          placeholder="Include condition, features and reason for selling"
+        ></textarea>
       </div>
 
+      {/* PRICE */}
       <h3>Set a price</h3>
       <div className="price-group">
         <span>₹</span>
@@ -122,7 +128,9 @@ export default function FurnitureForm() {
                   type="file"
                   accept="image/*"
                   hidden
-                  onChange={(e) => handleSelectPhoto(index, e.target.files[0])}
+                  onChange={(e) =>
+                    handleSelectPhoto(index, e.target.files[0])
+                  }
                 />
                 <span className="plus">+</span>
               </label>
@@ -135,13 +143,54 @@ export default function FurnitureForm() {
       <h3>Confirm your location</h3>
 
       <div className="form-group">
+        <label>State *</label>
+        <input type="text" placeholder="Enter State" />
+      </div>
+
+      <div className="form-group">
+        <label>District *</label>
+        <input type="text" placeholder="Enter District" />
+      </div>
+
+      <div className="form-group">
+        <label>Taluka *</label>
+        <input type="text" placeholder="Enter Taluka" />
+      </div>
+
+      <div className="form-group">
         <label>City *</label>
-        <input />
+        <input type="text" placeholder="Enter City" />
+      </div>
+
+      <div className="form-group">
+        <label>Address *</label>
+        <textarea
+          rows="3"
+          placeholder="Enter full address (Area, Street, Landmark...)"
+        ></textarea>
       </div>
 
       <div className="form-group">
         <label>Pin Code *</label>
-        <input />
+        <input type="number" placeholder="Enter Pin Code" />
+      </div>
+
+      {/* REVIEW PROFILE */}
+      <h3>Review your details</h3>
+
+      <div className="form-group">
+        <label>Name</label>
+        <input defaultValue="rohit kavathekar" maxLength="30" />
+      </div>
+
+      <h3>Let's verify your account</h3>
+      <p className="verify-text">
+        We will send you a confirmation code by SMS on the next step.
+      </p>
+
+      <div className="phone-group">
+        <span>+91</span>
+        <input type="tel" placeholder="Mobile Phone Number" />
       </div>
 
       <button className="submit-btn" onClick={handleSubmit}>

@@ -14,6 +14,8 @@ import ProductDetail from "./pages/Product/ProductDetail.jsx";
 import ScooterForm from "./pages/Sell/SubCategory/ScooterForm";
 import BicycleForm from "./pages/Sell/SubCategory/BicycleForm";
 import FurnitureForm from "./pages/Sell/SubCategory/FurnitureForm";
+import ElectronicsForm from "./pages/Sell/SubCategory/ElectronicsForm";
+import FashionForm from "./pages/Sell/SubCategory/FashionForm";
 
 // Navbar
 import Navbar from "./components/Navbar/Navbar";
@@ -54,6 +56,12 @@ export default function App() {
 
         {/* furniture */}
         <Route path="/sell/furniture" element={<FurnitureForm />} />
+
+        {/* Electronics */}
+        <Route path="/sell/electronics" element={<ElectronicsForm />} />
+
+        {/* Electronics */}
+        <Route path="/sell/Fashion" element={<FashionForm />} />
       </Routes>
     </div>
   );

@@ -149,6 +149,21 @@ export default function BicycleForm() {
       <h3>Confirm your location</h3>
 
       <div className="form-group">
+        <label>State *</label>
+        <input type="text" placeholder="Enter State" />
+      </div>
+
+      <div className="form-group">
+        <label>District *</label>
+        <input type="text" placeholder="Enter District" />
+      </div>
+
+      <div className="form-group">
+        <label>Taluka *</label>
+        <input type="text" placeholder="Enter Taluka" />
+      </div>
+
+      <div className="form-group">
         <label>City *</label>
         <input />
       </div>

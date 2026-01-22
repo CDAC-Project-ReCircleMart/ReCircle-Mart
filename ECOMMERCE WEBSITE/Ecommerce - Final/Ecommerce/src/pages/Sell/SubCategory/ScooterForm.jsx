@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import "./BikeForm.css";   // reuse same CSS
+import "./BikeForm.css"; // reuse same CSS
 
 export default function ScooterForm() {
   const navigate = useNavigate();
@@ -132,9 +132,7 @@ export default function ScooterForm() {
                   type="file"
                   accept="image/*"
                   hidden
-                  onChange={(e) =>
-                    handleSelectPhoto(index, e.target.files[0])
-                  }
+                  onChange={(e) => handleSelectPhoto(index, e.target.files[0])}
                 />
                 <span className="plus">+</span>
               </label>
@@ -144,6 +142,21 @@ export default function ScooterForm() {
       </div>
 
       <h3>Confirm your location</h3>
+
+      <div className="form-group">
+        <label>State *</label>
+        <input type="text" placeholder="Enter State" />
+      </div>
+
+      <div className="form-group">
+        <label>District *</label>
+        <input type="text" placeholder="Enter District" />
+      </div>
+
+      <div className="form-group">
+        <label>Taluka *</label>
+        <input type="text" placeholder="Enter Taluka" />
+      </div>
 
       <div className="form-group">
         <label>City *</label>
