@@ -1,7 +1,15 @@
 /**
- * Sidebar.css
- * Styles only for Sidebar component
+ * CarSidebar.css
+ * Styles only for Car Sidebar
  */
+
+.clear-btn {
+  background: none;
+  border: none;
+  color: #0a58ca;
+  cursor: pointer;
+  font-size: 14px;
+}
 
 .sidebar {
   width: 100%;
@@ -11,9 +19,6 @@
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
   height: fit-content;
 }
-
-
-
 
 .sidebar h3 {
   margin-bottom: 15px;

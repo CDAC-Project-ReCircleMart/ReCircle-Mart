@@ -38,6 +38,11 @@ export default function CarForm() {
         <input type="text" />
       </div>
 
+<div className="form-group">
+        <label>Model *</label>
+        <input type="text" />
+      </div>
+
       <div className="form-group">
         <label>Year *</label>
         <input type="number" />
@@ -164,18 +169,7 @@ export default function CarForm() {
         <input type="number" placeholder="Enter Pin Code" />
       </div>
 
-      <h2>Review your details</h2>
-      <div className="form-group">
-        <label>Name</label>
-        <input defaultValue="rohit kavathekar" />
-      </div>
-
-      <h2>Let's verify your account</h2>
-      <div className="phone-group">
-        <span>+91</span>
-        <input type="tel" />
-      </div>
-
+      
       <button className="submit-btn">Post Ad</button>
     </div>
   );

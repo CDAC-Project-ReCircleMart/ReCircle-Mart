@@ -52,7 +52,7 @@ export default function App() {
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/favourites" element={<Favourites />} />
 
-        {/* SELL CATEGORY PAGE */}
+        {/* SELL CATEGORY PAGES---------------- */}
         <Route path="/sell" element={<Sell />} />
 
         {/* CAR FORM */}

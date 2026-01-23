@@ -54,6 +54,12 @@ export default function BikeForm() {
       </div>
 
       <div className="form-group">
+        <label>Model *</label>
+        <input type="text" />
+      </div>
+
+      
+      <div className="form-group">
         <label>Year *</label>
         <input type="number" />
       </div>

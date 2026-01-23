@@ -73,11 +73,6 @@ export default function ScooterForm() {
       </div>
 
       <div className="form-group">
-        <label>Engine Capacity (cc) *</label>
-        <input type="number" placeholder="Ex: 110, 125" />
-      </div>
-
-      <div className="form-group">
         <label>KM Driven *</label>
         <input type="number" />
       </div>
