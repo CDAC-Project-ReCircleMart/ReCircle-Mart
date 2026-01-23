@@ -6,7 +6,12 @@ import Home from "./pages/Home/Home.jsx";
 import Messages from "./pages/Messages/Messages.jsx";
 import Notifications from "./pages/Notifications/Notifications.jsx";
 import Favourites from "./pages/Favourites/Favourites";
-import Login from "./pages/Login/Login";
+
+// Login and Register
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
+
+//Sell form
 import Sell from "./pages/Sell/Sell";
 import CarForm from "./pages/Sell/SubCategory/CarForm.jsx";
 import BikeForm from "./pages/Sell/SubCategory/BikeForm.jsx";
@@ -33,7 +38,7 @@ export default function App() {
 
         {/* Auth */}
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<div>Register Page</div>} />
+        <Route path="/register" element={<Register />} />
 
         {/* Product detail */}
         <Route path="/product/:id" element={<ProductDetail />} />

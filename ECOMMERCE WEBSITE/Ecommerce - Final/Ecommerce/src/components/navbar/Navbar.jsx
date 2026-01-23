@@ -1,15 +1,19 @@
-/**
- * Navbar.jsx
- * Top navigation bar + category bar
- * Used on public pages (Home, ProductDetail, etc.)
- * UI and behavior kept EXACTLY same
- */
-
 import { useNavigate } from "react-router-dom";
 import "./Navbar.css";
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  const handleSell = () => {
+    if (!user) navigate("/login");
+    else navigate("/Sell");
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    navigate("/");
+  };
 
   return (
     <>
@@ -35,26 +39,25 @@ export default function Navbar() {
         </div>
 
         <div className="right-head">
-          <i
-            className="fa-regular fa-comments icon"
-            onClick={() => navigate("/messages")}
-          ></i>
+          <i className="fa-regular fa-comments icon"></i>
+          <i className="fa-regular fa-bell icon"></i>
+          <i className="fa-regular fa-heart icon"></i>
 
-          <i
-            className="fa-regular fa-bell icon"
-            onClick={() => navigate("/notifications")}
-          ></i>
+          {!user ? (
+            <button className="nav-link" onClick={() => navigate("/login")}>
+              Login
+            </button>
+          ) : (
+            <div className="profile-nav">
+              <img src={user.icon} alt="profile" className="nav-profile" />
+              <span>{user.firstName}</span>
+              <button className="logout-btn" onClick={handleLogout}>
+                Logout
+              </button>
+            </div>
+          )}
 
-          <i
-            className="fa-regular fa-heart icon"
-            onClick={() => navigate("/favourites")}
-          ></i>
-
-          <button className="nav-link" onClick={() => navigate("/login")}>
-            Login
-          </button>
-
-          <div className="sell-border" onClick={() => navigate("/Sell")}>
+          <div className="sell-border" onClick={handleSell}>
             <button className="sell-btn">
               <i className="fa-solid fa-plus"></i> SELL
             </button>
@@ -69,7 +72,6 @@ export default function Navbar() {
             ALL CATEGORIES <i className="fa-solid fa-chevron-down"></i>
           </button>
 
-          {/* Category Dropdown  */}
           <div className="dropdown-content">
             <a href="#">Cars</a>
             <a href="#">Bikes</a>
