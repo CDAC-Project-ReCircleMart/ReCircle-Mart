@@ -1,15 +1,8 @@
-/**
- * ChatBubble.jsx
- * Represents a single message bubble
- * "me" → right side
- * "them" → left side
- */
-
 export default function ChatBubble({ message }) {
   return (
-    <div className={`message ${message.from === "me" ? "sent" : "received"}`}>
+    <div className={`chat-bubble ${message.from === "me" ? "me" : "seller"}`}>
       <p>{message.text}</p>
-      <span>{message.time}</span>
+      <span className="time">{message.time}</span>
     </div>
   );
 }

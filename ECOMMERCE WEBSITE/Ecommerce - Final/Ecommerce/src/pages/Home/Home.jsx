@@ -12,6 +12,10 @@ export default function Home() {
   const [filteredListings, setFilteredListings] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
 
+  // PAGINATION STATE
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
   // RANDOM LISTINGS ON FIRST LOAD
   useEffect(() => {
     const shuffled = [...listings].sort(() => 0.5 - Math.random());
@@ -21,24 +25,21 @@ export default function Home() {
   // WHEN CATEGORY ICON CLICKED
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
+    setCurrentPage(1); // reset to page 1
 
-    // FILTER BY CATEGORY (TEMP: TITLE BASED)
-    const filtered = listings.filter((item) =>
-      item.title.toLowerCase().includes(category.toLowerCase()),
-    );
+    // FILTER BY CATEGORY FIELD
+    const filtered = listings.filter((item) => item.category === category);
 
     setFilteredListings(filtered);
   };
 
-  // FILTER FROM SIDEBAR (ONLY AFTER CATEGORY SELECTED)
+  // FILTER FROM SIDEBAR
   const applyFilters = (filters) => {
     let filtered = [...listings];
 
     // FIRST FILTER BY SELECTED CATEGORY
     if (selectedCategory) {
-      filtered = filtered.filter((item) =>
-        item.title.toLowerCase().includes(selectedCategory.toLowerCase()),
-      );
+      filtered = filtered.filter((item) => item.category === selectedCategory);
     }
 
     // LOCATION
@@ -50,33 +51,16 @@ export default function Home() {
       );
     }
 
-    // FUEL
-    if (filters.fuel) {
-      filtered = filtered.filter((item) => item.fuel === filters.fuel);
-    }
-
     // YEAR
     if (filters.year) {
       filtered = filtered.filter((item) => item.year === filters.year);
     }
 
-    // BRAND
+    // BRAND (TITLE BASED)
     if (filters.brand) {
       filtered = filtered.filter((item) =>
         item.title.toLowerCase().includes(filters.brand.toLowerCase()),
       );
-    }
-
-    // KM RANGE
-    if (filters.km) {
-      const [minKm, maxKm] = filters.km.includes("+")
-        ? [Number(filters.km.replace("+", "")), Infinity]
-        : filters.km.split("-").map(Number);
-
-      filtered = filtered.filter((item) => {
-        const kmNumber = Number(item.km.replace(/[^0-9]/g, ""));
-        return kmNumber >= minKm && kmNumber <= maxKm;
-      });
     }
 
     // BUDGET RANGE
@@ -91,7 +75,23 @@ export default function Home() {
       });
     }
 
+    setCurrentPage(1);
     setFilteredListings(filtered);
+  };
+
+  /* ---------------- PAGINATION LOGIC ---------------- */
+
+  const totalPages = Math.ceil(filteredListings.length / itemsPerPage);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const currentListings = filteredListings.slice(startIndex, endIndex);
+
+  const goToPage = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
   };
 
   return (
@@ -120,14 +120,48 @@ export default function Home() {
                 : "Fresh Recommendations"}
             </h2>
 
-            {filteredListings.length === 0 ? (
+            {currentListings.length === 0 ? (
               <p className="no-results">No ads found for selected filters.</p>
             ) : (
-              <div className="listings-grid">
-                {filteredListings.map((item) => (
-                  <ListingCard key={item.id} item={item} />
-                ))}
-              </div>
+              <>
+                <div className="listings-grid">
+                  {currentListings.map((item) => (
+                    <ListingCard key={item.id} item={item} />
+                  ))}
+                </div>
+
+                {/* PAGINATION BAR */}
+                {totalPages > 1 && (
+                  <div className="pagination">
+                    <button
+                      disabled={currentPage === 1}
+                      onClick={() => goToPage(currentPage - 1)}
+                    >
+                      Prev
+                    </button>
+
+                    {[...Array(totalPages)].map((_, index) => {
+                      const page = index + 1;
+                      return (
+                        <button
+                          key={page}
+                          className={page === currentPage ? "active" : ""}
+                          onClick={() => goToPage(page)}
+                        >
+                          {page}
+                        </button>
+                      );
+                    })}
+
+                    <button
+                      disabled={currentPage === totalPages}
+                      onClick={() => goToPage(currentPage + 1)}
+                    >
+                      Next
+                    </button>
+                  </div>
+                )}
+              </>
             )}
           </section>
         </div>

@@ -111,7 +111,20 @@ export default function ProductDetail() {
               </div>
             </div>
 
-            <button className="chat-btn" onClick={() => navigate("/messages")}>
+            {/* <button className="chat-btn" onClick={() => navigate("/messages")}>
+              <i className="fa-solid fa-comment-dots"></i> Chat with seller
+            </button> */}
+            <button
+              className="chat-btn"
+              onClick={() =>
+                navigate("/messages", {
+                  state: {
+                    seller: listing.owner,
+                    productId: listing.id,
+                  },
+                })
+              }
+            >
               <i className="fa-solid fa-comment-dots"></i> Chat with seller
             </button>
           </div>

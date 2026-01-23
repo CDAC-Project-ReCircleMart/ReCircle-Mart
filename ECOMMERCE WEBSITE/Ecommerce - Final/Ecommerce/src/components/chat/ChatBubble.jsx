@@ -1,14 +1,8 @@
-
-/**
- * ChatBubble.jsx
- * Reusable UI component
- */
-import './ChatBubble.css';
-
-export default function ChatBubble() {
+export default function ChatBubble({ message }) {
   return (
-    <div className="chatbubble">
-      {/* ChatBubble UI goes here */}
+    <div className={`chat-bubble ${message.from === "me" ? "me" : "seller"}`}>
+      <p>{message.text}</p>
+      <span className="time">{message.time}</span>
     </div>
   );
 }

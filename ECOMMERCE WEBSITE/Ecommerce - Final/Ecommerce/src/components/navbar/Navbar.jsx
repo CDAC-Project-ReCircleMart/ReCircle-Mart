@@ -27,7 +27,12 @@ export default function Navbar() {
       <header className="main-header">
         <div className="left-head">
           <div className="logo" onClick={() => navigate("/")}>
-            OLX Ecommerce
+            Recircle Mart
+            <img
+              className="logo-img mr-10"
+              style={{ width: "50px", height: "auto" }}
+              src="logo.png"
+            ></img>
           </div>
 
           <div className="city-search">
