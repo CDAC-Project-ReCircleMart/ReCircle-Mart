@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -40,7 +43,8 @@ public class Users implements UserDetails {
 	@Column(name = "full_name")
 	private String fullName;
 
-	@Column(name = "email")
+	@Column(name = "email" , unique = true)
+	
 	private String email;
 
 	@Column(name = "phone_number")
@@ -52,11 +56,14 @@ public class Users implements UserDetails {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "status_id", nullable = false)
 	private UserStatus status;
-
-	@Column(name = "created_at", insertable = false, updatable = false)
+	
+	@CreationTimestamp
+	@Column(name = "created_at",  updatable = false)
 	private LocalDateTime createdAt;
 
-	@Column(name = "updated_at", insertable = false, updatable = false)
+	
+	@UpdateTimestamp
+	@Column(name = "updated_at", nullable= false)
 	private LocalDateTime updateAt;
 
 	@ManyToOne(fetch = FetchType.EAGER)
