@@ -1,4 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { listings } from "../../data";
 import "./ProductDetail.css";
 
@@ -7,6 +8,9 @@ export default function ProductDetail() {
   const navigate = useNavigate();
 
   const listing = listings.find((l) => l.id == id);
+
+  const images = listing?.images || [listing?.image]; // support multiple images
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   if (!listing) {
     return (
@@ -17,26 +21,36 @@ export default function ProductDetail() {
     );
   }
 
+  const prevImage = () => {
+    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  };
+
+  const nextImage = () => {
+    setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+  };
+
   return (
     <div className="product-page">
       {/* IMAGE SECTION */}
       <div className="image-section">
-        <img src={listing.image} alt={listing.title} />
+        <button className="arrow left-arrow" onClick={prevImage}>
+          <i className="fa-solid fa-chevron-left"></i>
+        </button>
+
+        <img src={images[currentIndex]} alt={listing.title} />
+
+        <button className="arrow right-arrow" onClick={nextImage}>
+          <i className="fa-solid fa-chevron-right"></i>
+        </button>
       </div>
 
       {/* MAIN CONTENT */}
       <div className="product-container">
-       
         {/* LEFT SIDE */}
-        <div className="left-panel">
-         
+        <div className="left-panel mt-2">
           {/* TITLE CARD */}
           <div className="detail-card">
-            <h2 className="product-title">{listing.title}</h2>
-            <p className="fuel-tag">
-              <i className="fa-solid fa-gas-pump"></i>{" "}
-              {listing.fuel || "Petrol"}
-            </p>
+            <h2 className="product-title ">{listing.title}</h2>
           </div>
 
           {/* OVERVIEW CARD */}
@@ -44,21 +58,25 @@ export default function ProductDetail() {
             <h3>Overview</h3>
 
             <div className="overview-grid">
+              {/* YEAR BOUGHT */}
               <div>
-                <i className="fa-solid fa-gauge-high"></i>
-                <span>{listing.km || "10,000"} km</span>
+                <i className="fa-solid fa-calendar"></i>
+                <span>{listing.year || "2022"}</span>
               </div>
 
+              {/* LOCATION */}
               <div>
                 <i className="fa-solid fa-location-dot"></i>
                 <span>{listing.location}</span>
               </div>
 
+              {/* POSTING DATE */}
               <div>
                 <i className="fa-solid fa-calendar-days"></i>
                 <span>{listing.date}</span>
               </div>
 
+              {/* SELLER */}
               <div>
                 <i className="fa-solid fa-user"></i>
                 <span>{listing.owner || "Seller"}</span>
@@ -76,7 +94,7 @@ export default function ProductDetail() {
         </div>
 
         {/* RIGHT SIDE */}
-        <div className="right-panel">
+        <div className="right-panel mt-2">
           {/* PRICE CARD */}
           <div className="price-card">
             <h2 className="price">{listing.price}</h2>

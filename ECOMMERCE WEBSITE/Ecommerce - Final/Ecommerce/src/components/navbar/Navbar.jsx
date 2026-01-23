@@ -5,9 +5,15 @@ export default function Navbar() {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
 
+  const today = new Date().toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+
   const handleSell = () => {
     if (!user) navigate("/login");
-    else navigate("/Sell");
+    else navigate("/sell"); // lowercase is safer
   };
 
   const handleLogout = () => {
@@ -105,6 +111,9 @@ export default function Navbar() {
         <span>Jobs</span>
         <span>Electronics</span>
         <span>Furniture</span>
+
+        {/* DATE AT RIGHT END (INSIDE BAR) */}
+        <span className="category-date">{today}</span>
       </div>
     </>
   );

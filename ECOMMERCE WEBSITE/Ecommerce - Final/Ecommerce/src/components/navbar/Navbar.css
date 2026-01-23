@@ -212,9 +212,10 @@
 
 /* DATE AT RIGHT END */
 .category-date {
-  margin-left: auto; /* pushes to extreme right */
-  margin-right: 10px; /* little gap from right side */
+  margin-left: auto;      /* pushes to extreme right */
+  margin-right: 10px;    /* little gap from right side */
   color: gray;
   font-size: 14px;
   white-space: nowrap;
 }
+

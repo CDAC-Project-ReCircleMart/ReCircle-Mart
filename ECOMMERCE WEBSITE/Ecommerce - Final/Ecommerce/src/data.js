@@ -1,5 +1,22 @@
 export const listings = [
   /* ======================= CARS (1–10) ======================= */
+
+  {
+    id: 1,
+    title: "iPhone 12",
+    price: "₹25,000",
+    images: [
+      "/images/iphone1.png",
+      "/images/iphone2.png",
+      "/images/iphone3.png",
+    ],
+    location: "Mumbai",
+    date: "23 Jan 2026",
+    owner: "Rohit",
+    year: "2022",
+    description: "Good condition phone",
+  },
+
   {
     id: 1,
     category: "Cars",
