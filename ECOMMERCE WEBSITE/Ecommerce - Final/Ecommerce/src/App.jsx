@@ -10,6 +10,8 @@ import Favourites from "./pages/Favourites/Favourites";
 // Login and Register
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
+import Profile from "./pages/Profile/Profile";
+import EditProfile from "./pages/Profile/EditProfile";
 
 //Sell form
 import Sell from "./pages/Sell/Sell";
@@ -43,6 +45,8 @@ export default function App() {
         {/* Auth */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/edit-profile" element={<EditProfile />} />
 
         {/* Product detail */}
         <Route path="/product/:id" element={<ProductDetail />} />

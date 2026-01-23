@@ -39,9 +39,18 @@ export default function Navbar() {
         </div>
 
         <div className="right-head">
-          <i className="fa-regular fa-comments icon"></i>
-          <i className="fa-regular fa-bell icon"></i>
-          <i className="fa-regular fa-heart icon"></i>
+          <i
+            className="fa-regular fa-comments icon"
+            onClick={() => navigate("/messages")}
+          ></i>
+          <i
+            className="fa-regular fa-bell icon"
+            onClick={() => navigate("/notifications")}
+          ></i>
+          <i
+            className="fa-regular fa-heart icon"
+            onClick={() => navigate("/favourites")}
+          ></i>
 
           {!user ? (
             <button className="nav-link" onClick={() => navigate("/login")}>
@@ -49,7 +58,12 @@ export default function Navbar() {
             </button>
           ) : (
             <div className="profile-nav">
-              <img src={user.icon} alt="profile" className="nav-profile" />
+              <img
+                src={user.icon}
+                alt="profile"
+                className="nav-profile"
+                onClick={() => navigate("/profile")}
+              />
               <span>{user.firstName}</span>
               <button className="logout-btn" onClick={handleLogout}>
                 Logout

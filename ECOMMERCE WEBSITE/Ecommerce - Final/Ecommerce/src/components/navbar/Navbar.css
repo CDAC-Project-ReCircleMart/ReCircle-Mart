@@ -202,3 +202,19 @@
   color: red;
   cursor: pointer;
 }
+
+.category-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px 20px;
+}
+
+/* DATE AT RIGHT END */
+.category-date {
+  margin-left: auto; /* pushes to extreme right */
+  margin-right: 10px; /* little gap from right side */
+  color: gray;
+  font-size: 14px;
+  white-space: nowrap;
+}
