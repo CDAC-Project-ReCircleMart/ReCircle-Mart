@@ -13,7 +13,7 @@ export const categories = {
 
   Fashion: ["Men", "Women", "Kids"],
 
-  Pets: ["Fishes & Aquarium", "Pet Food & Accessories", "Dogs", "Other Pets"],
+  Pets: ["pets"],
 
   Electronics: [
     "Cameras & Lenses",
@@ -24,4 +24,7 @@ export const categories = {
     "ACs",
     "Washing Machines",
   ],
+  Sports: ["sport"],
+
+  Mobiles: ["Mobile"],
 };

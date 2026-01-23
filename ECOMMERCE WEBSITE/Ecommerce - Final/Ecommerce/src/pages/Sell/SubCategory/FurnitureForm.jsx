@@ -128,9 +128,7 @@ export default function FurnitureForm() {
                   type="file"
                   accept="image/*"
                   hidden
-                  onChange={(e) =>
-                    handleSelectPhoto(index, e.target.files[0])
-                  }
+                  onChange={(e) => handleSelectPhoto(index, e.target.files[0])}
                 />
                 <span className="plus">+</span>
               </label>
@@ -180,7 +178,7 @@ export default function FurnitureForm() {
 
       <div className="form-group">
         <label>Name</label>
-        <input defaultValue="rohit kavathekar" maxLength="30" />
+        <input placeholder="Enter Your Name" maxLength="30" />
       </div>
 
       <h3>Let's verify your account</h3>

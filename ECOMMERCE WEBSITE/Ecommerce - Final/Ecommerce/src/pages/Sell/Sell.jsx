@@ -12,44 +12,46 @@ export default function Sell() {
   const handleSubCategoryChange = (sub) => {
     setSelectedSubCategory(sub);
 
-    // Navigate based on category
-
-    //ALL CAR FORMS
+    // CARS
     if (selectedCategory === "Cars") {
       navigate("/sell/cars");
     }
 
-    // ALL BIKE FORMS
-    if (selectedCategory === "Bikes") {
-      if (sub === "Motorcycles") {
-        navigate("/sell/bikes/motorcycles");
-      }
-
-      if (sub === "Scooters") {
-        navigate("/sell/bikes/scooters");
-      }
-
-      if (sub === "Bicycles") {
-        navigate("/sell/bikes/bicycles");
-      }
+    // BIKES
+    else if (selectedCategory === "Bikes") {
+      if (sub === "Motorcycles") navigate("/sell/bikes/motorcycles");
+      if (sub === "Scooters") navigate("/sell/bikes/scooters");
+      if (sub === "Bicycles") navigate("/sell/bikes/bicycles");
     }
 
-    // ALL FURNITURE FORM
-    if (selectedCategory === "Electronics") {
+    // ELECTRONICS
+    else if (selectedCategory === "Electronics") {
       navigate("/sell/electronics");
     }
-    if (selectedCategory === "Furniture") {
+
+    // FURNITURE
+    else if (selectedCategory === "Furniture") {
       navigate("/sell/furniture");
     }
 
-    //ALL FASHION FORMS
-    if (selectedCategory === "Fashion") {
+    // FASHION
+    else if (selectedCategory === "Fashion") {
       navigate("/sell/fashion");
     }
 
-    //ALL PETS FORMS
-    if (selectedCategory === "Pets") {
+    // PETS
+    else if (selectedCategory === "Pets") {
       navigate("/sell/pets");
+    }
+
+    // MOBILES
+    else if (selectedCategory === "Mobiles") {
+      navigate("/sell/mobile");
+    }
+
+    // SPORTS & HOBBIES
+    else if (selectedCategory === "Sports") {
+      navigate("/sell/sport");
     }
   };
 

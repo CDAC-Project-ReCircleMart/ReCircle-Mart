@@ -220,17 +220,7 @@ export default function FashionForm() {
 
       <div className="form-group">
         <label>Name</label>
-        <input defaultValue="rohit kavathekar" maxLength="30" />
-      </div>
-
-      <h3>Let's verify your account</h3>
-      <p className="verify-text">
-        We will send you a confirmation code by SMS on the next step.
-      </p>
-
-      <div className="phone-group">
-        <span>+91</span>
-        <input type="tel" placeholder="Mobile Phone Number" />
+        <input placeholder="Enter Your Name" maxLength="30" />
       </div>
 
       <button className="submit-btn" onClick={handleSubmit}>

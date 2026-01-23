@@ -2,9 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./BikeForm.css";
 
-export default function SportsForm() {
+export default function PetForm() {
   const navigate = useNavigate();
-  const category = "Sports & Hobbies";
+  const category = "Pets";
 
   const [subCategory, setSubCategory] = useState(""); // NEW
   const [photos, setPhotos] = useState(Array(12).fill(null));
@@ -35,7 +35,7 @@ export default function SportsForm() {
     };
 
     console.log("Sending to backend:", adData);
-    alert("Sports Ad Posted (demo)");
+    alert("Pet Ad Posted (demo)");
   };
 
   return (
@@ -65,11 +65,10 @@ export default function SportsForm() {
           onChange={(e) => setSubCategory(e.target.value)}
         >
           <option value="">Select Sub Category</option>
-          <option>Books</option>
-          <option>Gym & Fitness</option>
-          <option>Musical Instruments</option>
-          <option>Sports Equipment</option>
-          <option>Other Hobbies</option>
+          <option>Fishes & Aquarium</option>
+          <option>Pet Food & Accessories</option>
+          <option>Dogs</option>
+          <option>Other Pets</option>
         </select>
       </div>
 
@@ -93,7 +92,7 @@ export default function SportsForm() {
       <h3>Set a price</h3>
       <div className="price-group">
         <span>₹</span>
-        <input type="number" />
+        <input type="number" placeholder="Price" />
       </div>
 
       {/* PHOTOS */}
@@ -117,6 +116,7 @@ export default function SportsForm() {
                 <input
                   type="file"
                   hidden
+                  accept="image/*"
                   onChange={(e) => handleSelectPhoto(index, e.target.files[0])}
                 />
                 <span className="plus">+</span>
@@ -128,12 +128,21 @@ export default function SportsForm() {
 
       {/* LOCATION */}
       <h3>Confirm your location</h3>
+
       <div className="form-group">
         <label>State *</label>
         <input />
       </div>
       <div className="form-group">
+        <label>District *</label>
+        <input />
+      </div>
+      <div className="form-group">
         <label>City *</label>
+        <input />
+      </div>
+      <div className="form-group">
+        <label>Pin Code *</label>
         <input />
       </div>
 

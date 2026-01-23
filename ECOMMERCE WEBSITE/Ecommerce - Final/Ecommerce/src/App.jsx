@@ -22,6 +22,10 @@ import FurnitureForm from "./pages/Sell/SubCategory/FurnitureForm";
 import ElectronicsForm from "./pages/Sell/SubCategory/ElectronicsForm";
 import FashionForm from "./pages/Sell/SubCategory/FashionForm";
 
+import PetForm from "./pages/Sell/SubCategory/PetForm";
+import MobileForm from "./pages/Sell/SubCategory/MobileForm";
+import SportsForm from "./pages/Sell/SubCategory/SportsForm";
+
 // Navbar
 import Navbar from "./components/Navbar/Navbar";
 
@@ -65,8 +69,17 @@ export default function App() {
         {/* Electronics */}
         <Route path="/sell/electronics" element={<ElectronicsForm />} />
 
-        {/* Electronics */}
+        {/* Fashionform */}
         <Route path="/sell/Fashion" element={<FashionForm />} />
+
+        {/* PetForm */}
+        <Route path="/sell/pets" element={<PetForm />} />
+
+        {/* Mobile */}
+        <Route path="/sell/mobile" element={<MobileForm />} />
+
+        {/* sport */}
+        <Route path="/sell/sport" element={<SportsForm />} />
       </Routes>
     </div>
   );
