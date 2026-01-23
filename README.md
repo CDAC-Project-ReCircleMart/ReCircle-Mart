@@ -1,4 +1,4 @@
-# Olx-Style-WebApplication
+# ReCircle-Mart-WebApplication
 
 This project is an online marketplace where users can buy and sell products, similar to OLX.  
 It was developed as part of the CDAC academic project to demonstrate full-stack web development using modern technologies like mern stack.
@@ -38,11 +38,11 @@ It was developed as part of the CDAC academic project to demonstrate full-stack 
 
 ```bash
 # Clone the repository
-git clone https://github.com/CDAC-Project-Olx-Style/Olx-Style-WebApplication.git
+git clone https://github.com/CDAC-Project-ReCircleMart/ReCircle-Mart.git
 
 
 # Navigate into the project folder
-cd olx-style-webapp
+cd ReCircle-Mart-WebApplication
 
 # Install dependencies
 npm install
