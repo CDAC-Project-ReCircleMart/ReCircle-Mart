@@ -1,13 +1,80 @@
+/* eslint-disable no-unused-vars */
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./BikeForm.css";
 
 export default function SportsForm() {
   const navigate = useNavigate();
   const category = "Sports & Hobbies";
 
-  const [subCategory, setSubCategory] = useState(""); // NEW
+  const subCategories = [
+    "Books",
+    "Gym & Fitness",
+    "Musical Instruments",
+    "Sports Equipment",
+    "Other Hobbies",
+  ];
+
+  const indianStates = [
+    "Andhra Pradesh",
+    "Arunachal Pradesh",
+    "Assam",
+    "Bihar",
+    "Chhattisgarh",
+    "Goa",
+    "Gujarat",
+    "Haryana",
+    "Himachal Pradesh",
+    "Jharkhand",
+    "Karnataka",
+    "Kerala",
+    "Madhya Pradesh",
+    "Maharashtra",
+    "Manipur",
+    "Meghalaya",
+    "Mizoram",
+    "Nagaland",
+    "Odisha",
+    "Punjab",
+    "Rajasthan",
+    "Sikkim",
+    "Tamil Nadu",
+    "Telangana",
+    "Tripura",
+    "Uttar Pradesh",
+    "Uttarakhand",
+    "West Bengal",
+    "Andaman and Nicobar Islands",
+    "Chandigarh",
+    "Dadra and Nagar Haveli and Daman and Diu",
+    "Delhi",
+    "Jammu and Kashmir",
+    "Ladakh",
+    "Lakshadweep",
+    "Puducherry",
+  ];
+
+  const [form, setForm] = useState({
+    subCategory: "",
+    title: "",
+    yearOfPurchase: "",
+    state: "",
+    city: "",
+    landmark: "",
+
+    // SPORTS SPECIFIC
+    descriptionText: "",
+    price: "",
+  });
+
   const [photos, setPhotos] = useState(Array(12).fill(null));
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+  };
 
   const handleSelectPhoto = (index, file) => {
     if (!file) return;
@@ -22,20 +89,39 @@ export default function SportsForm() {
     setPhotos(updated);
   };
 
-  const handleSubmit = () => {
-    if (!subCategory) {
-      alert("Please select a sub category");
+  // SUBMIT
+  const handleSubmit = async () => {
+    if (!form.subCategory) {
+      toast.error("Please select a sub category");
       return;
     }
 
-    const adData = {
-      category: category,
-      subCategory: subCategory,
-      // later add title, description, price, photos, location, etc.
+    // GROUP SPORTS FIELDS INTO DESCRIPTION
+    const description = `Notes:${form.descriptionText}, Price:${form.price}`;
+
+    // COMBINE LOCATION
+    const location = `${form.state}, ${form.city}, ${form.landmark}`;
+
+    const payload = {
+      subCategory: form.subCategory,
+      name: form.title,
+      description,
+      purchasedYear: form.yearOfPurchase,
+      location,
+      images: photos.filter((p) => p !== null).map((p) => p.file),
     };
 
-    console.log("Sending to backend:", adData);
-    alert("Sports Ad Posted (demo)");
+    try {
+      await fetch("http://localhost:8080/api/products", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      toast.success("Sports ad posted successfully!");
+    } catch (err) {
+      toast.error("Failed to post ad");
+    }
   };
 
   return (
@@ -57,27 +143,41 @@ export default function SportsForm() {
 
       <h3>Include some details</h3>
 
-      {/* SUB CATEGORY DROPDOWN */}
+      {/* SUB CATEGORY */}
       <div className="form-group">
         <label>Sub Category *</label>
         <select
-          value={subCategory}
-          onChange={(e) => setSubCategory(e.target.value)}
+          name="subCategory"
+          value={form.subCategory}
+          onChange={handleChange}
+          required
         >
           <option value="">Select Sub Category</option>
-          <option>Books</option>
-          <option>Gym & Fitness</option>
-          <option>Musical Instruments</option>
-          <option>Sports Equipment</option>
-          <option>Other Hobbies</option>
+          {subCategories.map((s) => (
+            <option key={s}>{s}</option>
+          ))}
         </select>
       </div>
 
+      {/* TITLE */}
       <div className="form-group">
-        <label>Ad Title *</label>
+        <label>Title *</label>
         <input
-          maxLength="70"
-          placeholder="Mention the key features of your item"
+          name="title"
+          value={form.title}
+          onChange={handleChange}
+          required
+        />
+      </div>
+
+      {/* YEAR OF PURCHASE */}
+      <div className="form-group">
+        <label>Year of Purchase *</label>
+        <input
+          type="number"
+          name="yearOfPurchase"
+          value={form.yearOfPurchase}
+          onChange={handleChange}
         />
       </div>
 
@@ -85,6 +185,9 @@ export default function SportsForm() {
         <label>Description *</label>
         <textarea
           rows="4"
+          name="descriptionText"
+          value={form.descriptionText}
+          onChange={handleChange}
           placeholder="Include condition, features and reason for selling"
         ></textarea>
       </div>
@@ -93,7 +196,12 @@ export default function SportsForm() {
       <h3>Set a price</h3>
       <div className="price-group">
         <span>₹</span>
-        <input type="number" />
+        <input
+          type="number"
+          name="price"
+          value={form.price}
+          onChange={handleChange}
+        />
       </div>
 
       {/* PHOTOS */}
@@ -128,20 +236,30 @@ export default function SportsForm() {
 
       {/* LOCATION */}
       <h3>Confirm your location</h3>
+
       <div className="form-group">
         <label>State *</label>
-        <input />
-      </div>
-      <div className="form-group">
-        <label>City *</label>
-        <input />
+        <select
+          name="state"
+          value={form.state}
+          onChange={handleChange}
+          required
+        >
+          <option value="">Select State</option>
+          {indianStates.map((s) => (
+            <option key={s}>{s}</option>
+          ))}
+        </select>
       </div>
 
-      {/* REVIEW */}
-      <h3>Review your details</h3>
       <div className="form-group">
-        <label>Name</label>
-        <input />
+        <label>City *</label>
+        <input name="city" value={form.city} onChange={handleChange} />
+      </div>
+
+      <div className="form-group">
+        <label>Landmark / Address *</label>
+        <input name="landmark" value={form.landmark} onChange={handleChange} />
       </div>
 
       <button className="submit-btn" onClick={handleSubmit}>

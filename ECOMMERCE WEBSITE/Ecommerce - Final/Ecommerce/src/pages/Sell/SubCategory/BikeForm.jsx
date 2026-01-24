@@ -1,25 +1,85 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import "./BikeForm.css";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "./BikeForm.css"; // UI unchanged
 
 export default function BikeForm() {
   const navigate = useNavigate();
   const { type } = useParams(); // motorcycles / scooters / bicycles
 
   const category = "Bikes";
-  const subCategory = type; // directly from URL
+
+  const subCategories = ["Motorcycles", "Scooters", "Bicycles"];
+
+  const indianStates = [
+    "Andhra Pradesh",
+    "Arunachal Pradesh",
+    "Assam",
+    "Bihar",
+    "Chhattisgarh",
+    "Goa",
+    "Gujarat",
+    "Haryana",
+    "Himachal Pradesh",
+    "Jharkhand",
+    "Karnataka",
+    "Kerala",
+    "Madhya Pradesh",
+    "Maharashtra",
+    "Manipur",
+    "Meghalaya",
+    "Mizoram",
+    "Nagaland",
+    "Odisha",
+    "Punjab",
+    "Rajasthan",
+    "Sikkim",
+    "Tamil Nadu",
+    "Telangana",
+    "Tripura",
+    "Uttar Pradesh",
+    "Uttarakhand",
+    "West Bengal",
+    "Andaman and Nicobar Islands",
+    "Chandigarh",
+    "Dadra and Nagar Haveli and Daman and Diu",
+    "Delhi",
+    "Jammu and Kashmir",
+    "Ladakh",
+    "Lakshadweep",
+    "Puducherry",
+  ];
 
   // 12 fixed photo slots
   const [photos, setPhotos] = useState(Array(12).fill(null));
 
+  const [form, setForm] = useState({
+    subCategory: type || "",
+    title: "",
+    yearOfPurchase: "",
+    state: "",
+    city: "",
+    landmark: "",
+
+    // CATEGORY SPECIFIC
+    brand: "",
+    model: "",
+    fuel: "",
+    kmDriven: "",
+    descriptionText: "",
+    price: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+  };
+
   const handleSelectPhoto = (index, file) => {
     if (!file) return;
-
     const updated = [...photos];
-    updated[index] = {
-      file,
-      preview: URL.createObjectURL(file),
-    };
+    updated[index] = { file, preview: URL.createObjectURL(file) };
     setPhotos(updated);
   };
 
@@ -27,6 +87,36 @@ export default function BikeForm() {
     const updated = [...photos];
     updated[index] = null;
     setPhotos(updated);
+  };
+
+  // SUBMIT
+  const handleSubmit = async () => {
+    // GROUP CATEGORY SPECIFIC FIELDS INTO DESCRIPTION
+    const description = `Brand:${form.brand}, Model:${form.model}, Fuel:${form.fuel}, KMDriven:${form.kmDriven}, Notes:${form.descriptionText}, Price:${form.price}`;
+
+    // COMBINE LOCATION
+    const location = `${form.state}, ${form.city}, ${form.landmark}`;
+
+    const payload = {
+      subCategory: form.subCategory,
+      name: form.title,
+      description,
+      purchasedYear: form.yearOfPurchase,
+      location,
+      images: photos.filter((p) => p !== null).map((p) => p.file),
+    };
+
+    try {
+      await fetch("http://localhost:8080/api/products", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      toast.success("Bike ad posted successfully!");
+    } catch (err) {
+      toast.error("Failed to post ad");
+    }
   };
 
   return (
@@ -38,7 +128,7 @@ export default function BikeForm() {
         <div className="selected-category">
           <span>Selected category</span>
           <div className="cat-path">
-            <strong>{category}</strong> / <span>{subCategory}</span>
+            <strong>{category}</strong> / <span>{form.subCategory}</span>
             <button className="change-btn" onClick={() => navigate("/sell")}>
               Change
             </button>
@@ -48,25 +138,57 @@ export default function BikeForm() {
 
       <h3>Include some details</h3>
 
+      {/* SUB CATEGORY DROPDOWN */}
+      <div className="form-group">
+        <label>Sub Category *</label>
+        <select
+          name="subCategory"
+          value={form.subCategory}
+          onChange={handleChange}
+          required
+        >
+          <option value="">Select</option>
+          {subCategories.map((s) => (
+            <option key={s}>{s}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* TITLE */}
+      <div className="form-group">
+        <label>Title *</label>
+        <input
+          name="title"
+          value={form.title}
+          onChange={handleChange}
+          required
+        />
+      </div>
+
       <div className="form-group">
         <label>Brand *</label>
-        <input type="text" />
+        <input name="brand" value={form.brand} onChange={handleChange} />
       </div>
 
       <div className="form-group">
         <label>Model *</label>
-        <input type="text" />
+        <input name="model" value={form.model} onChange={handleChange} />
       </div>
 
-      
+      {/* YEAR OF PURCHASE */}
       <div className="form-group">
-        <label>Year *</label>
-        <input type="number" />
+        <label>Year of Purchase *</label>
+        <input
+          type="number"
+          name="yearOfPurchase"
+          value={form.yearOfPurchase}
+          onChange={handleChange}
+        />
       </div>
 
       <div className="form-group">
         <label>Fuel *</label>
-        <select>
+        <select name="fuel" value={form.fuel} onChange={handleChange}>
           <option value="">Select</option>
           <option>Electric</option>
           <option>Others</option>
@@ -78,14 +200,11 @@ export default function BikeForm() {
 
       <div className="form-group">
         <label>KM Driven *</label>
-        <input type="number" />
-      </div>
-
-      <div className="form-group">
-        <label>Ad Title *</label>
         <input
-          maxLength="70"
-          placeholder="Mention the key features (brand, model, age...)"
+          type="number"
+          name="kmDriven"
+          value={form.kmDriven}
+          onChange={handleChange}
         />
       </div>
 
@@ -93,6 +212,9 @@ export default function BikeForm() {
         <label>Description *</label>
         <textarea
           rows="4"
+          name="descriptionText"
+          value={form.descriptionText}
+          onChange={handleChange}
           placeholder="Include condition, features and reason for selling"
         ></textarea>
       </div>
@@ -100,7 +222,12 @@ export default function BikeForm() {
       <h3>Set a price</h3>
       <div className="price-group">
         <span>₹</span>
-        <input type="number" placeholder="Price" />
+        <input
+          name="price"
+          type="number"
+          value={form.price}
+          onChange={handleChange}
+        />
       </div>
 
       {/* UPLOAD PHOTOS */}
@@ -137,56 +264,37 @@ export default function BikeForm() {
 
       <h3>Confirm your location</h3>
 
+      {/* STATE DROPDOWN */}
       <div className="form-group">
         <label>State *</label>
-        <input type="text" placeholder="Enter State" />
-      </div>
-
-      <div className="form-group">
-        <label>District *</label>
-        <input type="text" placeholder="Enter District" />
-      </div>
-
-      <div className="form-group">
-        <label>Taluka *</label>
-        <input type="text" placeholder="Enter Taluka" />
+        <select
+          name="state"
+          value={form.state}
+          onChange={handleChange}
+          required
+        >
+          <option value="">Select State</option>
+          {indianStates.map((s) => (
+            <option key={s}>{s}</option>
+          ))}
+        </select>
       </div>
 
       <div className="form-group">
         <label>City *</label>
-        <input type="text" placeholder="Enter City" />
+        <input name="city" value={form.city} onChange={handleChange} />
       </div>
 
       <div className="form-group">
-        <label>Address *</label>
-        <textarea
-          rows="3"
-          placeholder="Enter full address (Area, Street, Landmark...)"
-        ></textarea>
+        <label>Landmark / Address *</label>
+        <input name="landmark" value={form.landmark} onChange={handleChange} />
       </div>
 
-      <div className="form-group">
-        <label>Pin Code *</label>
-        <input type="number" placeholder="Enter Pin Code" />
-      </div>
+      {/* REVIEW SECTION REMOVED */}
 
-      <h3>Review your details</h3>
-      <div className="form-group">
-        <label>Name</label>
-        <input placeholder="Enter Your Name " maxLength="30" />
-      </div>
-
-      <h3>Let's verify your account</h3>
-      <p className="verify-text">
-        We will send you a confirmation code by SMS on the next step.
-      </p>
-
-      <div className="phone-group">
-        <span>+91</span>
-        <input type="tel" placeholder="Mobile Phone Number" />
-      </div>
-
-      <button className="submit-btn">Post Ad</button>
+      <button className="submit-btn" onClick={handleSubmit}>
+        Post Ad
+      </button>
     </div>
   );
 }

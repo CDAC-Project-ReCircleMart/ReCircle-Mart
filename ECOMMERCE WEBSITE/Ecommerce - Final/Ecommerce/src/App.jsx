@@ -1,5 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // Pages
 import Home from "./pages/Home/Home.jsx";
@@ -36,6 +38,9 @@ export default function App() {
     <div className="app-wrapper">
       {/* NAVBAR ALWAYS ON TOP */}
       <Navbar />
+
+      {/* toastify */}
+      <ToastContainer position="top-right" autoClose={3000} />
 
       {/* PAGE CONTENT */}
       <Routes>
