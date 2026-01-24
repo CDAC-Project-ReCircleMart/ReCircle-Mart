@@ -31,9 +31,7 @@ export default function ListingCard({ item }) {
         {/* price */}
         <div className="price">{item.price}</div>
         {/* km and year */}
-        <div className="km_year">
-          {item.year} - {item.km}
-        </div>
+        <div className="km_year">{item.year}</div>
         {/* title */}
         <div className="title">{item.title}</div>
 

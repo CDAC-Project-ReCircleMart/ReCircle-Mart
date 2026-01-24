@@ -1,6 +1,14 @@
 import { useState, useEffect } from "react";
 
-import Sidebar from "../../components/sidebar/CarSidebar";
+import CarSidebar from "../../components/sidebar/CarSidebar";
+import BikeSidebar from "../../components/sidebar/BikeSidebar";
+import MobileSidebar from "../../components/sidebar/MobileSidebar";
+import ElectronicsSidebar from "../../components/sidebar/ElectronicsSidebar";
+import FashionSidebar from "../../components/sidebar/FashionSidebar";
+import FurnitureSidebar from "../../components/sidebar/FurnitureSidebar";
+import PetsSidebar from "../../components/sidebar/PetsSidebar";
+import SportsSidebar from "../../components/sidebar/SportsSidebar";
+
 import ListingCard from "../../components/cards/ListingCard";
 import Footer from "../../components/footer/Footer";
 import CategoryGrid from "../../components/category/CategoryGrid";
@@ -25,15 +33,15 @@ export default function Home() {
   // WHEN CATEGORY ICON CLICKED
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
-    setCurrentPage(1); // reset to page 1
+    setCurrentPage(1);
 
-    // FILTER BY CATEGORY FIELD
+    // FILTER BY CATEGORY
     const filtered = listings.filter((item) => item.category === category);
 
     setFilteredListings(filtered);
   };
 
-  // FILTER FROM SIDEBAR
+  // 🔥 FILTER FROM SIDEBAR (COMMON FOR ALL CATEGORIES)
   const applyFilters = (filters) => {
     let filtered = [...listings];
 
@@ -53,11 +61,13 @@ export default function Home() {
 
     // YEAR
     if (filters.year) {
-      filtered = filtered.filter((item) => item.year === filters.year);
+      filtered = filtered.filter(
+        (item) => String(item.year) === String(filters.year),
+      );
     }
 
-    // BRAND (TITLE BASED)
-    if (filters.brand) {
+    // BRAND (TITLE BASED — works for Cars, Mobiles, etc.)
+    if (filters.brand && selectedCategory !== "Fashion") {
       filtered = filtered.filter((item) =>
         item.title.toLowerCase().includes(filters.brand.toLowerCase()),
       );
@@ -74,6 +84,67 @@ export default function Home() {
         return priceNumber >= minPrice && priceNumber <= maxPrice;
       });
     }
+
+    // CATEGORY-SPECIFIC EXTRA FILTERS (Cars etc.)
+    if (filters.fuel) {
+      filtered = filtered.filter((item) =>
+        item.description?.toLowerCase().includes(filters.fuel.toLowerCase()),
+      );
+    }
+
+    if (filters.transmission) {
+      filtered = filtered.filter((item) =>
+        item.description
+          ?.toLowerCase()
+          .includes(filters.transmission.toLowerCase()),
+      );
+    }
+
+    if (filters.owners) {
+      filtered = filtered.filter((item) =>
+        item.description?.toLowerCase().includes(`owners:${filters.owners}`),
+      );
+    }
+
+    // 🔥🔥🔥 FASHION FILTERS (THIS IS THE FIX)
+    if (selectedCategory === "Fashion") {
+      // BRAND (FROM DESCRIPTION)
+      if (filters.brand) {
+        filtered = filtered.filter((item) =>
+          item.description
+            ?.toLowerCase()
+            .includes(`brand:${filters.brand.toLowerCase()}`),
+        );
+      }
+
+      // PRODUCT TYPE
+      if (filters.productType) {
+        filtered = filtered.filter((item) =>
+          item.description
+            ?.toLowerCase()
+            .includes(`type:${filters.productType.toLowerCase()}`),
+        );
+      }
+
+      // SIZE
+      if (filters.size) {
+        filtered = filtered.filter((item) =>
+          item.description
+            ?.toLowerCase()
+            .includes(`size:${filters.size.toLowerCase()}`),
+        );
+      }
+
+      // CONDITION
+      if (filters.condition) {
+        filtered = filtered.filter((item) =>
+          item.description
+            ?.toLowerCase()
+            .includes(`condition:${filters.condition.toLowerCase()}`),
+        );
+      }
+    }
+    // 🔥🔥🔥 END FASHION FILTER FIX
 
     setCurrentPage(1);
     setFilteredListings(filtered);
@@ -94,6 +165,38 @@ export default function Home() {
     }
   };
 
+  // 🔥 DYNAMIC SIDEBAR LOADER
+  const renderSidebar = () => {
+    switch (selectedCategory) {
+      case "Cars":
+        return <CarSidebar onFilterChange={applyFilters} />;
+
+      case "Bikes":
+        return <BikeSidebar onFilterChange={applyFilters} />;
+
+      case "Mobiles":
+        return <MobileSidebar onFilterChange={applyFilters} />;
+
+      case "Electronics":
+        return <ElectronicsSidebar onFilterChange={applyFilters} />;
+
+      case "Fashion":
+        return <FashionSidebar onFilterChange={applyFilters} />;
+
+      case "Furniture":
+        return <FurnitureSidebar onFilterChange={applyFilters} />;
+
+      case "Pets":
+        return <PetsSidebar onFilterChange={applyFilters} />;
+
+      case "Sports & Hobbies":
+        return <SportsSidebar onFilterChange={applyFilters} />;
+
+      default:
+        return null;
+    }
+  };
+
   return (
     <>
       <div className="home-page">
@@ -102,16 +205,13 @@ export default function Home() {
             selectedCategory ? "with-sidebar" : "no-sidebar"
           }`}
         >
-          {/* LEFT SIDEBAR — ONLY SHOW AFTER CATEGORY SELECT */}
+          {/* LEFT SIDEBAR */}
           {selectedCategory && (
-            <aside className="sidebar-wrapper">
-              <Sidebar onFilterChange={applyFilters} />
-            </aside>
+            <aside className="sidebar-wrapper">{renderSidebar()}</aside>
           )}
 
           {/* RIGHT CONTENT */}
           <section className="listings">
-            {/* CATEGORY GRID ALWAYS ON TOP */}
             <CategoryGrid onSelectCategory={handleCategorySelect} />
 
             <h2 className="home-title">
@@ -130,7 +230,7 @@ export default function Home() {
                   ))}
                 </div>
 
-                {/* PAGINATION BAR */}
+                {/* PAGINATION */}
                 {totalPages > 1 && (
                   <div className="pagination">
                     <button
