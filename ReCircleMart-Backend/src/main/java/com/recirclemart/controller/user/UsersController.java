@@ -16,7 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import com.recirclemart.dtos.UserRegisterRequestDTO;
-
+import com.recirclemart.dtos.UserResponseDTO;
 import com.recirclemart.entities.user.Users;
 import com.recirclemart.model.Credentials;
 import com.recirclemart.security.JwtUtil;
@@ -51,15 +51,24 @@ public class UsersController {
 
     @PostMapping("/authenticate")
     public ResponseEntity<?> authenticate(@RequestBody Credentials cr) {
-        Authentication auth = new UsernamePasswordAuthenticationToken(cr.getEmail(), cr.getPassword());
-        System.out.println("Before auth : " + auth);
+
+        Authentication auth = new UsernamePasswordAuthenticationToken(
+                cr.getEmail(), cr.getPassword()
+        );
+
         auth = authManager.authenticate(auth);
-        System.out.println("After auth : " + auth);
 
         String token = jwtUtil.createToken(auth);
 
-        return ResponseEntity.ok(Map.of("status", "success", "token", token));
+        Users authenticatedUser = (Users) auth.getPrincipal();
 
+        UserResponseDTO responseDTO = new UserResponseDTO(authenticatedUser);
+
+        return ResponseEntity.ok(Map.of(
+                "status", "success",
+                "token", token,
+                "data", responseDTO
+        ));
     }
 
     // ------------------ private helpers ------------------

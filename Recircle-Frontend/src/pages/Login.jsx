@@ -4,6 +4,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { login } from "../Service/user";
 import { useAuth } from "../providers/AuthProvider";
 
+function newUser(response) {
+  if (response.profile.bio == null && response.profile.addresses.length == 0) {
+    return true;
+  }
+  return false;
+}
+
+
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -12,9 +20,48 @@ export default function Login() {
   const navigate = useNavigate();
 
   const onLogin = async () => {
+<<<<<<< Updated upstream
     if (!email) {
       toast.warning("Please enter email");
       return;
+=======
+    if (email.length == 0) {
+      toast.warning('please enter email')
+    } else if (password.length == 0) {
+      toast.warning('please enter password')
+    } else {
+      console.log("sending the request for login ")
+      const response = await login(email, password)
+      if (response.status == 'success') {
+        toast.success('login successful')
+
+        // get the token from response and cache it in local storage
+        localStorage.setItem('token', response.token)
+        // localStorage.setItem('firstName', response['data']['firstName'])
+        // localStorage.setItem('lastName', response['data']['lastName'])
+
+        // set the logged in user information
+        loginUser({
+          userToken: response.token,
+          user: response.data
+        })
+        console.log(response)
+
+
+        if (newUser(response.data)) {
+          console.log("This is the new user ")
+        }
+        else {
+          navigate('/home')
+        }
+
+
+
+
+      } else {
+        toast.error("Login Credentials not matched")
+      }
+>>>>>>> Stashed changes
     }
 
     if (!password) {
@@ -39,6 +86,8 @@ export default function Login() {
       toast.error("Login credentials not matched");
     }
   };
+
+
 
   return (
     <div className="auth-wrapper">

@@ -1,6 +1,7 @@
 package com.recirclemart.entities.user;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -56,8 +58,19 @@ public class Users implements UserDetails {
     @JoinColumn(name = "status_id", nullable = false)
     private UserStatus status;
 
+<<<<<<< Updated upstream
     @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
+=======
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "role_id", nullable = false)
+	private Role role;
+	
+
+	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+    private List<UserAddress> userAddresses;
+>>>>>>> Stashed changes
 
     @Column(name = "updated_at", insertable = false, updatable = false)
     private LocalDateTime updatedAt;

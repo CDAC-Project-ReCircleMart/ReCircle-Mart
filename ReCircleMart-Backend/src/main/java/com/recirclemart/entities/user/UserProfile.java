@@ -31,7 +31,11 @@ public class UserProfile {
     @Column(name = "profile_id")
     private Long profileId;
 
+<<<<<<< Updated upstream
     @OneToOne(fetch = FetchType.LAZY)
+=======
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+>>>>>>> Stashed changes
     @JoinColumn(name = "user_id", nullable = false)
     private Users user;
 
@@ -41,6 +45,10 @@ public class UserProfile {
     @Column(name = "bio")
     private String bio;
 
+    
+    
+    
+    
     // ---------- constructors ----------
     public UserProfile() {
         // JPA only

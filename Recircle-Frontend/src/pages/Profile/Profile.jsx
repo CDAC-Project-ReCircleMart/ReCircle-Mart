@@ -1,155 +1,118 @@
+// src/pages/Profile/Profile.jsx
+import { useNavigate } from "react-router-dom";
+import "./Profile.css";
+import { useAuth } from "../../providers/AuthProvider";
+const getDisplayAddress = (addresses) => {
+  if (!addresses || addresses.length === 0) return null;
 
-import React, { useState, useEffect } from "react";
-// import './Profile.css'
 
+  // 1️⃣ Try to find HOME address
+  const homeAddressObj = addresses.find(
+    (item) => item.addressType === "HOME"
+  );
+
+
+  // 2️⃣ If HOME exists, return it
+  if (homeAddressObj) {
+    return homeAddressObj.address;
+  }
+
+
+  // 3️⃣ Else return first available address
+  return addresses[0].address;
+};
 export default function Profile() {
-  const [user, setUser] = useState({});
-  const [isEditing, setIsEditing] = useState(false);
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  console.log(user)
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [location, setLocation] = useState("");
-  const [address, setAddress] = useState("");
+  // const user = user_detail.user
+  // TEMP – later replace with backend listings
+  const userListings = []; // empty = no products
 
-  useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
-    setUser(storedUser);
-
-    setName(storedUser.name || "");
-    setEmail(storedUser.email || "");
-    setLocation(storedUser.location || "");
-    setAddress(storedUser.address || "");
-  }, []);
-
-  const handleSave = () => {
-    const updatedUser = { ...user, name, email, location, address };
-    setUser(updatedUser);
-    localStorage.setItem("user", JSON.stringify(updatedUser));
-    setIsEditing(false);
-  };
-
-  const handleCancel = () => {
-    setName(user.name || "");
-    setEmail(user.email || "");
-    setLocation(user.location || "");
-    setAddress(user.address || "");
-    setIsEditing(false);
-  };
+  if (!user) {
+    navigate("/login");
+    return null;
+  }
+  const address = getDisplayAddress(user.user.profile?.addresses);
 
   return (
-    <div className="container mt-5">
-      <div className="row justify-content-center">
-        <div className="col-md-8 col-lg-6">
-          <div className="card shadow-sm border-0">
-            <div className="card-body p-4">
-              {/* Header */}
-              <div className="text-center mb-4">
-                <div
-                  className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto"
-                  style={{ width: "80px", height: "80px", fontSize: "32px" }}
-                >
-                  {name ? name.charAt(0).toUpperCase() : "U"}
-                </div>
-                <h4 className="mt-3 mb-0">{name || "User Name"}</h4>
-                <small className="text-muted">{email || "Userh@gmail.com"}</small>
-              </div>
 
-              {/* Name */}
-              <div className="mb-3">
-                <label className="form-label fw-semibold">Name</label>
-                {isEditing ? (
-                  <input
-                    className="form-control"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                  />
-                ) : (
-                  <div className="form-control bg-light">
-                    {user.name || "Harsh Kumar"}
-                  </div>
-                )}
-              </div>
+    <div className="profile-container">
+      {/* LEFT SIDE - USER INFO */}
+      <div className="profile-left">
+        <img
+          src="https://thumbs.dreamstime.com/b/h-alphabetic-design-letter-can-be-made-initial-image-profile-picture-can-also-be-made-symbol-logo-116910441.jpg"
+          // src={user.profilePhoto || "/default-user.png"}
+          alt="profile"
+          className="profile-big-img"
+        />
 
-              {/* Email */}
-              <div className="mb-3">
-                <label className="form-label fw-semibold">Email</label>
-                {isEditing ? (
-                  <input
-                    type="email"
-                    className="form-control"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                ) : (
-                  <div className="form-control bg-light">
-                    {user.email || "harsh@gmail.com"}
-                  </div>
-                )}
-              </div>
+        <h2 className="profile-name">
+          {user.user.fullName}
+        </h2>
 
-              {/* Location */}
-              <div className="mb-3">
-                <label className="form-label fw-semibold">Location</label>
-                {isEditing ? (
-                  <input
-                    className="form-control"
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
-                    placeholder="City, State"
-                  />
-                ) : (
-                  <div className="form-control bg-light">
-                    {user.location || "-"}
-                  </div>
-                )}
-              </div>
+        <p className="profile-email">{user.user.email}</p>
 
-              {/* Address */}
-              <div className="mb-4">
-                <label className="form-label fw-semibold">Address</label>
-                {isEditing ? (
-                  <textarea
-                    className="form-control"
-                    rows="2"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                  />
-                ) : (
-                  <div className="form-control bg-light">
-                    {user.address || "Hinjewadi Pune"}
-                  </div>
-                )}
-              </div>
+        {user.user.profile.bio && (
+          <p className="profile-bio">asdf{user.user.profile.bio}</p>
+        )}
 
-              {/* Buttons */}
-              <div className="text-end">
-                {isEditing ? (
-                  <>
-                    <button
-                      className="btn btn-primary me-2"
-                      onClick={handleSave}
-                    >
-                      Save
-                    </button>
-                    <button
-                      className="btn btn-outline-secondary"
-                      onClick={handleCancel}
-                    >
-                      Cancel
-                    </button>
-                  </>
-                ) : (
-                  <button
-                    className="btn btn-primary px-4"
-                    onClick={() => setIsEditing(true)}
-                  >
-                    Edit Profile
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
+        <div className="profile-details">
+          <p>
+            <strong>📞 Phone:</strong> {user.user.phone || "Not added"}
+          </p>
+
+          <p>
+            <strong>🏠 Address:</strong>{" "}
+            {address ? (
+              <>
+                {address.street}, {address.city}, {address.state} -{" "}
+                {address.pincode}
+              </>
+            ) : (
+              "Address not added"
+            )}
+          </p>
         </div>
+
+        <button
+          className="edit-profile-btn"
+          onClick={() => navigate("/edit-profile")}
+        >
+          Edit Profile
+        </button>
+      </div>
+
+
+      {/* RIGHT SIDE - USER LISTINGS */}
+      <div className="profile-right">
+        {userListings.length === 0 ? (
+          <div className="no-listing-box">
+            <img
+              src="/start-selling.png" // add any illustration in public folder
+              alt="start selling"
+              className="no-listing-img"
+            />
+
+            <h3>You haven't listed anything yet</h3>
+            <p>Start selling now</p>
+
+            <button className="sell-now-btn" onClick={() => navigate("/sell")}>
+              Start Selling
+            </button>
+          </div>
+        ) : (
+          <div className="listing-grid">
+            {userListings.map((item) => (
+              <div key={item.id} className="listing-card">
+                <img src={item.image} alt={item.title} />
+                <h4>{item.title}</h4>
+                <p>₹ {item.price}</p>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
