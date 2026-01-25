@@ -1,11 +1,9 @@
 export default function ChatListItem({ chat, active, onClick }) {
-  // 🔴 OTHER USER (SELLER / BUYER)
-  const name = chat.otherUser?.name || chat.seller?.name || "User";
-
-  const avatar =
-    chat.otherUser?.avatar || chat.seller?.avatar || "/default-user.png"; // keep default icon
-
-  const lastMessage = chat.lastMessage || "No messages yet";
+  const avatar = chat.otherUserAvatar
+    ? chat.otherUserAvatar.startsWith("/uploads")
+      ? `http://localhost:8080${chat.otherUserAvatar}`
+      : chat.otherUserAvatar
+    : "/profile.png";
 
   return (
     <div
@@ -13,15 +11,16 @@ export default function ChatListItem({ chat, active, onClick }) {
       onClick={onClick}
     >
       {/* AVATAR */}
-      <div className="chat-avatar">
-        <img src={avatar} alt={name} />
+      <img src={avatar} alt="user" className="chat-list-avatar" />
+
+      {/* INFO */}
+      <div className="chat-info">
+        <p className="chat-name">{chat.otherUserName}</p>
+        <p className="chat-last">{chat.title}</p>
       </div>
 
-      {/* TEXT AREA */}
-      <div className="chat-info">
-        <p className="chat-name">{name}</p>
-        <p className="chat-last">{lastMessage}</p>
-      </div>
+      {/* RED DOT */}
+      {chat.unread && <span className="red-dot"></span>}
     </div>
   );
 }

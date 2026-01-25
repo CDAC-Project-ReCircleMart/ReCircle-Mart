@@ -15,11 +15,10 @@ router.get("/", auth, chatController.getMyChats);
 router.get("/:chatId/messages", auth, chatController.getMessages);
 
 // 🔴 SEND MESSAGE
-// router.post("/send", auth, chatController.sendMessage);
+router.post("/send", auth, chatController.sendMessage);
 
-router.post("/:chatId/messages", auth, chatController.sendMessage);
+// 🔴 SEND MESSAGE (MATCH FRONTEND)
+// router.post("/:chatId/messages", auth, chatController.sendMessage);
 
-// delete chat
-router.delete("/:chatId", auth, chatController.deleteChat);
 
 module.exports = router;

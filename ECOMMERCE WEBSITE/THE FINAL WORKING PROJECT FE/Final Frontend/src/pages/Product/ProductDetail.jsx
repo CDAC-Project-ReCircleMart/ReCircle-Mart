@@ -42,7 +42,7 @@ export default function ProductDetail() {
     );
   }
 
-  // 🔴 🔥 FIX 1: PREPARE IMAGES WITH FULL BACKEND PATH
+  // 🔴 PREPARE IMAGES WITH FULL BACKEND PATH
   const images =
     listing.images && listing.images.length > 0
       ? listing.images.map((img) =>
@@ -63,21 +63,30 @@ export default function ProductDetail() {
     ? listing.location.split(",")[1]?.trim()
     : "Unknown";
 
-  // 🔴 START CHAT WITH SELLER
+  // 🔥 COMMON CHAT FUNCTION (USED BY BOTH BUTTONS)
   const startChat = async () => {
     try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        toast.error("Please login to chat with seller");
+        navigate("/login");
+        return;
+      }
+
       const res = await api.post("/chats/start", {
         listingId: listing.id,
-        sellerId: listing.seller_id || listing.seller?.id,
+        sellerId: listing.seller?.id || listing.seller_id,
       });
 
       const { chatId } = res.data;
 
+      // 🔴 OPEN MESSAGES PAGE WITH THIS CHAT
       navigate("/messages", {
         state: { chatId },
       });
     } catch (err) {
-      console.error(err);
+      console.error("START CHAT ERROR:", err);
       toast.error("Failed to start chat with seller");
     }
   };
@@ -92,7 +101,6 @@ export default function ProductDetail() {
           </button>
         )}
 
-        {/* 🔴 🔥 FIX 2: SHOW CURRENT IMAGE */}
         <img src={images[currentIndex]} alt={listing.title} />
 
         {images.length > 1 && (
@@ -153,11 +161,17 @@ export default function ProductDetail() {
 
         {/* RIGHT SIDE */}
         <div className="right-panel mt-2">
+          {/* PRICE + OFFER */}
           <div className="price-card">
             <h2 className="price">₹ {listing.price}</h2>
-            <button className="offer-btn">Make Offer</button>
+
+            {/* 🔥 MAKE OFFER ALSO OPENS CHAT */}
+            <button className="offer-btn" onClick={startChat}>
+              Make Offer
+            </button>
           </div>
 
+          {/* SELLER CARD */}
           <div className="seller-card">
             <div className="seller-info">
               <i className="fa-solid fa-circle-user"></i>
@@ -169,6 +183,7 @@ export default function ProductDetail() {
               </div>
             </div>
 
+            {/* 🔥 CHAT BUTTON */}
             <button className="chat-btn" onClick={startChat}>
               <i className="fa-solid fa-comment-dots"></i> Chat with seller
             </button>
