@@ -10,8 +10,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
-
 import org.springframework.stereotype.Component;
+
 import com.recirclemart.entities.user.Users;
 
 import io.jsonwebtoken.Claims;
@@ -24,51 +24,64 @@ import jakarta.annotation.PostConstruct;
 @Component
 public class JwtUtil {
 
-	@Value(value = "${jwt.token.expiration.millis}")
-	public long jwtExpiration;
+	@Value("${jwt.token.expiration.millis}")
+	private long jwtExpiration;
 
-	@Value(value = "${jwt.token.secret}")
-	public String jwtSecret;
+	@Value("${jwt.token.secret}")
+	private String jwtSecret;
 
 	private Key jwtKey;
 
 	@PostConstruct
 	public void init() {
 		jwtKey = Keys.hmacShaKeyFor(jwtSecret.getBytes());
-
 	}
 
+	// ===================== CREATE TOKEN =====================
 	public String createToken(Authentication auth) {
+
 		Users user = (Users) auth.getPrincipal();
-		String subject = "" + user.getUserId();
+
+		// ✅ FIX: STORE EMAIL IN JWT SUBJECT
+		String subject = user.getEmail();
+
 		String roles = user.getAuthorities().stream()
 				.map(authority -> authority.getAuthority())
 				.collect(Collectors.joining(","));
-		System.out.println("subject " + subject);
-		String token = Jwts.builder()
-				.setSubject(subject)
+
+		System.out.println("JWT subject (email): " + subject);
+
+		return Jwts.builder()
+				.setSubject(subject) // ✅ EMAIL
 				.setIssuedAt(new Date())
 				.setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
 				.claim("role", roles)
 				.signWith(jwtKey, SignatureAlgorithm.HS256)
 				.compact();
-
-		return token;
 	}
 
+	// ===================== VALIDATE TOKEN =====================
 	public Authentication validateToken(String token) {
-		JwtParser parser = Jwts.parserBuilder().setSigningKey(jwtKey).build();
+
+		JwtParser parser = Jwts.parserBuilder()
+				.setSigningKey(jwtKey)
+				.build();
+
 		Claims claims = parser
 				.parseClaimsJws(token)
 				.getBody();
 
-		String userId = claims.getSubject();
+		// ✅ NOW THIS IS EMAIL
+		String email = claims.getSubject();
+
 		String roles = (String) claims.get("role");
-		List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(roles);
+		List<GrantedAuthority> authorities =
+				AuthorityUtils.commaSeparatedStringToAuthorityList(roles);
 
-		Authentication auth = new UsernamePasswordAuthenticationToken(userId, null, authorities);
-
-		return auth;
+		return new UsernamePasswordAuthenticationToken(
+				email, // principal = EMAIL
+				null,
+				authorities
+		);
 	}
-
 }

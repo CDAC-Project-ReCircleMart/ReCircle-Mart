@@ -33,7 +33,7 @@ public class UsersServiceImpl implements UsersService, UserDetailsService {
                         throw new RuntimeException("Email already registered");
                 }
 
-                Role userRole = roleRepository.findByRoleName("USER")
+                Role userRole = roleRepository.findByRoleName("ROLE_USER")
                                 .orElseThrow(() -> new RuntimeException("Role not found"));
 
                 UserStatus activeStatus = userStatusRepository.findByStatusName("ACTIVE")

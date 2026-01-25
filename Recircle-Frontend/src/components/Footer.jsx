@@ -34,7 +34,7 @@ export default function Footer() {
       </div>
 
       <div className="footer-bottom-blue">
-        © 2025 OLX Ecommerce — All Rights Reserved to Rohit , Prashant , Harsh ,
+        © 2026 ReCircleMart Ecommerce — All Rights Reserved to Rohit , Prashant , Harsh ,
         Om Team
       </div>
     </footer>

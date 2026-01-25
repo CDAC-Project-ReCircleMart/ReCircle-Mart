@@ -4,9 +4,6 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -35,60 +32,86 @@ import lombok.Setter;
 @Setter
 public class Users implements UserDetails {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "user_id")
-	private Long userId;
+    private static final long serialVersionUID = 1L;
 
-	@Column(name = "full_name")
-	private String fullName;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
+    private Long userId;
 
-	@Column(name = "email" , unique = true)
-	
-	private String email;
+    @Column(name = "full_name", nullable = false)
+    private String fullName;
 
-	@Column(name = "phone_number")
-	private String phoneNumber;
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
 
-	@Column(name = "password_hash")
-	private String passwordHash;
+    @Column(name = "phone_number")
+    private String phoneNumber;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "status_id", nullable = false)
-	private UserStatus status;
-	
-	@CreationTimestamp
-	@Column(name = "created_at",  updatable = false)
-	private LocalDateTime createdAt;
+    // 🔐 BCrypt encrypted password
+    @Column(name = "password_hash", nullable = false)
+    private String passwordHash;
 
-	
-	@UpdateTimestamp
-	@Column(name = "updated_at", nullable= false)
-	private LocalDateTime updateAt;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "status_id", nullable = false)
+    private UserStatus status;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "role_id", nullable = false)
-	private Role role;
+    @Column(name = "created_at", insertable = false, updatable = false)
+    private LocalDateTime createdAt;
 
-	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
-	private UserProfile userProfile;
+    @Column(name = "updated_at", insertable = false, updatable = false)
+    private LocalDateTime updatedAt;
 
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(role.getRoleName());
-		return authorities;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id", nullable = false)
+    private Role role;
 
-	}
+    @OneToOne(
+        mappedBy = "user",
+        cascade = CascadeType.ALL,
+        fetch = FetchType.LAZY,
+        optional = false
+    )
+    private UserProfile userProfile;
 
-	@Override
-	public String getUsername() {
-		return this.email;
-	}
+    /* ================= SPRING SECURITY ================= */
 
-	@Override
-	public String getPassword() {
-		return this.passwordHash;
+    // ✅ Authorities (ROLE_USER / ROLE_ADMIN)
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return AuthorityUtils.createAuthorityList(role.getRoleName());
+    }
 
-	}
+    // ✅ Username for authentication (email)
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
 
+    // 🔥 REQUIRED: return BCrypt password
+    @Override
+    public String getPassword() {
+        return this.passwordHash;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    // ✅ User enabled only if status = ACTIVE
+    @Override
+    public boolean isEnabled() {
+        return status != null && "ACTIVE".equalsIgnoreCase(status.getStatusName());
+    }
 }

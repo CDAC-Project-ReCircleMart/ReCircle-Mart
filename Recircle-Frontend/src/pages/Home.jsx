@@ -2,41 +2,55 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import Footer from "../components/Footer";
 import ListingCard from "../components/ListingCard";
-import { listings } from "../data";
-import { useNavigate } from "react-router-dom";
+import api from "../api/axios";
 
 export default function Home() {
-  const [filteredListings, setFilteredListings] = useState(listings);
+  const [allListings, setAllListings] = useState([]);
+  const [filteredListings, setFilteredListings] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+
+    api
+      .get("/products")
+      .then((res) => {
+        setAllListings(res.data);
+        setFilteredListings(res.data);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+  }, []);
 
   const applyFilters = (filters) => {
-    let filtered = listings;
+    let filtered = [...allListings];
 
     if (filters.category) {
-      const categoryMap = {
-        Cars: ["Wagon", "Amaze", "S-Cross", "i20", "Rapid"],
-        Bikes: ["Splendor", "Classic"],
-        Scooters: ["Jupiter", "Access"],
-      };
-
-      filtered = filtered.filter((item) =>
-        categoryMap[filters.category]?.some((word) => item.title.includes(word))
+      filtered = filtered.filter(
+        (item) =>
+          item.category &&
+          item.category.toLowerCase() === filters.category.toLowerCase()
       );
     }
 
     if (filters.location) {
-      filtered = filtered.filter((item) => item.location === filters.location);
+      filtered = filtered.filter(
+        (item) =>
+          item.location &&
+          item.location.toLowerCase() === filters.location.toLowerCase()
+      );
     }
 
     if (filters.year) {
-      filtered = filtered.filter((item) => item.year === filters.year);
+      filtered = filtered.filter(
+        (item) => String(item.year) === String(filters.year)
+      );
     }
 
     setFilteredListings(filtered);
   };
-
-  useEffect(() => {
-    setFilteredListings(listings);
-  }, []);
 
   return (
     <>
@@ -44,9 +58,15 @@ export default function Home() {
         <Sidebar onFilterChange={applyFilters} />
 
         <section className="listings">
-          {filteredListings.map((item) => (
-            <ListingCard key={item.id} item={item} />
-          ))}
+          {loading ? (
+            <p className="loading-text">Loading listings...</p>
+          ) : filteredListings.length > 0 ? (
+            filteredListings.map((item) => (
+              <ListingCard key={item.id} item={item} />
+            ))
+          ) : (
+            <p className="no-results">No listings found</p>
+          )}
         </section>
       </div>
 

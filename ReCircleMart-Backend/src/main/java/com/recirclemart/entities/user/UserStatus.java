@@ -13,12 +13,20 @@ import lombok.Getter;
 @Getter
 public class UserStatus {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "status_id")
-	private Long statusId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "status_id")
+    private Long statusId;
 
-	@Column(name = "status_name")
-	private String statusName;
+    @Column(name = "status_name", nullable = false, unique = true)
+    private String statusName;
 
+    // ✅ REQUIRED by JPA
+    protected UserStatus() {
+    }
+
+    // ✅ REQUIRED for DataInitializer
+    public UserStatus(String statusName) {
+        this.statusName = statusName;
+    }
 }
