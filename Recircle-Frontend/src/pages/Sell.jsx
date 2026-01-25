@@ -1,68 +1,235 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../api/axios";
 
 export default function Sell() {
+  const navigate = useNavigate();
+
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+
+  const [product, setProduct] = useState({
+    categoryId: "",
+    brand: "",
+    year: "",
+    fuelType: "",
+    transmission: "",
+    kmDriven: "",
+    owners: "",
+    condition: "",
+    title: "",
+    description: "",
+    location: "",
+    price: ""
+  });
+
+  // Load categories from backend
+  useEffect(() => {
+    api.get("/categories")
+      .then(res => setCategories(res.data))
+      .catch(err => console.error("Failed to load categories", err));
+  }, []);
+
+  // Handle input change
+  const handleChange = (e) => {
+    setProduct({ ...product, [e.target.name]: e.target.value });
+  };
+
+  // Handle button selection
+  const selectValue = (field, value) => {
+    setProduct({ ...product, [field]: value });
+  };
+
+  // Handle category change
+  const handleCategoryChange = (e) => {
+    const categoryId = e.target.value;
+    setProduct({ ...product, categoryId });
+
+    const cat = categories.find(
+      c => c.categoryId === Number(categoryId)
+    );
+    setSelectedCategory(cat?.categoryName || "");
+  };
+
+  // Submit product
+  const submitProduct = async (e) => {
+    e.preventDefault();
+
+    if (
+      !product.title ||
+      !product.description ||
+      !product.location ||
+      !product.price ||
+      !product.categoryId
+    ) {
+      alert("❌ Please fill all required fields");
+      return;
+    }
+
+    try {
+      await api.post("/products", {
+        title: product.title,
+        description: product.description,
+        location: product.location,
+        price: Number(product.price),
+        categoryId: Number(product.categoryId)
+      });
+
+      alert("✅ Ad posted successfully");
+      navigate("/");
+    } catch (err) {
+      console.error(err);
+      alert("❌ Failed to post ad");
+    }
+  };
+
   return (
-    <div className="sell-container">
+    <form className="sell-container" onSubmit={submitProduct}>
       <h2 className="page-title">POST YOUR AD</h2>
 
       <div className="section">
         <h3 className="section-title">Include some details</h3>
 
-        <label>Brand</label>
-        <input type="text" className="input" />
+        {/* CATEGORY */}
+        <label>Category</label>
+        <select
+          className="input"
+          value={product.categoryId}
+          onChange={handleCategoryChange}
+          required
+        >
+          <option value="">Select category</option>
+          {categories.map(cat => (
+            <option key={cat.categoryId} value={cat.categoryId}>
+              {cat.categoryName}
+            </option>
+          ))}
+        </select>
 
-        <label>Year</label>
-        <input type="number" className="input" />
+        {/* ================= CAR FIELDS ================= */}
+        {selectedCategory === "Cars" && (
+          <>
+            <label>Brand</label>
+            <input className="input" name="brand" onChange={handleChange} />
 
-        <label>Fuel Type</label>
-        <div className="button-group">
-          <button className="select-btn">CNG & Hybrids</button>
-          <button className="select-btn">Diesel</button>
-          <button className="select-btn">Petrol</button>
-          <button className="select-btn">Electric</button>
-        </div>
+            <label>Year</label>
+            <input
+              type="number"
+              className="input"
+              name="year"
+              onChange={handleChange}
+            />
 
-        <label>Transmission</label>
-        <div className="button-group">
-          <button className="select-btn">Automatic</button>
-          <button className="select-btn">Manual</button>
-        </div>
+            <label>Fuel Type</label>
+            <div className="button-group">
+              {["CNG & Hybrids", "Diesel", "Petrol", "Electric"].map(f => (
+                <button
+                  type="button"
+                  key={f}
+                  className={`select-btn ${
+                    product.fuelType === f ? "active" : ""
+                  }`}
+                  onClick={() => selectValue("fuelType", f)}
+                >
+                  {f}
+                </button>
+              ))}
+            </div>
 
-        <label>KM Driven</label>
-        <input type="number" className="input" />
+            <label>Transmission</label>
+            <div className="button-group">
+              {["Automatic", "Manual"].map(t => (
+                <button
+                  type="button"
+                  key={t}
+                  className={`select-btn ${
+                    product.transmission === t ? "active" : ""
+                  }`}
+                  onClick={() => selectValue("transmission", t)}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
 
-        <label>No of owners</label>
-        <div className="button-group">
-          <button className="select-btn">1st</button>
-          <button className="select-btn">2nd</button>
-          <button className="select-btn">3rd</button>
-          <button className="select-btn">4th</button>
-          <button className="select-btn">4+</button>
-        </div>
+            <label>KM Driven</label>
+            <input
+              type="number"
+              className="input"
+              name="kmDriven"
+              onChange={handleChange}
+            />
 
+            <label>No of owners</label>
+            <div className="button-group">
+              {["1st", "2nd", "3rd", "4th", "4+"].map(o => (
+                <button
+                  type="button"
+                  key={o}
+                  className={`select-btn ${
+                    product.owners === o ? "active" : ""
+                  }`}
+                  onClick={() => selectValue("owners", o)}
+                >
+                  {o}
+                </button>
+              ))}
+            </div>
+          </>
+        )}
+
+        {/* ================= ELECTRONICS FIELDS ================= */}
+        {selectedCategory === "Electronics" && (
+          <>
+            <label>Brand</label>
+            <input className="input" name="brand" onChange={handleChange} />
+
+            <label>Condition</label>
+            <select
+              className="input"
+              name="condition"
+              onChange={handleChange}
+            >
+              <option value="">Select condition</option>
+              <option value="New">New</option>
+              <option value="Used">Used</option>
+            </select>
+          </>
+        )}
+
+        {/* ================= COMMON FIELDS ================= */}
         <label>Ad title</label>
-        <input type="text" className="input" />
+        <input className="input" name="title" onChange={handleChange} />
 
         <label>Description</label>
-        <textarea className="textarea" />
+        <textarea
+          className="textarea"
+          name="description"
+          onChange={handleChange}
+        />
+
+        <label>Location</label>
+        <input
+          className="input"
+          name="location"
+          placeholder="Enter location"
+          onChange={handleChange}
+        />
       </div>
 
       <div className="section">
         <h3 className="section-title">Set price</h3>
-        <label>Price</label>
-        <input type="number" className="input" placeholder="₹" />
+        <input
+          type="number"
+          className="input"
+          name="price"
+          onChange={handleChange}
+        />
       </div>
 
-      <div className="section">
-        <h3 className="section-title">Upload photos</h3>
-        <div className="photo-grid">
-          {Array.from({ length: 12 }).map((_, idx) => (
-            <div key={idx} className="photo-box">+</div>
-          ))}
-        </div>
-      </div>
-
-      <button className="post-btn">Post Now</button>
-    </div>
+      <button className="post-btn" type="submit">
+        Post Now
+      </button>
+    </form>
   );
 }

@@ -1,13 +1,37 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { listings } from "../data";
+import api from "../api/axios";
 
 export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const listing = listings.find((l) => l.id === Number(id));
 
-  if (!listing) {
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // fetch product by id
+  useEffect(() => {
+    api
+      .get(`/products/${id}`)
+      .then((res) => {
+        setProduct(res.data);
+        setLoading(false);
+      })
+      .catch(() => {
+        setProduct(null);
+        setLoading(false);
+      });
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="product-wrapper">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
+  if (!product) {
     return (
       <div className="product-wrapper">
         <p>Listing not found.</p>
@@ -23,46 +47,49 @@ export default function ProductDetail() {
       <div className="product-card">
         {/* PRODUCT IMAGE */}
         <img
-          src={listing.image}
-          alt={listing.title}
+          src={product.imageUrl || "/placeholder-car.png"}
+          alt={product.title}
           className="product-image"
         />
 
         {/* PRODUCT INFO */}
         <div className="product-info">
           {/* TITLE */}
-          <h2 className="product-title">{listing.title}</h2>
+          <h2 className="product-title">{product.title}</h2>
 
           {/* PRICE */}
-          <div className="product-price">{listing.price}</div>
+          <div className="product-price">₹ {product.price}</div>
 
           {/* OWNER */}
           <p className="product-owner">
             <i className="fa-solid fa-user"></i>
-            {listing.owner || "Owner Name Not Provided"}
+            {product.ownerName || "Owner Name Not Provided"}
           </p>
 
           {/* LOCATION */}
           <p className="product-location">
             <i className="fa-solid fa-location-dot"></i>
-            {listing.location}
+            {product.location}
           </p>
 
-          {/* DATE / TIMESTAMP */}
+          {/* DATE */}
           <p className="product-date">
             <i className="fa-solid fa-clock"></i>
-            Posted: {listing.date}
+            Posted:{" "}
+            {product.createdAt
+              ? new Date(product.createdAt).toLocaleDateString()
+              : "Recently"}
           </p>
 
           {/* FUEL TYPE */}
           <p className="product-fuel">
             <i className="fa-solid fa-gas-pump"></i>
-            {listing.fuel || "Petrol"}
+            {product.fuelType || "Petrol"}
           </p>
 
           {/* DESCRIPTION */}
           <p className="product-description">
-            {listing.description || "No additional description provided."}
+            {product.description || "No additional description provided."}
           </p>
         </div>
       </div>

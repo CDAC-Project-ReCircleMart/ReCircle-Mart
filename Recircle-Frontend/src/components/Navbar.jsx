@@ -1,26 +1,38 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../providers/AuthProvider";
 
 export default function Navbar() {
-  const navigate = useNavigate()
-  const { logout } = useAuth()
+  const navigate = useNavigate();
+  const { user, logout } = useAuth(); // 👈 user comes from AuthProvider
+
   const onLogout = () => {
-    // remove all the cached items
-    localStorage.removeItem('token')
+    // clear token
+    localStorage.removeItem("token");
 
-    // call the logout function
-    logout()
+    // update auth state
+    logout();
 
-    // redirect to Login page
-    navigate('/login')
-  }
+    // redirect
+    navigate("/login");
+  };
+
+  const handleSell = () => {
+    if (!user) {
+      // not logged in → login first
+      navigate("/login");
+    } else {
+      // logged in → add product page
+      navigate("/add-product");
+    }
+  };
+
   return (
     <>
       <header className="main-header">
         <div className="left-head">
           <div className="logo" onClick={() => navigate("/")}>
-            OLX Ecommerce
+            ReCircle Mart
           </div>
 
           <div className="city-search">
@@ -38,23 +50,37 @@ export default function Navbar() {
         </div>
 
         <div className="right-head">
-          <i className="fa-regular fa-comments icon" onClick={() => navigate("/messages")}></i>
-          <i className="fa-regular fa-bell icon" onClick={() => navigate("/notifications")} ></i>
-          <i className="fa-regular fa-heart icon" onClick={() => navigate("/fav")}></i>
+          <i
+            className="fa-regular fa-comments icon"
+            onClick={() => navigate("/messages")}
+          ></i>
 
-          <button className="nav-link" onClick={() => navigate("/login")}>
-            Login
-          </button>
+          <i
+            className="fa-regular fa-bell icon"
+            onClick={() => navigate("/notifications")}
+          ></i>
 
-          <button
-            onClick={onLogout}
-            className='nav-link'
-            aria-current='page'
-          >
-            Logout
-          </button>
+          <i
+            className="fa-regular fa-heart icon"
+            onClick={() => navigate("/fav")}
+          ></i>
 
-          <div className="sell-border" onClick={() => navigate("/sell")}>
+          {/* LOGIN only when NOT logged in */}
+          {!user && (
+            <button className="nav-link" onClick={() => navigate("/login")}>
+              Login
+            </button>
+          )}
+
+          {/* LOGOUT only when logged in */}
+          {user && (
+            <button onClick={onLogout} className="nav-link">
+              Logout
+            </button>
+          )}
+
+          {/* SELL button */}
+          <div className="sell-border" onClick={handleSell}>
             <button className="sell-btn">
               <i className="fa-solid fa-plus"></i> SELL
             </button>
@@ -62,6 +88,7 @@ export default function Navbar() {
         </div>
       </header>
 
+      {/* Categories */}
       <div className="category-wrapper">
         <div className="dropdown">
           <button className="dropdown-btn">
@@ -69,24 +96,23 @@ export default function Navbar() {
           </button>
 
           <div className="dropdown-content">
-            <a href="#">Cars</a>
-            <a href="#">Bikes</a>
-            <a href="#">Mobile Phones</a>
-            <a href="#">Scooters</a>
-            <a href="#">Furniture</a>
-            <a href="#">Properties</a>
-            <a href="#">Jobs</a>
-
+            <span onClick={() => navigate("/category/cars")}>Cars</span>
+            <span onClick={() => navigate("/category/bikes")}>Bikes</span>
+            <span onClick={() => navigate("/category/mobiles")}>Mobile Phones</span>
+            <span onClick={() => navigate("/category/scooters")}>Scooters</span>
+            <span onClick={() => navigate("/category/furniture")}>Furniture</span>
+            <span onClick={() => navigate("/category/properties")}>Properties</span>
+            <span onClick={() => navigate("/category/jobs")}>Jobs</span>
           </div>
         </div>
 
-        <span>Cars</span>
-        <span>Motorcycles</span>
-        <span>Mobile Phones</span>
-        <span>Scooters</span>
-        <span>Properties</span>
-        <span>Jobs</span>
-        <span>Electronics</span>
+        <span onClick={() => navigate("/category/cars")}>Cars</span>
+        <span onClick={() => navigate("/category/bikes")}>Motorcycles</span>
+        <span onClick={() => navigate("/category/mobiles")}>Mobile Phones</span>
+        <span onClick={() => navigate("/category/scooters")}>Scooters</span>
+        <span onClick={() => navigate("/category/properties")}>Properties</span>
+        <span onClick={() => navigate("/category/jobs")}>Jobs</span>
+        <span onClick={() => navigate("/category/electronics")}>Electronics</span>
       </div>
     </>
   );
