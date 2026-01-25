@@ -4,13 +4,17 @@ const db = require("../config/db");
 exports.startChat = async (req, res) => {
   try {
     const { listingId, sellerId } = req.body;
-    const buyerId = req.user.id; // 🔥 CORRECT SOURCE
+    const buyerId = req.user.id;
 
     if (!listingId || !sellerId || !buyerId) {
       return res.status(400).json({ message: "Missing data" });
     }
 
-    // 🔥 CHECK BOTH DIRECTIONS (VERY IMPORTANT)
+    if (buyerId === sellerId) {
+      return res.status(400).json({ message: "You cannot chat with yourself" });
+    }
+
+    // 🔥 CHECK BOTH DIRECTIONS
     const [existing] = await db.query(
       `SELECT * FROM chats 
        WHERE listing_id = ? 
@@ -43,11 +47,7 @@ exports.startChat = async (req, res) => {
 /* -------------------- GET MY CHATS -------------------- */
 exports.getMyChats = async (req, res) => {
   try {
-    const userId = req.user.id; // 🔥 EXACT MATCH WITH AUTH
-
-    if (!userId) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
+    const userId = req.user.id;
 
     const [rows] = await db.query(
       `
@@ -58,19 +58,16 @@ exports.getMyChats = async (req, res) => {
         c.seller_id,
         l.title,
 
-        -- OTHER USER ID
         CASE 
           WHEN c.buyer_id = ? THEN s.id
           ELSE b.id
         END AS other_id,
 
-        -- OTHER USER NAME
         CASE 
           WHEN c.buyer_id = ? THEN CONCAT(s.first_name, ' ', s.last_name)
           ELSE CONCAT(b.first_name, ' ', b.last_name)
         END AS other_name,
 
-        -- OTHER USER AVATAR
         CASE 
           WHEN c.buyer_id = ? THEN s.avatar
           ELSE b.avatar
@@ -82,7 +79,7 @@ exports.getMyChats = async (req, res) => {
       JOIN users s ON s.id = c.seller_id
 
       WHERE c.buyer_id = ? OR c.seller_id = ?
-      ORDER BY c.created_at DESC
+      ORDER BY c.id DESC   -- 🔥 FIX: DO NOT USE created_at
       `,
       [userId, userId, userId, userId, userId],
     );
@@ -108,7 +105,8 @@ exports.getMessages = async (req, res) => {
         m.created_at
        FROM messages m
        WHERE m.chat_id = ?
-       ORDER BY m.created_at ASC`,
+       ORDER BY m.id ASC   -- 🔥 FIX: DO NOT USE created_at
+      `,
       [chatId],
     );
 
@@ -124,13 +122,12 @@ exports.sendMessage = async (req, res) => {
   try {
     const { chatId } = req.params;
     const { message } = req.body;
-    const senderId = req.user.id; // 🔥 EXACT MATCH
+    const senderId = req.user.id;
 
     if (!chatId || !message || !senderId) {
       return res.status(400).json({ message: "Missing data" });
     }
 
-    // INSERT MESSAGE
     const [result] = await db.query(
       `INSERT INTO messages (chat_id, sender_id, message)
        VALUES (?, ?, ?)`,

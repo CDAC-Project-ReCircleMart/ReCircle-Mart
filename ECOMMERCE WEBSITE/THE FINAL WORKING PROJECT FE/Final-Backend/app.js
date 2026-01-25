@@ -34,11 +34,14 @@ app.get("/", (req, res) => {
   res.json({ status: "Backend running successfully 🚀" });
 });
 
-// 🔴 ROUTE FILES (CORRECT NAMES)
+// 🔴 ROUTE FILES (KEEP ALL YOUR OLD ONES)
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/listings", require("./routes/listingRoutes"));
-app.use("/api/messages", require("./routes/chatRoutes")); // change
+app.use("/api/messages", require("./routes/chatRoutes")); // your current chat route
 app.use("/api/favourites", require("./routes/favouriteRoutes"));
+
+// 🔥 ADMIN ROUTES (NEW – VERY IMPORTANT)
+app.use("/api/admin", require("./routes/adminRoutes"));
 
 /* ================= ERROR HANDLING ================= */
 
