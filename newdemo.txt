@@ -1,1 +1,116 @@
-hello 
+
+Backend/
+│
+├── config/
+│   └── db.js
+│
+├── controllers/
+│   ├── authController.js        ✅ (modify: add role in JWT + response)
+│   ├── chatController.js
+│   ├── listingController.js
+│   ├── favouriteController.js
+│   └── adminController.js      🆕 (NEW – all admin logic here)
+│
+├── middleware/
+│   ├── authMiddleware.js       ✅ (modify: attach role also)
+│   └── adminMiddleware.js      🆕 (NEW – protect admin routes)
+│
+├── routes/
+│   ├── authRoutes.js
+│   ├── chatRoutes.js
+│   ├── listingRoutes.js
+│   ├── favouriteRoutes.js
+│   └── adminRoutes.js          🆕 (NEW – admin APIs)
+│
+├── uploads/
+│
+├── server.js                   ✅ (modify: add admin routes)
+└── .env
+
+
+=============================================================
+
+
+
+
+
+
+
+
+
+
+
+
+src/
+│
+├── components/
+│   ├── admin/
+│   │   ├── Sidebar.jsx          (left panel menu + profile + logout)
+│   │   ├── Topbar.jsx           (optional later)
+│   │   └── StatCard.jsx         (dashboard cards later)
+│   │
+│   └── common/                 (your existing shared components)
+│
+├── pages/
+│   ├── admin/
+│   │   ├── AdminLayout.jsx     (main layout: sidebar + outlet)
+│   │   ├── Dashboard.jsx       (main dashboard)
+│   │   ├── Calendar.jsx        (calendar page)
+│   │   └── ManageUsers.jsx     (users list + pagination)
+│   │
+│   └── (your existing user pages stay unchanged)
+│
+├── routes/
+│   ├── PublicRoutes.jsx        (already)
+│   ├── SellerRoutes.jsx        (already)
+│   └── AdminRoutes.jsx         🔥 NEW (protect admin pages)
+│
+├── services/
+│   ├── api.js                  (already – used for admin APIs also)
+│   └── adminApi.js             🔥 NEW (optional, for admin only APIs)
+│
+├── styles/
+│   └── admin/
+│       ├── layout.css
+│       ├── dashboard.css
+│       └── users.css
+│
+├── App.jsx / main.jsx          (add admin routes here)
+└── index.css
+
+
+------------------------------------
+
+backend/
+│
+├── controllers/
+│   └── adminController.js        🔥 NEW (MAIN ADMIN LOGIC)
+│
+├── middleware/
+│   └── adminMiddleware.js        🔥 NEW (CHECK ROLE = ADMIN)
+│
+├── routes/
+│   └── adminRoutes.js            🔥 NEW (ALL ADMIN ROUTES)
+
+
+====================================================================
+
+
+src/pages/admin/
+│
+├── layout/
+│   ├── AdminLayout.jsx        🔥 MAIN ADMIN SHELL (sidebar + top + outlet)
+│   └── AdminLayout.css
+│
+├── Dashboard.jsx             🔥 ADMIN DASHBOARD PAGE
+├── Dashboard.css
+│
+├── Calendar.jsx              🔥 ADMIN CALENDAR PAGE
+├── Calendar.css
+│
+├── ManageUsers.jsx           🔥 ADMIN MANAGE USERS PAGE
+├── ManageUsers.css
+│
+└── AdminHome.jsx (optional redirect helper)
+
+

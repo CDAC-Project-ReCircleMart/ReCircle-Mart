@@ -1,40 +1,42 @@
-import axios from "axios";
+import api from "./api";
 
-/* 🔹 CREATE ADMIN AXIOS INSTANCE */
-const adminApi = axios.create({
-  baseURL: "http://localhost:8080/api/admin", // backend admin route
-});
+/* DASHBOARD */
+export const getDashboardStats = () => api.get("/admin/dashboard");
+export const getUsersListingsChart = () =>
+  api.get("/admin/charts/users-listings");
+export const getVisitsChart = () => api.get("/admin/charts/visits");
+export const getCategoryChart = () => api.get("/admin/charts/categories");
 
-/* 🔹 ATTACH TOKEN AUTOMATICALLY TO EVERY REQUEST */
-adminApi.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("token");
+/* USERS */
+export const getUsers = (page, limit, search) =>
+  api.get(`/admin/users?page=${page}&limit=${limit}&search=${search}`);
 
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+export const deleteUser = (id) => api.delete(`/admin/users/${id}`);
 
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  },
-);
+export const updateUser = (id, data) => api.put(`/admin/users/${id}`, data);
 
-/* ================= ADMIN API FUNCTIONS ================= */
+/* CALENDAR */
+export const getAllEvents = () => api.get("/admin/events");
 
-/* DASHBOARD DATA */
-export const getDashboardData = () => adminApi.get("/dashboard");
+// export const getEventsByDate = (date) =>
+//   api.get(`/admin/events/date?date=${date}`);
 
-/* GET ALL USERS (with pagination later) */
-export const getAllUsers = (page = 1, limit = 10, search = "") =>
-  adminApi.get(`/users?page=${page}&limit=${limit}&search=${search}`);
+// export const addEvent = (data) => api.post("/admin/events", data);
 
-/* DELETE USER */
-export const deleteUser = (userId) => adminApi.delete(`/users/${userId}`);
+// 🔹 GET EVENTS BY DATE
+export const getEventsByDate = async (date) => {
+  const res = await api.get(`/admin/events/by-date?date=${date}`);
+  return res.data;
+};
 
-/* UPDATE USER (EDIT USER) */
-export const updateUser = (userId, data) =>
-  adminApi.put(`/users/${userId}`, data);
+// 🔹 ADD EVENT
+export const addEvent = async (data) => {
+  const res = await api.post("/admin/events", data);
+  return res.data;
+};
 
-export default adminApi;
+// 🔹 DELETE EVENT
+export const deleteEvent = async (id) => {
+  const res = await api.delete(`/admin/events/${id}`);
+  return res.data;
+};

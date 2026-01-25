@@ -2,7 +2,7 @@
 
 module.exports = (req, res, next) => {
   try {
-    // 🔴 authMiddleware MUST run before this
+    // 🔴 authMiddleware already attached req.user
     if (!req.user) {
       return res.status(401).json({ message: "Not authorized" });
     }
@@ -12,7 +12,7 @@ module.exports = (req, res, next) => {
       return res.status(403).json({ message: "Admin access only" });
     }
 
-    // ✅ USER IS ADMIN
+    // ✅ USER IS ADMIN → CONTINUE
     next();
   } catch (err) {
     console.error("❌ ADMIN MIDDLEWARE ERROR:", err);

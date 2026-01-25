@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+import api from "../../services/api";
+
 import {
   BarChart,
   Bar,
@@ -16,66 +19,115 @@ import {
 
 import "./Dashboard.css";
 
-/* 🔹 TEMP DATA (LATER WE WILL REPLACE WITH API DATA) */
-
-// Bar chart: users vs listings
-const barData = [
-  { name: "Users", total: 120 },
-  { name: "Listings", total: 340 },
-];
-
-// Line chart: visits per day
-const lineData = [
-  { day: "Mon", visits: 20 },
-  { day: "Tue", visits: 35 },
-  { day: "Wed", visits: 40 },
-  { day: "Thu", visits: 28 },
-  { day: "Fri", visits: 50 },
-  { day: "Sat", visits: 70 },
-  { day: "Sun", visits: 65 },
-];
-
-// Pie chart: listings by category
-const pieData = [
-  { name: "Cars", value: 120 },
-  { name: "Bikes", value: 80 },
-  { name: "Electronics", value: 60 },
-  { name: "Furniture", value: 40 },
-  { name: "Others", value: 40 },
-];
-
 const COLORS = ["#6366f1", "#22c55e", "#f59e0b", "#ef4444", "#06b6d4"];
 
 export default function Dashboard() {
+  const [barData, setBarData] = useState([]);
+  const [lineData, setLineData] = useState([]);
+  const [pieData, setPieData] = useState([]);
+
+  /* ================= FETCH BAR CHART ================= */
+  useEffect(() => {
+    const fetchBar = async () => {
+      try {
+        const res = await api.get("/admin/chart/users-listings");
+
+        // MERGE USERS + LISTINGS BY DATE
+        const merged = {};
+
+        res.data.users.forEach((u) => {
+          merged[u.date] = { date: u.date, users: u.users, listings: 0 };
+        });
+
+        res.data.listings.forEach((l) => {
+          if (!merged[l.date]) {
+            merged[l.date] = { date: l.date, users: 0, listings: l.listings };
+          } else {
+            merged[l.date].listings = l.listings;
+          }
+        });
+
+        setBarData(Object.values(merged));
+      } catch (err) {
+        console.error("❌ BAR CHART ERROR:", err);
+      }
+    };
+
+    fetchBar();
+  }, []);
+
+  /* ================= FETCH LINE CHART ================= */
+  useEffect(() => {
+    const fetchLine = async () => {
+      try {
+        const res = await api.get("/admin/chart/visits");
+
+        const formatted = res.data.map((row) => ({
+          date: row.date,
+          visits: row.visits,
+        }));
+
+        setLineData(formatted);
+      } catch (err) {
+        console.error("❌ LINE CHART ERROR:", err);
+      }
+    };
+
+    fetchLine();
+  }, []);
+
+  /* ================= FETCH PIE CHART ================= */
+  useEffect(() => {
+    const fetchPie = async () => {
+      try {
+        const res = await api.get("/admin/chart/categories");
+
+        const formatted = res.data.map((row) => ({
+          name: row.category,
+          value: row.total,
+        }));
+
+        setPieData(formatted);
+      } catch (err) {
+        console.error("❌ PIE CHART ERROR:", err);
+      }
+    };
+
+    fetchPie();
+  }, []);
+
   return (
     <div className="dashboard-root">
       <h3>Analytics Overview</h3>
 
       {/* ================= BAR CHART ================= */}
       <div className="chart-box">
-        <h4>Total Users vs Listings</h4>
+        <h4>Users vs Listings (By Date)</h4>
 
         <ResponsiveContainer width="100%" height={250}>
           <BarChart data={barData}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
+            <XAxis dataKey="date" />
             <YAxis />
             <Tooltip />
-            <Bar dataKey="total" fill="#6366f1" />
+
+            <Bar dataKey="users" fill="#6366f1" name="Users" />
+            <Bar dataKey="listings" fill="#22c55e" name="Listings" />
           </BarChart>
         </ResponsiveContainer>
       </div>
 
       {/* ================= LINE CHART ================= */}
       <div className="chart-box">
-        <h4>User Visits (This Week)</h4>
+        <h4>User Visits (Daily)</h4>
 
         <ResponsiveContainer width="100%" height={250}>
           <LineChart data={lineData}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="day" />
+            <XAxis dataKey="date" />
             <YAxis />
             <Tooltip />
+
             <Line
               type="monotone"
               dataKey="visits"
@@ -101,7 +153,7 @@ export default function Dashboard() {
               label
             >
               {pieData.map((entry, index) => (
-                <Cell key={index} fill={COLORS[index]} />
+                <Cell key={index} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>
 

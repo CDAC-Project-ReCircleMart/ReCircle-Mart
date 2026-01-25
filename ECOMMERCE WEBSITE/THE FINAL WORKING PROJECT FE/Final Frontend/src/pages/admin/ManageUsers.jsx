@@ -1,69 +1,72 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import api from "../../services/api";
+import { toast } from "react-toastify";
 import "./ManageUsers.css";
 
-/* 🔹 HARD CODED USERS (LATER FROM BACKEND API) */
-const allUsers = [
-  {
-    id: 1,
-    name: "Rohit Kavathekar",
-    email: "rohit@gmail.com",
-    avatar: "/profile.png",
-    listings: 3,
-  },
-  {
-    id: 2,
-    name: "Amit Sharma",
-    email: "amit@gmail.com",
-    avatar: "/profile.png",
-    listings: 0,
-  },
-  {
-    id: 3,
-    name: "Sneha Patil",
-    email: "sneha@gmail.com",
-    avatar: "/profile.png",
-    listings: 5,
-  },
-  {
-    id: 4,
-    name: "John Doe",
-    email: "john@gmail.com",
-    avatar: "/profile.png",
-    listings: 0,
-  },
-  {
-    id: 5,
-    name: "Neha Singh",
-    email: "neha@gmail.com",
-    avatar: "/profile.png",
-    listings: 2,
-  },
-  {
-    id: 6,
-    name: "Rahul Mehta",
-    email: "rahul@gmail.com",
-    avatar: "/profile.png",
-    listings: 0,
-  },
-];
-
 export default function ManageUsers() {
+  const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const perPage = 4;
+  // edit modal state
+  const [editUser, setEditUser] = useState(null);
+  const [editRole, setEditRole] = useState("");
 
-  /* 🔹 FILTER USERS BY SEARCH */
-  const filteredUsers = allUsers.filter((user) =>
-    `${user.id} ${user.name} ${user.email}`
-      .toLowerCase()
-      .includes(search.toLowerCase()),
-  );
+  const limit = 6;
 
-  /* 🔹 PAGINATION LOGIC */
-  const totalPages = Math.ceil(filteredUsers.length / perPage);
-  const start = (page - 1) * perPage;
-  const currentUsers = filteredUsers.slice(start, start + perPage);
+  /* ================= FETCH USERS ================= */
+  const fetchUsers = async () => {
+    try {
+      const res = await api.get(
+        `/admin/users?page=${page}&limit=${limit}&search=${search}`,
+      );
+
+      setUsers(res.data.users);
+      setTotalPages(res.data.totalPages);
+    } catch (err) {
+      toast.error("Failed to load users");
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, [page, search]);
+
+  /* ================= DELETE USER ================= */
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this user?")) return;
+
+    try {
+      await api.delete(`/admin/users/${id}`);
+      toast.success("User deleted");
+      fetchUsers();
+    } catch (err) {
+      toast.error("Delete failed");
+    }
+  };
+
+  /* ================= OPEN EDIT ================= */
+  const openEdit = (user) => {
+    setEditUser(user);
+    setEditRole(user.role);
+  };
+
+  /* ================= UPDATE USER ================= */
+  const handleUpdate = async () => {
+    try {
+      await api.put(`/admin/users/${editUser.id}`, {
+        role: editRole,
+      });
+
+      toast.success("User updated");
+      setEditUser(null);
+      fetchUsers();
+    } catch (err) {
+      toast.error("Update failed");
+    }
+  };
 
   return (
     <div className="users-root">
@@ -98,21 +101,29 @@ export default function ManageUsers() {
           </thead>
 
           <tbody>
-            {currentUsers.map((user) => {
-              const isSeller = user.listings > 0;
+            {users.map((user) => {
+              const isSeller = user.totalListings > 0;
 
               return (
                 <tr key={user.id}>
                   <td>
                     <img
-                      src={user.avatar}
+                      src={
+                        user.avatar
+                          ? user.avatar.startsWith("/uploads")
+                            ? `http://localhost:8080${user.avatar}`
+                            : user.avatar
+                          : "/profile.png"
+                      }
                       alt="profile"
                       className="user-avatar"
                     />
                   </td>
 
                   <td>{user.id}</td>
-                  <td>{user.name}</td>
+                  <td>
+                    {user.first_name} {user.last_name}
+                  </td>
                   <td>{user.email}</td>
 
                   {/* ROLE BADGE */}
@@ -124,12 +135,19 @@ export default function ManageUsers() {
                     )}
                   </td>
 
-                  <td>{user.listings}</td>
+                  <td>{user.totalListings}</td>
 
                   {/* ACTIONS */}
                   <td>
-                    <button className="edit-btn">Edit</button>
-                    <button className="delete-btn">Delete</button>
+                    <button className="edit-btn" onClick={() => openEdit(user)}>
+                      Edit
+                    </button>
+                    <button
+                      className="delete-btn"
+                      onClick={() => handleDelete(user.id)}
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               );
@@ -155,6 +173,40 @@ export default function ManageUsers() {
           Next
         </button>
       </div>
+
+      {/* ================= EDIT MODAL ================= */}
+      {editUser && (
+        <div className="modal-overlay">
+          <div className="modal-box">
+            <h3>Edit User</h3>
+
+            <p>
+              <strong>Name:</strong> {editUser.first_name} {editUser.last_name}
+            </p>
+            <p>
+              <strong>Email:</strong> {editUser.email}
+            </p>
+
+            <label>Role</label>
+            <select
+              value={editRole}
+              onChange={(e) => setEditRole(e.target.value)}
+            >
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
+
+            <div className="modal-actions">
+              <button onClick={handleUpdate} className="save-btn">
+                Save Changes
+              </button>
+              <button onClick={() => setEditUser(null)} className="cancel-btn">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

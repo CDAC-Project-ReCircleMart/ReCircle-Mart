@@ -265,7 +265,7 @@ import EditListing from "../pages/Sell/EditListing";
 
 /* 🔥 ADMIN */
 import AdminRoutes from "./AdminRoutes";
-import AdminLayout from "../pages/admin/AdminLayout";
+import AdminLayout from "../pages/admin/layout/AdminLayout";
 import Dashboard from "../pages/admin/Dashboard";
 import Calendar from "../pages/admin/Calendar";
 import ManageUsers from "../pages/admin/ManageUsers";
@@ -440,8 +440,10 @@ export default function PublicRoutes() {
       />
 
       {/* 🔥 ADMIN ROUTES (ALL ADMIN PAGES HERE) */}
-      <Route path="/admin" element={<AdminRoutes />}>
-        <Route element={<AdminLayout />}>
+      {/* 🔥 ADMIN ROUTES (ALL ADMIN PAGES HERE) */}
+      <Route element={<AdminRoutes />}>
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<Dashboard />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="calendar" element={<Calendar />} />
           <Route path="users" element={<ManageUsers />} />
