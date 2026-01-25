@@ -20,11 +20,6 @@ export default function Login() {
   const navigate = useNavigate();
 
   const onLogin = async () => {
-<<<<<<< Updated upstream
-    if (!email) {
-      toast.warning("Please enter email");
-      return;
-=======
     if (email.length == 0) {
       toast.warning('please enter email')
     } else if (password.length == 0) {
@@ -41,11 +36,13 @@ export default function Login() {
         // localStorage.setItem('lastName', response['data']['lastName'])
 
         // set the logged in user information
+
+        // console.log(response.data)
         loginUser({
           userToken: response.token,
           user: response.data
         })
-        console.log(response)
+        // console.log(response)
 
 
         if (newUser(response.data)) {
@@ -61,30 +58,9 @@ export default function Login() {
       } else {
         toast.error("Login Credentials not matched")
       }
->>>>>>> Stashed changes
     }
 
-    if (!password) {
-      toast.warning("Please enter password");
-      return;
-    }
 
-    const response = await login(email, password);
-    console.log("LOGIN RESPONSE:", response);
-
-    if (response.status === "success" && response.token) {
-      toast.success("Login successful");
-
-      localStorage.setItem("token", response.token);
-
-      loginUser({
-        userToken: response.token
-      });
-
-      navigate("/home");
-    } else {
-      toast.error("Login credentials not matched");
-    }
   };
 
 

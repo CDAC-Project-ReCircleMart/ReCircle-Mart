@@ -29,7 +29,7 @@ export default function Profile() {
   // const user = user_detail.user
   // TEMP – later replace with backend listings
   const userListings = []; // empty = no products
-
+  console.log(user)
   if (!user) {
     navigate("/login");
     return null;

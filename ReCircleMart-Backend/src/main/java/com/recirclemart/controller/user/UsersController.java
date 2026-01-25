@@ -15,6 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import com.recirclemart.dtos.UpdateUserRequestDTO;
 import com.recirclemart.dtos.UserRegisterRequestDTO;
 import com.recirclemart.dtos.UserResponseDTO;
 import com.recirclemart.entities.user.Users;
@@ -71,6 +72,23 @@ public class UsersController {
         ));
     }
 
+    @PutMapping("/{userId}")		
+    public ResponseEntity<?> updateUser(
+    @PathVariable Long userId,
+    @RequestBody UpdateUserRequestDTO request
+    ) {
+    Users updated = usersService.updateUser(userId, request);
+    UserResponseDTO responseDTO= new UserResponseDTO(updated);
+   System.out.println(responseDTO);
+    return ResponseEntity.ok(Map.of(
+    		"status" ,"success" ,
+    		
+    		"data" , responseDTO
+    		)
+    		
+    		
+    		); // better: return DTO to avoid lazy proxy issue
+    }
     // ------------------ private helpers ------------------
 
     private Object buildSuccessResponse(Users user) {

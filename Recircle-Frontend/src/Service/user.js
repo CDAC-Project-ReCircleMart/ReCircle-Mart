@@ -4,52 +4,67 @@ import { config } from "./config";
 
 /* ================= LOGIN ================= */
 export async function login(email, password) {
-<<<<<<< Updated upstream
   try {
-    const url = `${config.server}/users/authenticate`;
-    const body = { email, password };
+    const url = `${config.server}/users/authenticate`
+    const body = { email, password }
+    const response = await axios.post(url, body)
+    // console.log(response)
+    return response.data
 
-    const response = await axios.post(url, body, {
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
 
-    // backend returns: { token, status }
-    return {
-      status: response.data.status,
-      token: response.data.token
-    };
-  } catch (ex) {
-    console.error("Login error:", ex);
-    return {
-      status: "error",
-      message: "Invalid credentials"
-    };
+
+  }
+  catch (ex) {
+    return { error: "Invalid Credentials" }
+  }
+}
+export async function updateProfile(userId, payload) {
+  try {
+    const res = await axios.put(`${config.server}/users/${userId}`, payload);
+
+
+    // expected: { status: "success", data: {...user} }
+    const body = res.data;
+    if (body?.status !== "success") {
+      throw new Error(body?.message || "Update failed");
+    }
+    return res.data;
+  } catch (err) {
+    const msg =
+      err?.response?.data?.message ||
+      err?.response?.data?.error ||
+      err?.message ||
+      "Something went wrong";
+    throw msg;
   }
 }
 
-/* ================= REGISTER ================= */
-=======
-    try {
-        const url = `${config.server}/users/authenticate`
-        const body = { email, password }
-        const response = await axios.post(url, body)
 
-        return response.data
+// export const updateProfile = async (userData) => {
+//   try {
+//     // If sending a raw file, use FormData
+//     const formData = new FormData();
+//     formData.append('fullName', userData.fullName);
+//     formData.append('phone', userData.phone);
+//     formData.append('bio', userData.bio);
+//     formData.append('addresses', JSON.stringify(userData.profile.addresses));
+
+//     // Only append photo if it's a new file object
+//     if (userData.profilePhoto instanceof File) {
+//       formData.append('profilePhoto', userData.profilePhoto);
+//     }
+
+//     const response = await axios.put(`${API_URL}/update`, formData, {
+//       headers: { 'Content-Type': 'multipart/form-data' }
+//     });
+
+//     return response.data;
+//   } catch (error) {
+//     throw error.response?.data?.message || "Failed to update profile";
+//   }
+// };
 
 
-
-    }
-    catch (ex) {
-        return { error: "Invalid Credentials" }
-    }
-}
-
-
-
-
->>>>>>> Stashed changes
 export async function register(name, email, password, phone) {
   try {
     const response = await api.post("/users/register", {

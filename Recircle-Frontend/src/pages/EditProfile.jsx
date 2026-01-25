@@ -3,20 +3,22 @@ import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../providers/AuthProvider";
+import { updateProfile } from "../Service/user";
 
 export default function EditProfile() {
-    const { user, login } = useAuth()
+    const { user } = useAuth()
+    const { login: loginUser } = useAuth()
     const navigate = useNavigate();
     const fileInputRef = useRef(null);
 
     // ===== BASIC PROFILE =====
-    const [fullName, setFullName] = useState(user?.fullName || "");
-    const [bio, setBio] = useState(user?.bio || "");
-    const [phone, setPhone] = useState(user?.phone || "");
+    const [fullName, setFullName] = useState(user.user?.fullName || "");
+    const [bio, setBio] = useState(user.user?.profile.bio || "");
+    const [phone, setPhone] = useState(user.user?.phone || "");
 
     // ===== PROFILE PHOTO =====
     const [photoPreview, setPhotoPreview] = useState(
-        user?.profilePhoto || "/default-user.png"
+        user.user?.profile.profileImageUrl || "/default-user.png"
     );
     const [photoFile, setPhotoFile] = useState(null);
 
@@ -87,17 +89,37 @@ export default function EditProfile() {
                 addresses
             }
         };
+        // console.log(updatedUser)
+        const payload = {
+            fullName: updatedUser.fullName,
+            phoneNumber: updatedUser.phone, // backend expects phoneNumber
+            bio: updatedUser.bio,
+            profileImageUrl: updatedUser.user?.profile?.profileImageUrl, // OR your uploaded URL
+            addresses: (updatedUser.profile?.addresses || []).map((ua) => ({
+                userAddressId: ua.userAddressId ?? null,
+                addressType: ua.addressType,
+                street: ua.address?.street ?? "",
+                city: ua.address?.city ?? "",
+                state: ua.address?.state ?? "",
+                pincode: ua.address?.pincode ?? "",
+                latitude: ua.address?.latitude ?? null,
+                longitude: ua.address?.longitude ?? null,
+            })),
+        };
+        try {
+            // 1. Call the backend service
+            const result = await updateProfile(updatedUser.user.id, payload);
+            console.log(result)
+            // 2. Update local global state (e.g., AuthContext)
+            loginUser({
+                user: result.data
+            })
 
-        /*
-          🔥 Backend-ready (later)
-          const formData = new FormData();
-          formData.append("photo", photoFile);
-          formData.append("user", JSON.stringify(updatedUser));
-        */
-
-        login(updatedUser);
-        toast.success("Profile updated successfully");
-        navigate("/profile");
+            toast.success("Profile updated successfully");
+            navigate("/profile");
+        } catch (error) {
+            toast.error(error);
+        }
     };
 
     // =========================
