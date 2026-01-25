@@ -37,7 +37,7 @@ app.get("/", (req, res) => {
 // 🔴 ROUTE FILES (CORRECT NAMES)
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/listings", require("./routes/listingRoutes"));
-app.use("/api/chats", require("./routes/chatRoutes"));
+app.use("/api/messages", require("./routes/chatRoutes")); // change
 app.use("/api/favourites", require("./routes/favouriteRoutes"));
 
 /* ================= ERROR HANDLING ================= */

@@ -1,149 +1,202 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Segoe UI", sans-serif;
-}
-
-body {
-  background: #f4f6f8;
-}
-
-.container {
+.profile-container {
   display: flex;
+  gap: 30px;
+  padding: 30px 40px;
+  background: #f7f8f9;
+}
+
+/* LEFT PANEL */
+.profile-left {
+  width: 280px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 25px 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.profile-avatar-wrapper {
+  width: 140px;
+  height: 140px;
+  margin: 0 auto 15px;
+  border-radius: 50%;
+  border: 4px solid #e0e0e0;
+  overflow: hidden;
+}
+
+.profile-big-img {
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
 }
 
-/* LEFT */
-.left {
-  flex: 1;
-  background: linear-gradient(135deg, #0a63ff, #00c6ff);
-  color: white;
-  padding: 60px;
-  border-radius: 0 40px 40px 0;
+.profile-name {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
-.left h1 {
-  font-size: 42px;
-  line-height: 1.2;
+.profile-email,
+.profile-joined {
+  color: #666;
+  font-size: 14px;
+  margin: 6px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
-.left p {
-  margin-top: 20px;
-  font-size: 15px;
-  max-width: 400px;
+.profile-stats {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 20px 0;
 }
 
-.illustration img {
-  margin-top: 40px;
-  width: 300px;
-}
-
-/* RIGHT */
-.right {
-  flex: 1;
-  padding: 60px 80px;
-  background: white;
-}
-
-.logo {
+.profile-stats strong {
+  display: block;
   font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 40px;
 }
 
-.logo span {
-  margin-left: 6px;
-}
-
-.right h2 {
-  font-size: 28px;
-}
-
-.subtitle {
-  color: gray;
-  margin-bottom: 30px;
-}
-
-form input {
+.edit-profile-btn {
   width: 100%;
-  padding: 14px;
-  margin-bottom: 18px;
-  border-radius: 10px;
+  padding: 10px;
   border: none;
-  background: #f3f5f7;
-  font-size: 15px;
+  background: #003a3a;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
 }
 
-.forgot {
-  text-align: right;
+.edit-profile-btn:hover {
+  background: #005555;
+}
+
+/* RIGHT PANEL */
+.profile-right {
+  flex: 1;
+  background: #fff;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.my-listings-title {
+  font-size: 20px;
+  font-weight: 600;
   margin-bottom: 20px;
 }
 
-.forgot a {
-  font-size: 13px;
-  text-decoration: none;
-  color: #333;
+.listing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
 }
 
-.login-btn {
+/* LISTING CARD */
+.profile-listing-card {
+  border: 1px solid #eee;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+
+.profile-listing-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.profile-listing-card img {
   width: 100%;
-  padding: 14px;
-  border-radius: 12px;
-  border: none;
-  background: #0a63ff;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
+  height: 160px;
+  object-fit: cover;
 }
 
-/* divider */
-.divider {
-  text-align: center;
-  margin: 30px 0;
-  color: gray;
-  font-size: 13px;
-}
-
-/* social */
-.social-buttons {
-  display: flex;
-  gap: 15px;
-}
-
-.social-buttons button {
-  flex: 1;
+.listing-info {
   padding: 12px;
-  border-radius: 12px;
-  border: 1px solid #ddd;
-  background: white;
+}
+
+.listing-info h4 {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.price {
+  color: #008b8b;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+/* ACTION BUTTONS */
+.listing-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.view-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 5px;
+  background: #f0f0f0;
   cursor: pointer;
-  font-size: 14px;
 }
 
-.signup {
-  margin-top: 30px;
+.view-btn:hover {
+  background: #ddd;
+}
+
+.edit-btn {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 5px;
+  background: #e6f0ff;
+  color: #0056b3;
+  cursor: pointer;
+}
+
+.edit-btn:hover {
+  background: #d6e6ff;
+}
+
+.delete-btn {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 5px;
+  background: #ffe5e5;
+  color: #d10000;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background: #ffcccc;
+}
+
+/* EMPTY STATE */
+.no-listing-box {
   text-align: center;
+  padding: 40px 20px;
 }
 
-.signup a {
-  color: #0a63ff;
-  text-decoration: none;
-  font-weight: 500;
+.no-listing-img {
+  width: 200px;
+  margin-bottom: 20px;
 }
 
-/* RESPONSIVE */
-@media (max-width: 900px) {
-  .container {
-    flex-direction: column;
-  }
-  .left {
-    border-radius: 0;
-    text-align: center;
-  }
+.sell-now-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  background: #008b8b;
+  color: white;
+  cursor: pointer;
 }
-.welcome {
-  text-align: center;
-  margin-bottom: 30px;
+
+.sell-now-btn:hover {
+  background: #006666;
 }

@@ -1,4 +1,3 @@
-// src/pages/Profile/Profile.jsx
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../../services/api";
@@ -11,56 +10,140 @@ export default function Profile() {
 
   const [user, setUser] = useState(null);
   const [userListings, setUserListings] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  // 🔴 FETCH PROFILE + USER LISTINGS
+  // 🔴 LOAD USER FROM LOCALSTORAGE FIRST
   useEffect(() => {
-    const fetchProfile = async () => {
-      setLoading(true);
-      try {
-        // GET USER INFO FROM BACKEND
-        const userRes = await api.get("/users/me");
-        setUser(userRes.data);
+    const localUser = JSON.parse(localStorage.getItem("user"));
 
-        // GET USER LISTINGS
-        const listingsRes = await api.get("/listings/my");
+    if (!localUser) {
+      navigate("/login");
+      return;
+    }
+
+    setUser(localUser);
+
+    // 🔴 FETCH USER LISTINGS
+    const fetchListings = async () => {
+      try {
+        const listingsRes = await api.get("/listings/user/me");
         setUserListings(listingsRes.data);
       } catch (err) {
-        toast.error("Please login again");
+        console.error("PROFILE LISTINGS ERROR:", err);
+        toast.error("Session expired. Please login again.");
         navigate("/login");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchProfile();
+    fetchListings();
   }, [navigate]);
 
-  if (loading) {
-    return <Loader />;
-  }
+  // 🔴 DELETE LISTING
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this listing?",
+    );
 
-  if (!user) {
-    return null;
-  }
+    if (!confirmDelete) return;
 
-  // 🔴 KEEP AVATAR FROM LOCALSTORAGE (AS YOU REQUESTED)
-  const localUser = JSON.parse(localStorage.getItem("user"));
+    try {
+      await api.delete(`/listings/${id}`);
+
+      // REMOVE FROM UI
+      setUserListings((prev) => prev.filter((item) => item.id !== id));
+
+      toast.success("Listing deleted successfully");
+    } catch (err) {
+      console.error("DELETE LISTING ERROR:", err);
+      toast.error("Failed to delete listing");
+    }
+  };
+
+  if (loading) return <Loader />;
+  if (!user) return null;
+
+  const joinedDate = user.created_at
+    ? new Date(user.created_at).toLocaleString()
+    : null;
+
+  // 🔴 INTERNAL LISTING CARD COMPONENT (ONLY FOR PROFILE PAGE)
+  function MyListingCard({ item }) {
+    return (
+      <div className="profile-listing-card">
+        <img src={item.image} alt={item.title} />
+
+        <div className="listing-info">
+          <h4>{item.title}</h4>
+          <p className="price">₹ {item.price}</p>
+
+          <div className="listing-actions">
+            {/* VIEW */}
+            <button
+              onClick={() => navigate(`/product/${item.id}`)}
+              className="view-btn"
+            >
+              View
+            </button>
+
+            {/* EDIT */}
+            <button
+              onClick={() => navigate(`/edit-listing/${item.id}`)}
+              className="edit-btn"
+            >
+              <i className="fa-solid fa-pen"></i>
+            </button>
+
+            {/* DELETE */}
+            <button
+              onClick={() => handleDelete(item.id)}
+              className="delete-btn"
+            >
+              <i className="fa-solid fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="profile-container">
       {/* LEFT SIDE - USER INFO */}
       <div className="profile-left">
-        <img
-          src={localUser?.icon || "/default-user.png"}
-          alt="profile"
-          className="profile-big-img"
-        />
+        <div className="profile-avatar-wrapper">
+          <img
+            src={user.avatar || "/default-user.png"}
+            alt="profile"
+            className="profile-big-img"
+          />
+        </div>
 
-        <h2>
-          {user.firstName} {user.lastName}
+        <h2 className="profile-name">
+          <i className="fa-solid fa-user"></i>
+          {user.first_name} {user.last_name}
         </h2>
-        <p className="profile-email">{user.email}</p>
+
+        <p className="profile-email">
+          <i className="fa-solid fa-envelope"></i>
+          {user.email}
+        </p>
+
+        {joinedDate && (
+          <p className="profile-joined">
+            <i className="fa-solid fa-calendar-days"></i>
+            Joined on {joinedDate}
+          </p>
+        )}
+
+        {/* STATS */}
+        <div className="profile-stats">
+          <div>
+            <strong>{userListings.length}</strong>
+            <span>Listings</span>
+          </div>
+        </div>
 
         <button
           className="edit-profile-btn"
@@ -72,6 +155,8 @@ export default function Profile() {
 
       {/* RIGHT SIDE - USER LISTINGS */}
       <div className="profile-right">
+        <h3 className="my-listings-title">My Listings</h3>
+
         {userListings.length === 0 ? (
           <div className="no-listing-box">
             <img
@@ -90,11 +175,7 @@ export default function Profile() {
         ) : (
           <div className="listing-grid">
             {userListings.map((item) => (
-              <div key={item.id} className="listing-card">
-                <img src={item.image} alt={item.title} />
-                <h4>{item.title}</h4>
-                <p>₹ {item.price}</p>
-              </div>
+              <MyListingCard key={item.id} item={item} />
             ))}
           </div>
         )}

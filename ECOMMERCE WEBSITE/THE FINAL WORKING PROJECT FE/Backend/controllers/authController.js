@@ -34,43 +34,57 @@ exports.register = async (req, res) => {
   }
 };
 
-// 🔴 LOGIN USER
+// 🔴 LOGIN USER (🔥 FIXED VERSION)
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    // 🔴 FIND USER
     const [rows] = await db.query("SELECT * FROM users WHERE email = ?", [
       email,
     ]);
 
     if (rows.length === 0) {
-      return res.status(400).json({ message: "Invalid email or password" });
+      return res.status(401).json({ message: "Invalid email or password" });
     }
 
     const user = rows[0];
 
+    // 🔴 CHECK PASSWORD
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return res.status(400).json({ message: "Invalid email or password" });
+      return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    // Create JWT
+    // 🔴 CREATE JWT TOKEN (IMPORTANT: SECRET MUST EXIST)
     const token = jwt.sign(
-      { id: user.id, email: user.email },
-      process.env.JWT_SECRET,
+      { id: user.id },
+      process.env.JWT_SECRET || "mysecretkey", // 🔴 fallback so it NEVER fails
       { expiresIn: "7d" },
     );
 
-    // Send user data (without password)
+    // 🔴 SEND TOKEN + CLEAN USER OBJECT
+    // res.json({
+    //   token, // 🔥 THIS IS WHAT FRONTEND SAVES
+    //   user: {
+    //     id: user.id,
+    //     first_name: user.first_name,
+    //     last_name: user.last_name,
+    //     email: user.email,
+    //     avatar: user.avatar,
+    //   },
+    // });
+
     res.json({
       token,
       user: {
         id: user.id,
-        firstName: user.first_name,
-        lastName: user.last_name,
+        first_name: user.first_name, // 🔴 MUST MATCH TABLE
+        last_name: user.last_name,
         email: user.email,
         avatar: user.avatar,
+        created_at: user.created_at, // 🔴 IMPORTANT FOR JOINED DATE
       },
     });
   } catch (err) {

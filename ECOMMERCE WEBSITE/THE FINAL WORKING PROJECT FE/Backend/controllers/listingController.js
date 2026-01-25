@@ -107,7 +107,9 @@ exports.getMyListings = async (req, res) => {
     const [rows] = await db.query(
       `SELECT l.*, 
       (SELECT image_path FROM listing_images WHERE listing_id = l.id LIMIT 1) AS image
-      FROM listings l WHERE seller_id = ?`,
+      FROM listings l 
+      WHERE seller_id = ?
+      ORDER BY l.created_at DESC`,
       [userId],
     );
 
@@ -115,5 +117,89 @@ exports.getMyListings = async (req, res) => {
   } catch (err) {
     console.error("❌ My listings error:", err);
     res.status(500).json({ message: "Failed to fetch your listings" });
+  }
+};
+
+// 🔴 DELETE MY LISTING (PROFILE DELETE BUTTON)
+exports.deleteListing = async (req, res) => {
+  try {
+    const userId = req.user.id; // logged in user
+    const listingId = req.params.id; // listing to delete
+
+    // 🔴 CHECK OWNERSHIP FIRST (VERY IMPORTANT SECURITY)
+    const [[listing]] = await db.query(
+      "SELECT * FROM listings WHERE id = ? AND seller_id = ?",
+      [listingId, userId],
+    );
+
+    if (!listing) {
+      return res
+        .status(403)
+        .json({ message: "Not allowed to delete this listing" });
+    }
+
+    // 🔴 DELETE IMAGES FIRST
+    await db.query("DELETE FROM listing_images WHERE listing_id = ?", [
+      listingId,
+    ]);
+
+    // 🔴 DELETE LISTING
+    await db.query("DELETE FROM listings WHERE id = ?", [listingId]);
+
+    res.json({ message: "Listing deleted successfully" });
+  } catch (err) {
+    console.error("❌ Delete listing error:", err);
+    res.status(500).json({ message: "Failed to delete listing" });
+  }
+};
+
+// 🔴 UPDATE MY LISTING (EDIT PAGE)
+exports.updateListing = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const listingId = req.params.id;
+
+    console.log("UPDATE USER:", userId);
+    console.log("UPDATE LISTING ID:", listingId);
+    console.log("UPDATE BODY:", req.body);
+
+    const { title, price, category, subcategory, location, year, description } =
+      req.body;
+
+    // 🔴 CHECK OWNERSHIP
+    const [[listing]] = await db.query(
+      "SELECT * FROM listings WHERE id = ? AND seller_id = ?",
+      [listingId, userId],
+    );
+
+    console.log("OWNERSHIP CHECK RESULT:", listing);
+
+    if (!listing) {
+      return res
+        .status(403)
+        .json({ message: "Not allowed to update this listing" });
+    }
+
+    // 🔴 UPDATE LISTING
+    await db.query(
+      `UPDATE listings 
+       SET title=?, price=?, category=?, subcategory=?, location=?, year=?, description=? 
+       WHERE id=?`,
+      [
+        title,
+        price,
+        category,
+        subcategory,
+        location,
+        year,
+        description,
+        listingId,
+      ],
+    );
+
+    res.json({ message: "Listing updated successfully" });
+  } catch (err) {
+    console.error("❌ Update listing error FULL:", err);
+    res.status(500).json({ message: "Failed to update listing" });
   }
 };

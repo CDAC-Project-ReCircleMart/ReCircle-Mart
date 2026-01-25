@@ -1,26 +1,30 @@
-// routes/listingRoutes.js
-
 const express = require("express");
 const router = express.Router();
 const listingController = require("../controllers/listingController");
 const auth = require("../middleware/authMiddleware");
-const upload = require("../utils/upload"); // multer for images
+const upload = require("../utils/upload");
 
-// 🔴 CREATE LISTING (SELL FORM) – PROTECTED
+// 🔴 CREATE LISTING
 router.post(
   "/",
   auth,
-  upload.array("images", 12), // accept multiple images
+  upload.array("images", 12),
   listingController.createListing,
 );
 
-// 🔴 GET ALL LISTINGS (HOME PAGE)
+// 🔴 GET ALL LISTINGS
 router.get("/", listingController.getAllListings);
 
-// 🔴 GET SINGLE LISTING (PRODUCT DETAIL)
-router.get("/:id", listingController.getSingleListing);
-
-// 🔴 GET MY LISTINGS (PROFILE PAGE) – PROTECTED
+// 🔴 GET MY LISTINGS (PROFILE)
 router.get("/user/me", auth, listingController.getMyListings);
+
+// 🔴 UPDATE LISTING (EDIT)  ⭐ MUST COME BEFORE :id GET
+router.put("/:id", auth, listingController.updateListing);
+
+// 🔴 DELETE LISTING
+router.delete("/:id", auth, listingController.deleteListing);
+
+// 🔴 GET SINGLE LISTING (LAST ALWAYS)
+router.get("/:id", listingController.getSingleListing);
 
 module.exports = router;
