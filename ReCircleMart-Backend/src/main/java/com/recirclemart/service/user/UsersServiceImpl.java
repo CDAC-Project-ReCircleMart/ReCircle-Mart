@@ -1,5 +1,7 @@
 package com.recirclemart.service.user;
 
+import java.util.ArrayList;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,6 +13,7 @@ import com.recirclemart.entities.user.Role;
 import com.recirclemart.entities.user.UserProfile;
 import com.recirclemart.entities.user.UserStatus;
 import com.recirclemart.entities.user.Users;
+import com.recirclemart.model.Credentials;
 import com.recirclemart.repository.user.RoleRepository;
 import com.recirclemart.repository.user.UserStatusRepository;
 import com.recirclemart.repository.user.UsersRepository;
@@ -47,13 +50,14 @@ public class UsersServiceImpl implements UsersService, UserDetailsService {
                 user.setPhoneNumber(request.getPhone());
                 user.setStatus(activeStatus);
 
-                // Create user profile
+                // // Create user profile
                 UserProfile profile = new UserProfile();
                 profile.setUser(user);
 
                 user.setUserProfile(profile);
 
                 return usersRepository.save(user);
+
         }
 
         @Override
@@ -64,6 +68,13 @@ public class UsersServiceImpl implements UsersService, UserDetailsService {
 
                 return user;
 
+        }
+
+        @Override
+        public Users getUserLoggedIn(String email, String password) {
+                Users user = usersRepository.findByEmailAndPasswordHash(email, password)
+                                .orElseThrow(() -> new UsernameNotFoundException("No User found"));
+                return user;
         }
 
 }

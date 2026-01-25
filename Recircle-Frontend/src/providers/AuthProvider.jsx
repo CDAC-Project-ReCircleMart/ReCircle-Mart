@@ -9,10 +9,12 @@ export const AuthProvider = ({ children }) => {
         return savedUser ? JSON.parse(savedUser) : null;
     });
 
+
     const login = (userData) => {
         setUser(userData);
         // Save user state to local storage
         localStorage.setItem('user', JSON.stringify(userData));
+
     };
 
     const logout = () => {

@@ -4,6 +4,7 @@ import { config } from "./config";
 
 /* ================= LOGIN ================= */
 export async function login(email, password) {
+<<<<<<< Updated upstream
   try {
     const url = `${config.server}/users/authenticate`;
     const body = { email, password };
@@ -29,6 +30,26 @@ export async function login(email, password) {
 }
 
 /* ================= REGISTER ================= */
+=======
+    try {
+        const url = `${config.server}/users/authenticate`
+        const body = { email, password }
+        const response = await axios.post(url, body)
+
+        return response.data
+
+
+
+    }
+    catch (ex) {
+        return { error: "Invalid Credentials" }
+    }
+}
+
+
+
+
+>>>>>>> Stashed changes
 export async function register(name, email, password, phone) {
   try {
     const response = await api.post("/users/register", {
