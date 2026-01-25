@@ -4,12 +4,52 @@ const db = require("../config/db");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-// 🔴 REGISTER USER
+// // 🔴 REGISTER USER
+// exports.register = async (req, res) => {
+//   try {
+//     const { firstName, lastName, email, password, icon } = req.body;
+
+//     // Check if user exists
+//     const [existing] = await db.query("SELECT id FROM users WHERE email = ?", [
+//       email,
+//     ]);
+
+//     if (existing.length > 0) {
+//       return res.status(400).json({ message: "User already exists" });
+//     }
+
+//     // Hash password
+//     const hashedPassword = await bcrypt.hash(password, 10);
+
+//     // Insert user
+//     const [result] = await db.query(
+//       "INSERT INTO users (first_name, last_name, email, password, avatar) VALUES (?, ?, ?, ?, ?)",
+//       [firstName, lastName, email, hashedPassword, icon],
+//     );
+
+//     res.json({ message: "Registration successful" });
+//   } catch (err) {
+//     console.error("❌ Register error:", err);
+//     res.status(500).json({ message: "Registration failed" });
+//   }
+// };
+
 exports.register = async (req, res) => {
   try {
-    const { firstName, lastName, email, password, icon } = req.body;
+    console.log("REGISTER BODY:", req.body); // 🔴 DEBUG
+    console.log("REGISTER FILE:", req.file); // 🔴 DEBUG
 
-    // Check if user exists
+    const firstName = req.body.firstName;
+    const lastName = req.body.lastName;
+    const email = req.body.email;
+    const password = req.body.password;
+    const icon = req.body.icon;
+
+    if (!firstName || !email || !password) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    // 🔴 CHECK IF USER EXISTS
     const [existing] = await db.query("SELECT id FROM users WHERE email = ?", [
       email,
     ]);
@@ -18,18 +58,25 @@ exports.register = async (req, res) => {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Insert user
-    const [result] = await db.query(
+    // 🔴 PRIORITY: FILE > ICON
+    let avatarPath = null;
+
+    if (req.file) {
+      avatarPath = `/uploads/${req.file.filename}`;
+    } else if (icon) {
+      avatarPath = icon;
+    }
+
+    await db.query(
       "INSERT INTO users (first_name, last_name, email, password, avatar) VALUES (?, ?, ?, ?, ?)",
-      [firstName, lastName, email, hashedPassword, icon],
+      [firstName, lastName, email, hashedPassword, avatarPath],
     );
 
     res.json({ message: "Registration successful" });
   } catch (err) {
-    console.error("❌ Register error:", err);
+    console.error("❌ Register error FULL:", err);
     res.status(500).json({ message: "Registration failed" });
   }
 };

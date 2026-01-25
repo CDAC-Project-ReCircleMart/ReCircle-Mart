@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 import CarSidebar from "../../components/sidebar/CarSidebar";
 import BikeSidebar from "../../components/sidebar/BikeSidebar";
@@ -13,24 +14,19 @@ import ListingCard from "../../components/cards/ListingCard";
 import Footer from "../../components/footer/Footer";
 import CategoryGrid from "../../components/category/CategoryGrid";
 
-import api from "../../services/api";                 // 🔴 NEW
-import Loader from "../../components/Loader";         // 🔴 NEW
-import { toast } from "react-toastify";               // 🔴 NEW
-
-// import { getAllListings } from "../../services/listingService";
-// const data = await getAllListings();
-
-
-
+import api from "../../services/api";
+import Loader from "../../components/Loader";
+import { toast } from "react-toastify";
 
 import "./Home.css";
 
 export default function Home() {
-  const [allListings, setAllListings] = useState([]);     // 🔴 store backend data
+  const location = useLocation(); // 🔥 READ SEARCH FROM URL
+
+  const [allListings, setAllListings] = useState([]);
   const [filteredListings, setFilteredListings] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
 
-  
   // LOADING STATE
   const [loading, setLoading] = useState(false);
 
@@ -44,12 +40,12 @@ export default function Home() {
       setLoading(true);
       try {
         const res = await api.get("/listings");
+
         setAllListings(res.data);
 
-        // RANDOMIZE LIKE BEFORE
+        // RANDOMIZE ORDER
         const shuffled = [...res.data].sort(() => 0.5 - Math.random());
         setFilteredListings(shuffled);
-
       } catch (err) {
         toast.error("Failed to load listings from server");
       } finally {
@@ -60,21 +56,55 @@ export default function Home() {
     fetchListings();
   }, []);
 
+  // 🔥 APPLY SEARCH FROM NAVBAR (CITY + MAIN SEARCH)
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+
+    const city = params.get("city");
+    const q = params.get("q");
+
+    let filtered = [...allListings];
+
+    // 🔴 CITY SEARCH FILTER
+    if (city) {
+      filtered = filtered.filter(
+        (item) =>
+          item.location &&
+          item.location.toLowerCase().includes(city.toLowerCase()),
+      );
+    }
+
+    // 🔴 MAIN SEARCH FILTER (TITLE / CATEGORY / SUBCATEGORY / DESCRIPTION)
+    if (q) {
+      filtered = filtered.filter((item) => {
+        const searchText = q.toLowerCase();
+
+        return (
+          item.title?.toLowerCase().includes(searchText) ||
+          item.category?.toLowerCase().includes(searchText) ||
+          item.subcategory?.toLowerCase().includes(searchText) ||
+          item.description?.toLowerCase().includes(searchText)
+        );
+      });
+    }
+
+    setFilteredListings(filtered);
+    setCurrentPage(1);
+  }, [location.search, allListings]);
+
   // WHEN CATEGORY ICON CLICKED
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
     setCurrentPage(1);
 
-    // FILTER BY CATEGORY FROM BACKEND DATA
     const filtered = allListings.filter((item) => item.category === category);
     setFilteredListings(filtered);
   };
 
-  // 🔥 FILTER FROM SIDEBAR (SAME LOGIC, JUST REPLACE listings → allListings)
+  // 🔥 FILTER FROM SIDEBAR
   const applyFilters = (filters) => {
     let filtered = [...allListings];
 
-    // FIRST FILTER BY SELECTED CATEGORY
     if (selectedCategory) {
       filtered = filtered.filter((item) => item.category === selectedCategory);
     }
@@ -84,21 +114,21 @@ export default function Home() {
       filtered = filtered.filter(
         (item) =>
           item.location &&
-          item.location.toLowerCase().includes(filters.location.toLowerCase())
+          item.location.toLowerCase().includes(filters.location.toLowerCase()),
       );
     }
 
     // YEAR
     if (filters.year) {
       filtered = filtered.filter(
-        (item) => String(item.year) === String(filters.year)
+        (item) => String(item.year) === String(filters.year),
       );
     }
 
-    // BRAND (TITLE BASED — works for Cars, Mobiles, etc.)
+    // BRAND (TITLE BASED)
     if (filters.brand && selectedCategory !== "Fashion") {
       filtered = filtered.filter((item) =>
-        item.title.toLowerCase().includes(filters.brand.toLowerCase())
+        item.title.toLowerCase().includes(filters.brand.toLowerCase()),
       );
     }
 
@@ -114,32 +144,34 @@ export default function Home() {
       });
     }
 
-    // CATEGORY-SPECIFIC EXTRA FILTERS
+    // EXTRA FILTERS
     if (filters.fuel) {
       filtered = filtered.filter((item) =>
-        item.description?.toLowerCase().includes(filters.fuel.toLowerCase())
+        item.description?.toLowerCase().includes(filters.fuel.toLowerCase()),
       );
     }
 
     if (filters.transmission) {
       filtered = filtered.filter((item) =>
-        item.description?.toLowerCase().includes(filters.transmission.toLowerCase())
+        item.description
+          ?.toLowerCase()
+          .includes(filters.transmission.toLowerCase()),
       );
     }
 
     if (filters.owners) {
       filtered = filtered.filter((item) =>
-        item.description?.toLowerCase().includes(`owners:${filters.owners}`)
+        item.description?.toLowerCase().includes(`owners:${filters.owners}`),
       );
     }
 
-    // 🔥 FASHION FILTERS
+    // FASHION FILTERS
     if (selectedCategory === "Fashion") {
       if (filters.brand) {
         filtered = filtered.filter((item) =>
           item.description
             ?.toLowerCase()
-            .includes(`brand:${filters.brand.toLowerCase()}`)
+            .includes(`brand:${filters.brand.toLowerCase()}`),
         );
       }
 
@@ -147,7 +179,7 @@ export default function Home() {
         filtered = filtered.filter((item) =>
           item.description
             ?.toLowerCase()
-            .includes(`type:${filters.productType.toLowerCase()}`)
+            .includes(`type:${filters.productType.toLowerCase()}`),
         );
       }
 
@@ -155,7 +187,7 @@ export default function Home() {
         filtered = filtered.filter((item) =>
           item.description
             ?.toLowerCase()
-            .includes(`size:${filters.size.toLowerCase()}`)
+            .includes(`size:${filters.size.toLowerCase()}`),
         );
       }
 
@@ -163,7 +195,7 @@ export default function Home() {
         filtered = filtered.filter((item) =>
           item.description
             ?.toLowerCase()
-            .includes(`condition:${filters.condition.toLowerCase()}`)
+            .includes(`condition:${filters.condition.toLowerCase()}`),
         );
       }
     }
@@ -187,7 +219,7 @@ export default function Home() {
     }
   };
 
-  // 🔥 DYNAMIC SIDEBAR LOADER (UNCHANGED)
+  // 🔥 DYNAMIC SIDEBAR LOADER
   const renderSidebar = () => {
     switch (selectedCategory) {
       case "Cars":

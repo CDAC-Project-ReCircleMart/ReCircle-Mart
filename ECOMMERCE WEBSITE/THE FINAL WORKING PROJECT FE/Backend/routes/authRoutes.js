@@ -1,13 +1,12 @@
-// routes/authRoutes.js
-
 const express = require("express");
 const router = express.Router();
 const authController = require("../controllers/authController");
+const upload = require("../utils/upload"); // 🔴 IMPORTANT
 
-// REGISTER
-router.post("/register", authController.register);
+// 🔴 REGISTER WITH AVATAR UPLOAD
+router.post("/register", upload.single("avatar"), authController.register);
 
-// LOGIN
+// 🔴 LOGIN
 router.post("/login", authController.login);
 
 module.exports = router;

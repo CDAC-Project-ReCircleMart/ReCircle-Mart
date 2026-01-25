@@ -50,10 +50,7 @@ export default function Profile() {
 
     try {
       await api.delete(`/listings/${id}`);
-
-      // REMOVE FROM UI
       setUserListings((prev) => prev.filter((item) => item.id !== id));
-
       toast.success("Listing deleted successfully");
     } catch (err) {
       console.error("DELETE LISTING ERROR:", err);
@@ -68,11 +65,18 @@ export default function Profile() {
     ? new Date(user.created_at).toLocaleString()
     : null;
 
-  // 🔴 INTERNAL LISTING CARD COMPONENT (ONLY FOR PROFILE PAGE)
+  // 🔴 INTERNAL LISTING CARD (ONLY IMAGE FIX ADDED)
   function MyListingCard({ item }) {
+    // 🔥 FIX IMAGE PATH HERE
+    const imageSrc = item.image
+      ? item.image.startsWith("/uploads")
+        ? `http://localhost:8080${item.image}`
+        : item.image
+      : "/no-image.png";
+
     return (
       <div className="profile-listing-card">
-        <img src={item.image} alt={item.title} />
+        <img src={imageSrc} alt={item.title} />
 
         <div className="listing-info">
           <h4>{item.title}</h4>
@@ -110,11 +114,11 @@ export default function Profile() {
 
   return (
     <div className="profile-container">
-      {/* LEFT SIDE - USER INFO */}
+      {/* LEFT SIDE */}
       <div className="profile-left">
         <div className="profile-avatar-wrapper">
           <img
-            src={user.avatar || "/default-user.png"}
+            src={user.avatar ? user.avatar : "profile.png"}
             alt="profile"
             className="profile-big-img"
           />
@@ -137,7 +141,6 @@ export default function Profile() {
           </p>
         )}
 
-        {/* STATS */}
         <div className="profile-stats">
           <div>
             <strong>{userListings.length}</strong>
@@ -153,21 +156,19 @@ export default function Profile() {
         </button>
       </div>
 
-      {/* RIGHT SIDE - USER LISTINGS */}
+      {/* RIGHT SIDE */}
       <div className="profile-right">
         <h3 className="my-listings-title">My Listings</h3>
 
         {userListings.length === 0 ? (
           <div className="no-listing-box">
             <img
-              src="/start-selling.png"
+              src="startsell.png"
               alt="start selling"
               className="no-listing-img"
             />
-
             <h3>You haven't listed anything yet</h3>
             <p>Start selling now</p>
-
             <button className="sell-now-btn" onClick={() => navigate("/sell")}>
               Start Selling
             </button>

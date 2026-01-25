@@ -42,10 +42,12 @@ export default function ProductDetail() {
     );
   }
 
-  // 🔴 IMAGES (BACKEND RETURNS ARRAY OF URLS)
+  // 🔴 🔥 FIX 1: PREPARE IMAGES WITH FULL BACKEND PATH
   const images =
     listing.images && listing.images.length > 0
-      ? listing.images
+      ? listing.images.map((img) =>
+          img.startsWith("/uploads") ? `http://localhost:8080${img}` : img,
+        )
       : ["/no-image.png"];
 
   const prevImage = () => {
@@ -56,7 +58,7 @@ export default function ProductDetail() {
     setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   };
 
-  // 🔴 SHOW ONLY CITY FROM LOCATION (state, city, landmark)
+  // 🔴 SHOW ONLY CITY
   const cityOnly = listing.location
     ? listing.location.split(",")[1]?.trim()
     : "Unknown";
@@ -90,6 +92,7 @@ export default function ProductDetail() {
           </button>
         )}
 
+        {/* 🔴 🔥 FIX 2: SHOW CURRENT IMAGE */}
         <img src={images[currentIndex]} alt={listing.title} />
 
         {images.length > 1 && (
@@ -103,7 +106,6 @@ export default function ProductDetail() {
       <div className="product-container">
         {/* LEFT SIDE */}
         <div className="left-panel mt-2">
-          {/* TITLE */}
           <div className="detail-card">
             <h2 className="product-title">{listing.title}</h2>
             <p className="category-line">
@@ -111,24 +113,20 @@ export default function ProductDetail() {
             </p>
           </div>
 
-          {/* OVERVIEW */}
           <div className="detail-card">
             <h3>Overview</h3>
 
             <div className="overview-grid">
-              {/* YEAR */}
               <div>
                 <i className="fa-solid fa-calendar"></i>
                 <span>{listing.year || "N/A"}</span>
               </div>
 
-              {/* LOCATION (CITY ONLY) */}
               <div>
                 <i className="fa-solid fa-location-dot"></i>
                 <span>{cityOnly}</span>
               </div>
 
-              {/* POSTED DATE */}
               <div>
                 <i className="fa-solid fa-calendar-days"></i>
                 <span>
@@ -138,7 +136,6 @@ export default function ProductDetail() {
                 </span>
               </div>
 
-              {/* SELLER */}
               <div>
                 <i className="fa-solid fa-user"></i>
                 <span>
@@ -148,7 +145,6 @@ export default function ProductDetail() {
             </div>
           </div>
 
-          {/* DESCRIPTION */}
           <div className="detail-card">
             <h3>Description</h3>
             <p>{listing.description}</p>
@@ -157,13 +153,11 @@ export default function ProductDetail() {
 
         {/* RIGHT SIDE */}
         <div className="right-panel mt-2">
-          {/* PRICE */}
           <div className="price-card">
             <h2 className="price">₹ {listing.price}</h2>
             <button className="offer-btn">Make Offer</button>
           </div>
 
-          {/* SELLER */}
           <div className="seller-card">
             <div className="seller-info">
               <i className="fa-solid fa-circle-user"></i>
