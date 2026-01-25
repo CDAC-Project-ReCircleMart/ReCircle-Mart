@@ -1,25 +1,32 @@
 const db = require("../config/db");
 
-// 🔴 START CHAT
+/* -------------------- START CHAT -------------------- */
 exports.startChat = async (req, res) => {
   try {
     const { listingId, sellerId } = req.body;
-    const buyerId = req.user.id;
+    const buyerId = req.user.id; // 🔥 CORRECT SOURCE
 
-    if (!listingId || !sellerId) {
+    if (!listingId || !sellerId || !buyerId) {
       return res.status(400).json({ message: "Missing data" });
     }
 
+    // 🔥 CHECK BOTH DIRECTIONS (VERY IMPORTANT)
     const [existing] = await db.query(
       `SELECT * FROM chats 
-       WHERE listing_id = ? AND buyer_id = ? AND seller_id = ?`,
-      [listingId, buyerId, sellerId],
+       WHERE listing_id = ? 
+       AND (
+         (buyer_id = ? AND seller_id = ?) 
+         OR 
+         (buyer_id = ? AND seller_id = ?)
+       )`,
+      [listingId, buyerId, sellerId, sellerId, buyerId],
     );
 
     if (existing.length > 0) {
       return res.json({ chatId: existing[0].id });
     }
 
+    // CREATE NEW CHAT
     const [result] = await db.query(
       `INSERT INTO chats (listing_id, buyer_id, seller_id)
        VALUES (?, ?, ?)`,
@@ -33,79 +40,51 @@ exports.startChat = async (req, res) => {
   }
 };
 
-// 🔴 GET MY CHATS (SHOW OTHER USER NAME + AVATAR)
-// // 🔴 GET MY CHATS (LEFT SIDEBAR + HEADER USER FIXED)
-// exports.getMyChats = async (req, res) => {
-//   try {
-//     const userId = req.user.id;
-
-//     const [rows] = await db.query(
-//       `
-//       SELECT
-//         c.id,
-//         c.listing_id,
-//         c.buyer_id,
-//         c.seller_id,
-//         c.created_at,
-
-//         l.title AS listing_title,
-
-//         -- OTHER USER INFO (THE PERSON I AM CHATTING WITH)
-//         u.id AS otherUserId,
-//         CONCAT(u.first_name, ' ', u.last_name) AS otherUserName,
-//         u.avatar AS otherUserAvatar
-
-//       FROM chats c
-//       JOIN listings l ON c.listing_id = l.id
-
-//       -- FIND THE OTHER USER (IF I AM BUYER → OTHER IS SELLER, IF I AM SELLER → OTHER IS BUYER)
-//       JOIN users u
-//         ON u.id = CASE
-//           WHEN c.buyer_id = ? THEN c.seller_id
-//           ELSE c.buyer_id
-//         END
-
-//       WHERE c.buyer_id = ? OR c.seller_id = ?
-//       ORDER BY c.created_at DESC
-//       `,
-//       [userId, userId, userId],
-//     );
-
-//     res.json(rows);
-//   } catch (err) {
-//     console.error("GET CHATS ERROR:", err);
-//     res.status(500).json({ message: "Failed to fetch chats" });
-//   }
-// };
-
+/* -------------------- GET MY CHATS -------------------- */
 exports.getMyChats = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.id; // 🔥 EXACT MATCH WITH AUTH
+
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
 
     const [rows] = await db.query(
-      `SELECT 
-         c.id,
-         c.listing_id,
-         c.buyer_id,
-         c.seller_id,
-         c.created_at,
-         l.title AS listing_title,
+      `
+      SELECT 
+        c.id,
+        c.listing_id,
+        c.buyer_id,
+        c.seller_id,
+        l.title,
 
-         -- 🔥 OTHER USER DETAILS
-         u.id AS otherUserId,
-         CONCAT(u.first_name, ' ', u.last_name) AS otherUserName,
-         u.avatar AS otherUserAvatar
+        -- OTHER USER ID
+        CASE 
+          WHEN c.buyer_id = ? THEN s.id
+          ELSE b.id
+        END AS other_id,
 
-       FROM chats c
-       JOIN listings l ON c.listing_id = l.id
+        -- OTHER USER NAME
+        CASE 
+          WHEN c.buyer_id = ? THEN CONCAT(s.first_name, ' ', s.last_name)
+          ELSE CONCAT(b.first_name, ' ', b.last_name)
+        END AS other_name,
 
-       -- 🔥 PICK THE OTHER PERSON
-       JOIN users u 
-         ON u.id = IF(c.buyer_id = ?, c.seller_id, c.buyer_id)
+        -- OTHER USER AVATAR
+        CASE 
+          WHEN c.buyer_id = ? THEN s.avatar
+          ELSE b.avatar
+        END AS other_avatar
 
-       WHERE c.buyer_id = ? OR c.seller_id = ?
-       ORDER BY c.created_at DESC`,
-      [userId, userId, userId],
+      FROM chats c
+      JOIN listings l ON c.listing_id = l.id
+      JOIN users b ON b.id = c.buyer_id
+      JOIN users s ON s.id = c.seller_id
+
+      WHERE c.buyer_id = ? OR c.seller_id = ?
+      ORDER BY c.created_at DESC
+      `,
+      [userId, userId, userId, userId, userId],
     );
 
     res.json(rows);
@@ -115,7 +94,7 @@ exports.getMyChats = async (req, res) => {
   }
 };
 
-// 🔴 GET MESSAGES
+/* -------------------- GET MESSAGES -------------------- */
 exports.getMessages = async (req, res) => {
   try {
     const { chatId } = req.params;
@@ -140,33 +119,33 @@ exports.getMessages = async (req, res) => {
   }
 };
 
+/* -------------------- SEND MESSAGE -------------------- */
 exports.sendMessage = async (req, res) => {
   try {
     const { chatId } = req.params;
-    const { text } = req.body;
-    const senderId = req.user.id;
+    const { message } = req.body;
+    const senderId = req.user.id; // 🔥 EXACT MATCH
 
-    if (!chatId || !text) {
-      return res.status(400).json({ message: "Missing chatId or message" });
+    if (!chatId || !message || !senderId) {
+      return res.status(400).json({ message: "Missing data" });
     }
 
+    // INSERT MESSAGE
     const [result] = await db.query(
       `INSERT INTO messages (chat_id, sender_id, message)
        VALUES (?, ?, ?)`,
-      [chatId, senderId, text],
+      [chatId, senderId, message],
     );
 
+    // RETURN SAVED MESSAGE
     const [rows] = await db.query(
       `SELECT 
-         m.id,
-         m.chat_id,
-         m.message,
-         m.created_at,
-         u.id AS sender_id,
-         CONCAT(u.first_name, ' ', u.last_name) AS sender_name,
-         u.avatar AS sender_avatar
+        m.id,
+        m.chat_id,
+        m.sender_id,
+        m.message,
+        m.created_at
        FROM messages m
-       JOIN users u ON m.sender_id = u.id
        WHERE m.id = ?`,
       [result.insertId],
     );
@@ -175,5 +154,31 @@ exports.sendMessage = async (req, res) => {
   } catch (err) {
     console.error("SEND MESSAGE ERROR:", err);
     res.status(500).json({ message: "Failed to send message" });
+  }
+};
+
+/* -------------------- DELETE CHAT -------------------- */
+exports.deleteChat = async (req, res) => {
+  try {
+    const { chatId } = req.params;
+    const userId = req.user.id;
+
+    const [rows] = await db.query(
+      `SELECT * FROM chats 
+       WHERE id = ? AND (buyer_id = ? OR seller_id = ?)`,
+      [chatId, userId, userId],
+    );
+
+    if (rows.length === 0) {
+      return res.status(403).json({ message: "Not allowed" });
+    }
+
+    await db.query(`DELETE FROM messages WHERE chat_id = ?`, [chatId]);
+    await db.query(`DELETE FROM chats WHERE id = ?`, [chatId]);
+
+    res.json({ message: "Chat deleted" });
+  } catch (err) {
+    console.error("DELETE CHAT ERROR:", err);
+    res.status(500).json({ message: "Failed to delete chat" });
   }
 };

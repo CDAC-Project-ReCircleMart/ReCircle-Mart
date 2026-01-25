@@ -1,8 +1,8 @@
 export default function ChatListItem({ chat, active, onClick }) {
-  const avatar = chat.otherUserAvatar
-    ? chat.otherUserAvatar.startsWith("/uploads")
-      ? `http://localhost:8080${chat.otherUserAvatar}`
-      : chat.otherUserAvatar
+  const avatar = chat.otherUser?.avatar
+    ? chat.otherUser.avatar.startsWith("/uploads")
+      ? `http://localhost:8080${chat.otherUser.avatar}`
+      : chat.otherUser.avatar
     : "/profile.png";
 
   return (
@@ -15,7 +15,7 @@ export default function ChatListItem({ chat, active, onClick }) {
 
       {/* INFO */}
       <div className="chat-info">
-        <p className="chat-name">{chat.otherUserName}</p>
+        <p className="chat-name">{chat.otherUser?.name || "User"}</p>
         <p className="chat-last">{chat.title}</p>
       </div>
 
