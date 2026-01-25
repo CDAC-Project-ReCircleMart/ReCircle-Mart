@@ -34,20 +34,8 @@ public class SecurityConfig {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-<<<<<<< Updated upstream
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-=======
-	@Bean
-	public CorsConfigurationSource corsConfigurationSource() {
-		CorsConfiguration configuration = new CorsConfiguration();
-		// Use List.of or Arrays.asList to set your React app's origin
-		configuration.setAllowedOrigins(List.of("http://localhost:5173"));
-//		configuration.setAllowedOrigins(List.of("*"));
-		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-		configuration.setAllowedHeaders(List.of("*"));
-		configuration.setAllowCredentials(true); // Required if sending cookies or Auth headers
->>>>>>> Stashed changes
 
         AuthenticationManagerBuilder authManagerBuilder =
                 http.getSharedObject(AuthenticationManagerBuilder.class);

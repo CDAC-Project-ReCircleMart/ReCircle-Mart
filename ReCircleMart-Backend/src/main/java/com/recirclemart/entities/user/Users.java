@@ -58,19 +58,16 @@ public class Users implements UserDetails {
     @JoinColumn(name = "status_id", nullable = false)
     private UserStatus status;
 
-<<<<<<< Updated upstream
+
     @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
-=======
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "role_id", nullable = false)
-	private Role role;
+
 	
 
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     private List<UserAddress> userAddresses;
->>>>>>> Stashed changes
+
 
     @Column(name = "updated_at", insertable = false, updatable = false)
     private LocalDateTime updatedAt;

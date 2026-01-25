@@ -1,6 +1,7 @@
 
 package com.recirclemart.entities.user;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -31,11 +32,9 @@ public class UserProfile {
     @Column(name = "profile_id")
     private Long profileId;
 
-<<<<<<< Updated upstream
-    @OneToOne(fetch = FetchType.LAZY)
-=======
+
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
->>>>>>> Stashed changes
+
     @JoinColumn(name = "user_id", nullable = false)
     private Users user;
 
