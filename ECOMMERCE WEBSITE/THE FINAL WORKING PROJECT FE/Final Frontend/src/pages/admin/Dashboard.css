@@ -1,0 +1,30 @@
+.dashboard-root {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+}
+
+.dashboard-root h3 {
+  grid-column: span 2;
+  margin-bottom: 10px;
+}
+
+/* EACH CHART BOX */
+.chart-box {
+  background: white;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.chart-box h4 {
+  margin-bottom: 15px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* PIE CHART FULL WIDTH */
+.chart-box:last-child {
+  grid-column: span 2;
+}
