@@ -11,8 +11,26 @@ export default function Favourites() {
     const fetchFavourites = async () => {
       try {
         const res = await api.get("/favourites");
-        setFavourites(res.data);
+
+        console.log("RAW FAVOURITES RESPONSE:", res.data);
+
+        let listings = [];
+
+        // 🔴 VERY SAFE HANDLING (no crash possible)
+        if (Array.isArray(res.data)) {
+          // If backend sends { listing: {...} }
+          if (res.data.length > 0 && res.data[0].listing) {
+            listings = res.data.map((fav) => fav.listing);
+          }
+          // If backend already sends listings directly
+          else {
+            listings = res.data;
+          }
+        }
+
+        setFavourites(listings);
       } catch (err) {
+        console.error("FAVOURITES ERROR:", err);
         toast.error("Failed to load favourites");
       }
     };
@@ -34,7 +52,8 @@ export default function Favourites() {
                 key={item.id}
                 className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4"
               >
-                <ListingCard item={item} />
+                {/* 🔴 EXTRA SAFETY: don't render broken items */}
+                {item && <ListingCard item={item} />}
               </div>
             ))}
           </div>

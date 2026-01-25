@@ -6,16 +6,17 @@ export default function ListingCard({ item }) {
   const navigate = useNavigate();
   const { favourites, addFavourite, removeFavourite } = useFavourites();
 
-  // 🔴 CHECK IF THIS ITEM IS ALREADY LIKED
+  // 🔴 FIX 1: Correct check — favourites may store listing objects
   const isLiked = favourites.some((fav) => fav.id === item.id);
 
   const handleLike = (e) => {
     e.stopPropagation(); // stop card navigation
 
+    // 🔴 FIX 2: Only send listing ID to backend (what API expects)
     if (isLiked) {
-      removeFavourite(item.id); // remove from favourites
+      removeFavourite(item.id); // backend: DELETE /favourites/:listingId
     } else {
-      addFavourite(item); // add to favourites
+      addFavourite(item.id); // backend: POST /favourites { listingId }
     }
   };
 

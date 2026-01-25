@@ -1,12 +1,12 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { isLoggedIn } from "../utils/token";
 
-export default function ProtectedRoute() {
+export default function ProtectedRoute({ children }) {
   // 🔴 IF NOT LOGGED IN → BLOCK ACCESS
   if (!isLoggedIn()) {
-    return <Navigate to="/unauthorized" replace />;
+    return <Navigate to="/login" replace />; // better UX than /unauthorized
   }
 
-  // 🟢 IF LOGGED IN → ALLOW PAGE
-  return <Outlet />;
+  // 🟢 IF LOGGED IN → SHOW THE PAGE
+  return children;
 }

@@ -1,42 +1,90 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import api from "../services/api";
 
-// CREATE CONTEXT
 const FavouritesContext = createContext();
 
-// PROVIDER
 export function FavouritesProvider({ children }) {
   const [favourites, setFavourites] = useState([]);
+  const [loaded, setLoaded] = useState(false);
 
-  // 🔴 LOAD FROM LOCALSTORAGE ON FIRST LOAD
-  useEffect(() => {
-    const stored = localStorage.getItem("favourites");
-    if (stored) {
-      setFavourites(JSON.parse(stored));
-    }
-  }, []);
+  const token = localStorage.getItem("token"); // 🔴 watch token
 
-  // 🔴 SAVE TO LOCALSTORAGE WHENEVER FAVOURITES CHANGE
+  // 🔴 LOAD FAVOURITES WHEN USER LOGS IN / TOKEN CHANGES
   useEffect(() => {
-    localStorage.setItem("favourites", JSON.stringify(favourites));
-  }, [favourites]);
+    const fetchFavourites = async () => {
+      try {
+        if (!token) {
+          // 🔴 USER LOGGED OUT → CLEAR FAVOURITES
+          setFavourites([]);
+          setLoaded(true);
+          return;
+        }
+
+        const res = await api.get("/favourites");
+
+        console.log("FAV CONTEXT RESPONSE:", res.data);
+
+        let listings = [];
+
+        if (Array.isArray(res.data)) {
+          if (res.data[0]?.listing) {
+            listings = res.data.map((fav) => fav.listing);
+          } else {
+            listings = res.data;
+          }
+        }
+
+        setFavourites(listings);
+        setLoaded(true);
+      } catch (err) {
+        console.error("FAV CONTEXT ERROR:", err);
+        setFavourites([]); // 🔴 reset on error
+        setLoaded(true);
+      }
+    };
+
+    fetchFavourites();
+  }, [token]); // 🔴 VERY IMPORTANT: re-run when user changes
 
   // 🟢 ADD TO FAVOURITES
-  const addFavourite = (item) => {
-    const alreadyExists = favourites.find((fav) => fav.id === item.id);
-    if (alreadyExists) return;
+  const addFavourite = async (listingId) => {
+    try {
+      await api.post("/favourites", { listingId });
 
-    setFavourites((prev) => [...prev, item]);
+      // reload favourites after add
+      const res = await api.get("/favourites");
+
+      let listings = [];
+      if (res.data[0]?.listing) {
+        listings = res.data.map((fav) => fav.listing);
+      } else {
+        listings = res.data;
+      }
+
+      setFavourites(listings);
+    } catch (err) {
+      console.error("ADD FAV ERROR:", err);
+    }
   };
 
   // 🔴 REMOVE FROM FAVOURITES
-  const removeFavourite = (id) => {
-    setFavourites((prev) => prev.filter((item) => item.id !== id));
+  const removeFavourite = async (listingId) => {
+    try {
+      await api.delete(`/favourites/${listingId}`);
+      setFavourites((prev) => prev.filter((item) => item.id !== listingId));
+    } catch (err) {
+      console.error("REMOVE FAV ERROR:", err);
+    }
   };
 
-  // 🔴 CHECK IF ITEM IS FAVOURITE
   const isFavourite = (id) => {
     return favourites.some((item) => item.id === id);
   };
+
+  // 🔴 WAIT UNTIL CONTEXT IS READY
+  if (!loaded) {
+    return children; // or spinner
+  }
 
   return (
     <FavouritesContext.Provider
@@ -52,7 +100,6 @@ export function FavouritesProvider({ children }) {
   );
 }
 
-// CUSTOM HOOK
 export function useFavourites() {
   return useContext(FavouritesContext);
 }
