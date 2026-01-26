@@ -203,3 +203,40 @@ exports.updateListing = async (req, res) => {
     res.status(500).json({ message: "Failed to update listing" });
   }
 };
+
+exports.getUserListingsById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const [rows] = await db.query(
+      `
+      SELECT 
+        l.id,
+        l.title,
+        l.price,
+        l.category,
+        l.subcategory,
+        l.location,
+        l.year,
+        l.description,
+        l.seller_id,
+        l.created_at,
+
+        -- 🔥 TAKE FIRST IMAGE OF EACH LISTING
+        MIN(li.image_path) AS image
+
+      FROM listings l
+      LEFT JOIN listing_images li ON l.id = li.listing_id
+      WHERE l.seller_id = ?
+      GROUP BY l.id
+      ORDER BY l.created_at DESC
+    `,
+      [id],
+    );
+
+    res.json(rows);
+  } catch (err) {
+    console.error("❌ SELLER LISTINGS ERROR:", err);
+    res.status(500).json({ message: "Failed to fetch seller listings" });
+  }
+};

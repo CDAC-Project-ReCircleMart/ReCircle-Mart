@@ -100,6 +100,7 @@ app.use("/api/listings", require("./routes/listingRoutes"));
 app.use("/api/messages", require("./routes/chatRoutes"));
 app.use("/api/favourites", require("./routes/favouriteRoutes"));
 app.use("/api/admin", require("./routes/adminRoutes"));
+app.use("/api/users", require("./routes/userRoutes"));
 
 /* ================= VISIT LOGGER (🔥 AFTER ROUTES – SAFE) ================= */
 

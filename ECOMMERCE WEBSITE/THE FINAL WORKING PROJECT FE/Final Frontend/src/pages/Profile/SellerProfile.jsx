@@ -43,15 +43,27 @@ export default function SellerProfile() {
     : null;
 
   function ListingCard({ item }) {
-    const imageSrc = item.image
-      ? item.image.startsWith("/uploads")
-        ? `http://localhost:8080${item.image}`
-        : item.image
-      : "/no-image.png";
+    console.log("SELLER LISTING RAW DATA:", item);
+
+    // 🔥 FULL SAFE IMAGE HANDLING
+
+    let rawImage = null;
+
+    if (item.images && item.images.length > 0) {
+      rawImage = item.images[0]; // first image from array
+    } else if (item.image) {
+      rawImage = item.image; // fallback if single image field exists
+    }
+
+    const imageSrc = rawImage
+      ? rawImage.startsWith("/uploads")
+        ? `http://localhost:8080${rawImage}`
+        : rawImage
+      : "no-image.png";
 
     return (
       <div className="seller-listing-card">
-        <img src={imageSrc} alt={item.title} />
+        <img src={imageSrc ? imageSrc : "no-image.png"} alt={item.title} />
 
         <div className="listing-info">
           <h4>{item.title}</h4>
@@ -88,12 +100,14 @@ export default function SellerProfile() {
 
         <h2 className="seller-name">
           <i className="fa-solid fa-user"></i>
-          {seller.first_name} {seller.last_name}
+          <span>
+            {seller.first_name} {seller.last_name}{" "}
+          </span>
         </h2>
 
         <p className="seller-email">
           <i className="fa-solid fa-envelope"></i>
-          {seller.email}
+          <span> {seller.email}</span>
         </p>
 
         {joinedDate && (
@@ -106,7 +120,7 @@ export default function SellerProfile() {
         <div className="seller-stats">
           <div>
             <strong>{listings.length}</strong>
-            <span>Listings</span>
+            <span> Listings</span>
           </div>
         </div>
       </div>
