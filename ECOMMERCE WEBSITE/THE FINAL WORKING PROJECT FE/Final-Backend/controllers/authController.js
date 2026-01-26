@@ -100,3 +100,39 @@ exports.login = async (req, res) => {
     res.status(500).json({ message: "Login failed" });
   }
 };
+
+/* ================= UPDATE PROFILE ================= */
+
+exports.updateProfile = async (req, res) => {
+  try {
+    const userId = req.user.id; // from auth middleware
+    const { first_name, email, password } = req.body;
+
+    let query = "UPDATE users SET first_name = ?, email = ?";
+    let params = [first_name, email];
+
+    // 🔥 UPDATE PASSWORD ONLY IF PROVIDED
+    if (password) {
+      const bcrypt = require("bcryptjs");
+      const hashed = await bcrypt.hash(password, 10);
+
+      query += ", password = ?";
+      params.push(hashed);
+    }
+
+    query += " WHERE id = ?";
+    params.push(userId);
+
+    const db = require("../config/db");
+    await db.query(query, params);
+
+    // 🔥 RETURN UPDATED USER DATA
+    res.json({
+      first_name,
+      email,
+    });
+  } catch (err) {
+    console.error("❌ UPDATE PROFILE ERROR:", err);
+    res.status(500).json({ message: "Failed to update profile" });
+  }
+};

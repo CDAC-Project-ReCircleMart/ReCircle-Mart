@@ -16,10 +16,10 @@ module.exports = (req, res, next) => {
     // 🔴 VERIFY TOKEN
     const decoded = jwt.verify(token, process.env.JWT_SECRET || "mysecretkey");
 
-    // 🔥 ATTACH USER ID + ROLE (ADMIN SUPPORT ADDED)
+    // 🔥 ATTACH USER ID + ROLE (ADMIN SUPPORT)
     req.user = {
       id: decoded.id,
-      role: decoded.role, // 🔥 VERY IMPORTANT
+      role: decoded.role || "user", // 🔥 fallback so it never crashes
     };
 
     next();

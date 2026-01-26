@@ -1,18 +1,78 @@
-// app.js
+// const express = require("express");
+// const cors = require("cors");
+// const morgan = require("morgan");
+// const path = require("path");
+
+// const app = express();
+
+// /* ================= MIDDLEWARE ================= */
+
+// // Allow React frontend
+// app.use(
+//   cors({
+//     origin: "http://localhost:5173",
+//     credentials: true,
+//   }),
+// );
+
+// // Logging
+// app.use(morgan("dev"));
+
+// // Body parser
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
+
+// // Static folder for uploaded images
+// app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+// /* ================= VISIT LOGGER (SAFE – DOES NOT BLOCK ROUTES) ================= */
+
+// const visitLogger = require("./middleware/visitLogger");
+// app.use(visitLogger);
+
+// /* ================= ROUTES ================= */
+
+// // Health check
+// app.get("/", (req, res) => {
+//   res.json({ status: "Backend running successfully 🚀" });
+// });
+
+// // 🔴 PUBLIC + PROTECTED ROUTES (UNCHANGED)
+// app.use("/api/auth", require("./routes/authRoutes"));
+// app.use("/api/listings", require("./routes/listingRoutes"));
+// app.use("/api/messages", require("./routes/chatRoutes"));
+// app.use("/api/favourites", require("./routes/favouriteRoutes"));
+// app.use("/api/admin", require("./routes/adminRoutes"));
+
+// /* ================= ERROR HANDLING ================= */
+
+// app.use((req, res) => {
+//   res.status(404).json({ message: "Route not found" });
+// });
+
+// app.use((err, req, res, next) => {
+//   console.error("❌ Error:", err);
+
+//   res.status(err.status || 500).json({
+//     message: err.message || "Internal Server Error",
+//   });
+// });
+
+// module.exports = app;
 
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const path = require("path");
 
-const app = express(); // 🔴 CREATE APP FIRST
+const app = express();
 
 /* ================= MIDDLEWARE ================= */
 
 // Allow React frontend
 app.use(
   cors({
-    origin: "http://localhost:5173", // Vite frontend
+    origin: "http://localhost:5173",
     credentials: true,
   }),
 );
@@ -27,21 +87,24 @@ app.use(express.urlencoded({ extended: true }));
 // Static folder for uploaded images
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-/* ================= ROUTES ================= */
+/* ================= ROUTES FIRST (IMPORTANT) ================= */
 
 // Health check
 app.get("/", (req, res) => {
   res.json({ status: "Backend running successfully 🚀" });
 });
 
-// 🔴 ROUTE FILES (KEEP ALL YOUR OLD ONES)
+// 🔴 ROUTES
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/listings", require("./routes/listingRoutes"));
-app.use("/api/messages", require("./routes/chatRoutes")); // your current chat route
+app.use("/api/messages", require("./routes/chatRoutes"));
 app.use("/api/favourites", require("./routes/favouriteRoutes"));
-
-// 🔥 ADMIN ROUTES (NEW – VERY IMPORTANT)
 app.use("/api/admin", require("./routes/adminRoutes"));
+
+/* ================= VISIT LOGGER (🔥 AFTER ROUTES – SAFE) ================= */
+
+const visitLogger = require("./middleware/visitLogger");
+app.use(visitLogger);
 
 /* ================= ERROR HANDLING ================= */
 

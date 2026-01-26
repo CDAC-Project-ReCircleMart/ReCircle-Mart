@@ -10,7 +10,7 @@ export default function AdminLayout() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    navigate("/login");
+    navigate("/");
   };
 
   const today = new Date().toLocaleDateString("en-IN", {

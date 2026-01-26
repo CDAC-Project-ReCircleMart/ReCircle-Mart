@@ -30,7 +30,7 @@ export default function Calendar() {
   for (let i = 0; i < firstDay; i++) daysArray.push(null);
   for (let day = 1; day <= totalDays; day++) daysArray.push(day);
 
-  // 🔥 LOAD EVENTS WHEN DATE CHANGES
+  /* 🔥 LOAD EVENTS OF SELECTED DATE */
   useEffect(() => {
     loadEvents(selectedDate);
   }, [selectedDate]);
@@ -40,11 +40,11 @@ export default function Calendar() {
       const data = await getEventsByDate(date);
       setEvents(data);
     } catch (err) {
-      console.error("Failed to load events", err);
+      console.log("Failed to load events", err);
     }
   };
 
-  // 🔹 ADD EVENT
+  /* 🔹 ADD EVENT */
   const handleAddEvent = async () => {
     if (!title) return alert("Title required");
 
@@ -64,7 +64,7 @@ export default function Calendar() {
     }
   };
 
-  // 🔹 DELETE EVENT
+  /* 🔹 DELETE EVENT */
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this event?")) return;
 
@@ -77,10 +77,53 @@ export default function Calendar() {
   };
 
   return (
-    <div className="calendar-root">
-      {/* -------- CALENDAR PANEL -------- */}
-      <div className="calendar-panel">
-        <div className="calendar-header">
+    <div className="calendar-layout">
+      {/* ===== LEFT / MIDDLE PANEL – EVENTS LIST ===== */}
+      <div className="events-panel-modern">
+        <div className="events-header">
+          <h2>Upcoming Events</h2>
+
+          <button
+            className="add-event-main-btn"
+            onClick={() => setShowForm(true)}
+          >
+            ＋
+          </button>
+        </div>
+
+        <p className="selected-date-text">
+          Events on <strong>{selectedDate}</strong>
+        </p>
+
+        {events.length === 0 ? (
+          <div className="no-events-box">
+            <p>No events for this day</p>
+            <button className="add-empty-btn" onClick={() => setShowForm(true)}>
+              + Add Event
+            </button>
+          </div>
+        ) : (
+          events.map((event) => (
+            <div key={event.id} className="event-card-modern">
+              <div>
+                <h4>{event.title}</h4>
+                <p>{event.description}</p>
+              </div>
+
+              <button
+                className="delete-event-btn"
+                onClick={() => handleDelete(event.id)}
+              >
+                ✖
+              </button>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* ===== RIGHT PANEL – CALENDAR ===== */}
+      <div className="calendar-panel-modern">
+        <div className="calendar-header-modern">
           <button onClick={() => setCurrentDate(new Date(year, month - 1, 1))}>
             ◀
           </button>
@@ -94,15 +137,13 @@ export default function Calendar() {
           </button>
         </div>
 
-        <div className="calendar-days">
-          {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
-            <div key={d} className="day-name">
-              {d}
-            </div>
+        <div className="calendar-days-modern">
+          {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d) => (
+            <div key={d}>{d}</div>
           ))}
         </div>
 
-        <div className="calendar-grid">
+        <div className="calendar-grid-modern">
           {daysArray.map((day, index) => {
             if (!day) return <div key={index} className="empty"></div>;
 
@@ -114,7 +155,7 @@ export default function Calendar() {
             return (
               <div
                 key={index}
-                className={`calendar-date ${
+                className={`calendar-date-modern ${
                   selectedDate === fullDate ? "active" : ""
                 }`}
                 onClick={() => setSelectedDate(fullDate)}
@@ -126,40 +167,12 @@ export default function Calendar() {
         </div>
       </div>
 
-      {/* -------- EVENTS PANEL -------- */}
-      <div className="events-panel">
-        <div className="events-header">
-          <h3>Events on {selectedDate}</h3>
-
-          <button className="add-btn" onClick={() => setShowForm(true)}>
-            +
-          </button>
-        </div>
-
-        {events.length === 0 ? (
-          <p className="no-events">No events for this day</p>
-        ) : (
-          events.map((event) => (
-            <div key={event.id} className="event-card">
-              <p className="event-title">{event.title}</p>
-              <p className="event-desc">{event.description}</p>
-
-              <button
-                className="delete-event"
-                onClick={() => handleDelete(event.id)}
-              >
-                ✖
-              </button>
-            </div>
-          ))
-        )}
-      </div>
-
-      {/* -------- ADD EVENT MODAL -------- */}
+      {/* ===== ADD EVENT MODAL ===== */}
       {showForm && (
         <div className="modal-overlay">
-          <div className="modal-box">
+          <div className="modal-box-modern">
             <h3>Add Event</h3>
+            <p>Date: {selectedDate}</p>
 
             <input
               type="text"
@@ -174,9 +187,13 @@ export default function Calendar() {
               onChange={(e) => setDescription(e.target.value)}
             />
 
-            <div className="modal-actions">
-              <button onClick={handleAddEvent}>Save</button>
-              <button onClick={() => setShowForm(false)}>Cancel</button>
+            <div className="modal-actions-modern">
+              <button className="save-btn" onClick={handleAddEvent}>
+                Save
+              </button>
+              <button className="cancel-btn" onClick={() => setShowForm(false)}>
+                Cancel
+              </button>
             </div>
           </div>
         </div>

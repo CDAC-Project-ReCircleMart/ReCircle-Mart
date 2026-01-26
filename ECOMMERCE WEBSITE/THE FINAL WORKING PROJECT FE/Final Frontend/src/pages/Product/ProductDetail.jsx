@@ -1,3 +1,5 @@
+//
+
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import api from "../../services/api";
@@ -74,7 +76,8 @@ export default function ProductDetail() {
         return;
       }
 
-      const res = await api.post("/chats/start", {
+      // 🔥🔥🔥 ONLY FIXED LINE (BUG FIX) 🔥🔥🔥
+      const res = await api.post("/messages/start", {
         listingId: listing.id,
         sellerId: listing.seller?.id || listing.seller_id,
       });
@@ -176,9 +179,22 @@ export default function ProductDetail() {
             <div className="seller-info">
               <i className="fa-solid fa-circle-user"></i>
               <div>
-                <p className="seller-name">
+                <span
+                  className="seller-link"
+                  onClick={() =>
+                    navigate(
+                      `/seller/${listing.seller?.id || listing.seller_id}`,
+                    )
+                  }
+                  style={{
+                    cursor: "pointer",
+                    color: "#4f46e5",
+                    fontWeight: "600",
+                  }}
+                >
                   {listing.seller?.name || listing.seller_name || "Seller"}
-                </p>
+                </span>
+
                 <p className="seller-meta">Member since recently</p>
               </div>
             </div>

@@ -1,8 +1,7 @@
-// src/pages/Profile/EditProfile.jsx
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../../services/api"; // 🔴 NEW
-import { toast } from "react-toastify"; // 🔴 NEW
+import api from "../../services/api";
+import { toast } from "react-toastify";
 import "./EditProfile.css";
 
 export default function EditProfile() {
@@ -15,47 +14,49 @@ export default function EditProfile() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // 🔴 LOAD CURRENT USER DATA FROM BACKEND
+  // 🔴 LOAD USER ONCE ONLY
   useEffect(() => {
     if (!localUser) {
       navigate("/login");
       return;
     }
 
-    setFirstName(localUser.firstName);
-    setEmail(localUser.email);
-  }, [navigate, localUser]);
+    // IMPORTANT FIX — SUPPORT BOTH NAMING STYLES
+    setFirstName(localUser.first_name || localUser.firstName || "");
+    setEmail(localUser.email || "");
+  }, []); // ⚠️ DO NOT PUT localUser IN DEPENDENCY (THIS WAS LOCKING INPUT)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      // 🔴 UPDATE PROFILE IN BACKEND
-      const res = await api.put("/users/me", {
-        firstName,
-        email,
-        ...(password && { password }), // only send if user entered new password
+      const res = await api.put("/auth/update-profile", {
+        first_name: firstName,
+        email: email,
+        ...(password && { password }),
       });
 
+      // 🔴 UPDATE LOCAL STORAGE CORRECTLY
       const updatedUser = {
-        ...localUser, // keep avatar + role + id + icon
-        firstName: res.data.firstName,
-        email: res.data.email,
+        ...localUser,
+        first_name: firstName,
+        firstName: firstName,
+        email: email,
       };
 
-      // 🔴 UPDATE LOCALSTORAGE (KEEP ICON / AVATAR SAME)
       localStorage.setItem("user", JSON.stringify(updatedUser));
 
-      // 🟢 TOAST SUCCESS
       toast.success("Profile updated successfully");
-
-      // 🔴 GO BACK TO PROFILE
       navigate("/profile");
     } catch (err) {
-      const message = err.response?.data?.message || "Failed to update profile";
+      console.error("❌ UPDATE PROFILE ERROR:", err);
 
-      // 🔴 TOAST ERROR
+      const message =
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        "Failed to update profile";
+
       toast.error(message);
     } finally {
       setLoading(false);
@@ -63,40 +64,54 @@ export default function EditProfile() {
   };
 
   return (
-    <div className="edit-profile-page">
-      <div className="edit-profile-box">
+    <div className="edit-profile-wrapper">
+      <div className="edit-profile-card">
         <h2>Edit Profile</h2>
+        <p className="subtitle">Update your personal information</p>
 
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            placeholder="Name"
-            required
-          />
+        <form onSubmit={handleSubmit} className="edit-form">
+          <div className="form-group">
+            <label>Name</label>
+            <input
+              type="text"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              placeholder="Enter your name"
+              required
+            />
+          </div>
 
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email"
-            required
-          />
+          <div className="form-group">
+            <label>Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
+              required
+            />
+          </div>
 
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="New Password"
-          />
+          <div className="form-group">
+            <label>New Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Leave empty to keep current password"
+            />
+          </div>
 
           <div className="edit-actions">
-            <button type="submit" disabled={loading}>
-              {loading ? "Saving..." : "Save"}
+            <button type="submit" disabled={loading} className="save-btn">
+              {loading ? "Saving..." : "Save Changes"}
             </button>
 
-            <button type="button" onClick={() => navigate("/profile")}>
+            <button
+              type="button"
+              className="cancel-btn"
+              onClick={() => navigate("/profile")}
+            >
               Cancel
             </button>
           </div>

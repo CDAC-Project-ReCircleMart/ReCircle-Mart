@@ -47,10 +47,16 @@ router.delete("/users/:id", auth, admin, adminController.deleteUser);
 
 /* ===================== LISTINGS MANAGEMENT ===================== */
 
-// 🔹 GET ALL LISTINGS
-router.get("/listings", auth, admin, adminController.getAllListings);
+// 🔹 GET ALL EVENTS
+router.get("/events", auth, admin, adminController.getAllEvents);
 
-// 🔹 DELETE LISTING
-router.delete("/listings/:id", auth, admin, adminController.deleteListing);
+// 🔹 GET EVENTS BY DATE
+router.get("/events/by-date", auth, admin, adminController.getEventsByDate);
+
+// 🔹 ADD EVENT  (THIS IS REQUIRED)
+router.post("/events", auth, admin, adminController.addEvent);
+
+// 🔹 DELETE EVENT (THIS IS REQUIRED)
+router.delete("/events/:id", auth, admin, adminController.deleteEvent);
 
 module.exports = router;

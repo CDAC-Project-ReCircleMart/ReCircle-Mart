@@ -77,7 +77,7 @@ exports.login = async (req, res) => {
 
     // 🔥 CREATE JWT TOKEN WITH ROLE INCLUDED (ADMIN SUPPORT)
     const token = jwt.sign(
-      { id: user.id, role: user.role },   // 🔥 ADD ROLE HERE
+      { id: user.id, role: user.role }, // 🔥 ADD ROLE HERE
       process.env.JWT_SECRET || "mysecretkey",
       { expiresIn: "7d" },
     );
@@ -92,7 +92,7 @@ exports.login = async (req, res) => {
         email: user.email,
         avatar: user.avatar,
         created_at: user.created_at,
-        role: user.role,   // 🔥 SEND ROLE TO FRONTEND
+        role: user.role, // 🔥 SEND ROLE TO FRONTEND
       },
     });
   } catch (err) {

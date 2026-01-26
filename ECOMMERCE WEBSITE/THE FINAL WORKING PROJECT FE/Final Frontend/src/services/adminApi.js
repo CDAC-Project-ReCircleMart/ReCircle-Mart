@@ -18,24 +18,37 @@ export const updateUser = (id, data) => api.put(`/admin/users/${id}`, data);
 /* CALENDAR */
 export const getAllEvents = () => api.get("/admin/events");
 
-// export const getEventsByDate = (date) =>
-//   api.get(`/admin/events/date?date=${date}`);
-
-// export const addEvent = (data) => api.post("/admin/events", data);
-
 // 🔹 GET EVENTS BY DATE
+// export const getEventsByDate = async (date) => {
+//   const res = await api.get(`/admin/events/by-date?date=${date}`);
+//   return res.data;
+// };
+
+// // 🔹 ADD EVENT
+// export const addEvent = async (data) => {
+//   const res = await api.post("/admin/events", data);
+//   return res.data;
+// };
+
+// // 🔹 DELETE EVENT
+// export const deleteEvent = async (id) => {
+//   const res = await api.delete(`/admin/events/${id}`);
+//   return res.data;
+// };
+
+// GET EVENTS BY DATE
 export const getEventsByDate = async (date) => {
   const res = await api.get(`/admin/events/by-date?date=${date}`);
   return res.data;
 };
 
-// 🔹 ADD EVENT
+// ADD EVENT
 export const addEvent = async (data) => {
   const res = await api.post("/admin/events", data);
   return res.data;
 };
 
-// 🔹 DELETE EVENT
+// DELETE EVENT
 export const deleteEvent = async (id) => {
   const res = await api.delete(`/admin/events/${id}`);
   return res.data;
