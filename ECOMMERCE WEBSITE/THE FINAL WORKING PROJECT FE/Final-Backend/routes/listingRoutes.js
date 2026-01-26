@@ -45,11 +45,10 @@ router.post(
 
 // 🔴 GET ALL LISTINGS
 router.get("/", listingController.getAllListings);
-// 🔥 NEW – GET LISTINGS BY SELLER ID
-router.get("/user/:id", listingController.getUserListingsById);
-
 // 🔴 GET MY LISTINGS (PROFILE)
 router.get("/user/me", auth, listingController.getMyListings);
+// 🔥 NEW – GET LISTINGS BY SELLER ID
+router.get("/user/:id", listingController.getUserListingsById);
 
 // 🔥🔥🔥 NEW ROUTE — GET SELLER LISTINGS (PUBLIC, FOR SELLER PROFILE PAGE) 🔥🔥🔥
 // ⚠️ ONLY NEW CODE ADDED — OLD CODE NOT TOUCHED
