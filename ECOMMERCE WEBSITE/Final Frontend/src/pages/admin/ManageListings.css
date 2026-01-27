@@ -1,0 +1,144 @@
+.listings-root {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+/* ================= STATS ================= */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  padding: 16px;
+  border-radius: 14px;
+  color: white;
+  text-align: center;
+}
+
+.stat-card span {
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+.stat-card strong {
+  display: block;
+  font-size: 26px;
+  margin-top: 6px;
+}
+
+.stat-card.purple {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+}
+
+.stat-card.card-0 {
+  background: linear-gradient(135deg, #22c55e, #4ade80);
+}
+
+.stat-card.card-1 {
+  background: linear-gradient(135deg, #f59e0b, #fbbf24);
+}
+
+.stat-card.card-2 {
+  background: linear-gradient(135deg, #06b6d4, #3b82f6);
+}
+
+/* ================= CHART ================= */
+
+.chart-box {
+  background: white;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+}
+
+/* ================= SEARCH ================= */
+
+.listings-top input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+/* ================= FILTER PILLS ================= */
+
+.filter-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.filter-bar button {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  background: #f3f4f6;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.filter-bar button.active {
+  background: #6366f1;
+  color: white;
+  border-color: #6366f1;
+}
+
+/* ================= TABLE ================= */
+
+.listings-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.listings-table th,
+.listings-table td {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+}
+
+.listing-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* ACTION ICON */
+
+.action-icons {
+  display: flex;
+  justify-content: center;
+}
+
+.delete-icon {
+  color: #dc2626;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* ================= PAGINATION ================= */
+
+.pagination {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.pagination button {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
