@@ -1,4 +1,4 @@
-package com.backend.dtos;
+package com.recirclemart.dtos;
 
 
 import jakarta.validation.constraints.Email;

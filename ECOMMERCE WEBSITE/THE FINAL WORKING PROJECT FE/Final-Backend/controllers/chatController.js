@@ -79,7 +79,7 @@ exports.getMyChats = async (req, res) => {
       JOIN users s ON s.id = c.seller_id
 
       WHERE c.buyer_id = ? OR c.seller_id = ?
-      ORDER BY c.id DESC   -- 🔥 FIX: DO NOT USE created_at
+      ORDER BY c.id DESC   
       `,
       [userId, userId, userId, userId, userId],
     );

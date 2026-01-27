@@ -465,7 +465,7 @@ exports.getAllUsers = async (req, res) => {
         u.role,
         COUNT(l.id) AS totalListings
       FROM users u
-      LEFT JOIN listings l ON u.id = l.seller_id   -- 🔥 FIXED HERE
+      LEFT JOIN listings l ON u.id = l.seller_id   
       GROUP BY 
         u.id,
         u.first_name,

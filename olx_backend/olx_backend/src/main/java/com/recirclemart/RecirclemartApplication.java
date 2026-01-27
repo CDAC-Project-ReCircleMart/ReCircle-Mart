@@ -1,35 +1,32 @@
-package com.backend;
+//package com.recirclemart;
+//
+//import org.springframework.boot.SpringApplication;
+//import org.springframework.boot.autoconfigure.SpringBootApplication;
+//import org.springframework.boot.autoconfigure.domain.EntityScan;
+//import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+//import org.springframework.transaction.annotation.EnableTransactionManagement;
+//
+//@SpringBootApplication
+//@EntityScan(basePackages = "com.recirclemart.entity")
+//@EnableJpaRepositories(basePackages = "com.recirclemart.repository")
+//@EnableTransactionManagement
+//public class RecirclemartApplication {
+//
+//    public static void main(String[] args) {
+//        SpringApplication.run(RecirclemartApplication.class, args);
+//    }
+//}
 
-import org.modelmapper.Conditions;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
+
+package com.recirclemart;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-public class Application {
+public class RecirclemartApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
-	}
-	/*
-	 * configure ModelMapper as spring bean
-	 * <bean id class ...../>
-	 * Add @Bean annotated method to return ModelMapper instance
-	 * - to be managed by SC
-	 */
-	@Bean //method level annotation - to declare a method returning java object
-	 ModelMapper modelMapper()
-	{
-		ModelMapper mapper=new ModelMapper();
-		//configure mapper - to transfer the matching props (name + data type)
-		mapper.getConfiguration()
-		.setMatchingStrategy(MatchingStrategies.STRICT)
-		//configure mapper - not to transfer nulls from src -> dest
-		.setPropertyCondition(Conditions.isNotNull());
-		return mapper;//Method rets configured ModelMapper bean to SC
-	}
-	
-
+    public static void main(String[] args) {
+        SpringApplication.run(RecirclemartApplication.class, args);
+    }
 }
