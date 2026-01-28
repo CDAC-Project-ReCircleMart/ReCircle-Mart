@@ -1,8 +1,0 @@
-.notification-item {
-  cursor: pointer;
-  padding: 12px;
-}
-
-.notification-item.unread {
-  background-color: #f5f9ff;
-}
