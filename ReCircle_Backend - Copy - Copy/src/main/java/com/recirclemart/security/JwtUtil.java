@@ -12,7 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Component;
 
-import com.recirclemart.entities.user.Users;
+import com.recirclemart.entity.User;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
@@ -40,7 +40,7 @@ public class JwtUtil {
 	// ===================== CREATE TOKEN =====================
 	public String createToken(Authentication auth) {
 
-		Users user = (Users) auth.getPrincipal();
+		User user = (User) auth.getPrincipal();
 
 		// ✅ FIX: STORE EMAIL IN JWT SUBJECT
 		String subject = user.getEmail();
