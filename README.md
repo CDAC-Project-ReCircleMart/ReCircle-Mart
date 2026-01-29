@@ -17,9 +17,8 @@ It was developed as part of the CDAC academic project to demonstrate full-stack 
 ## 🧰 Tech Stack
 
 - **Frontend:** React.js (Vite)
-- **Backend:** Express.js, Node.js , Spring Boot ,.Net
+- **Backend:**  Spring Boot
 - **Database:** MySQL
-- **Hosting:** Render / Netlify
 
 ---
 
