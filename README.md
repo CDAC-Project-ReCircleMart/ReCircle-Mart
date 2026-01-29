@@ -24,9 +24,7 @@ This project was developed as part of a **CDAC academic project** to demonstrate
 ### Backend
 - Java
 - Spring Boot
-- Spring MVC
 - Spring Security
-- RESTful APIs
 
 ### Database
 - MySQL
@@ -35,8 +33,8 @@ This project was developed as part of a **CDAC academic project** to demonstrate
 - Git & GitHub
 - Postman
 - Maven
-- VS Code (Frontend)
-- Spring Tool Suite (STS) (Backend)
+- VS Code 
+- Spring Tool Suite (STS)
 
 ---
 
@@ -48,6 +46,7 @@ This project was developed as part of a **CDAC academic project** to demonstrate
 - Product Search and Filtering
 - Image Upload Functionality
 - User Profile Management
+- Real-time Chat between Buyers and Sellers
 - Responsive and User-Friendly Interface
 - REST API–based backend integration
 
