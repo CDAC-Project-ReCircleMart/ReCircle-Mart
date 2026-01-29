@@ -1,11 +1,11 @@
 # ReCircle-Mart-WebApplication
 
 ReCircle Mart is an online marketplace where users can buy and sell used products, similar to OLX.  
-This project was developed as part of a **CDAC academic project** to demonstrate **full-stack web application development** using **React and Spring Boot**.
+This project was developed as part of a **CDAC academic project** to demonstrate **full-stack web application development** using **React.js and Spring Boot**.
 
 ---
 
-## 👥 Team Members
+##  Team Members
 
 - Prashant Kumar  
 - Rohit Kavethekar  
@@ -14,7 +14,7 @@ This project was developed as part of a **CDAC academic project** to demonstrate
 
 ---
 
-## 🧰 Tech Stack
+##  Tech Stack
 
 ### Frontend
 - React.js (Vite)
@@ -35,11 +35,12 @@ This project was developed as part of a **CDAC academic project** to demonstrate
 - Git & GitHub
 - Postman
 - Maven
-- VS Code / IntelliJ IDEA
+- VS Code (Frontend)
+- Spring Tool Suite (STS) (Backend)
 
 ---
 
-## 🚀 Features
+##  Features
 
 - User Registration & Authentication
 - Secure Login using JWT
@@ -48,21 +49,20 @@ This project was developed as part of a **CDAC academic project** to demonstrate
 - Image Upload Functionality
 - User Profile Management
 - Responsive and User-Friendly Interface
-- REST API based backend integration
+- REST API–based backend integration
 
 ---
 
-## 🏗️ Project Architecture
+##  Project Architecture
 
-- **Frontend:** React (separate client application)
-- **Backend:** Spring Boot REST API
+- **Frontend:** React.js (separate client application)
+- **Backend:** Spring Boot REST APIs
 - **Database:** MySQL
-- **Communication:** REST APIs using JSON
+- **Communication:** JSON over REST APIs
 
 ---
 
-## ⚙️ How to Run Locally
+##  Repository
 
-### 1️⃣ Clone the Repository
-```bash
-git clone https://github.com/CDAC-Project-ReCircleMart/ReCircle-Mart.git
+**GitHub Repository:**  
+- https://github.com/CDAC-Project-ReCircleMart/ReCircle-Mart
