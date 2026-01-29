@@ -1,4 +1,4 @@
-olx-clone/
+ReCircle-Mart/
 ├─ backend/
 │  ├─ package.json
 │  ├─ server.js
