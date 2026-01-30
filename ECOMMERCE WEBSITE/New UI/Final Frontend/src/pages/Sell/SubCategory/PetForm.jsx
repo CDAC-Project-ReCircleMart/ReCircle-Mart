@@ -68,7 +68,7 @@ export default function PetForm() {
     setPhotos(updated);
   };
 
-  // 🔴 SUBMIT
+  // Submit
   const handleSubmit = async () => {
     if (!form.subCategory) {
       toast.error("Please select a sub category");
@@ -76,13 +76,13 @@ export default function PetForm() {
     }
 
     try {
-      // 🔴 DESCRIPTION
+      // Description
       const description = `Notes:${form.descriptionText}`;
 
-      // 🔴 LOCATION
+      // Location
       const location = `${form.state}, ${form.city}, ${form.landmark}`;
 
-      // 🔴 FORM DATA
+      // Prepare FormData
       const formData = new FormData();
 
       formData.append("title", form.title);
@@ -93,7 +93,7 @@ export default function PetForm() {
       formData.append("year", form.yearOfPurchase);
       formData.append("description", description);
 
-      // 🔴 MULTIPLE IMAGES
+      // Handle multiple images
       photos.forEach((p) => {
         if (p) {
           formData.append("images", p.file);

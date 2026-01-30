@@ -16,11 +16,11 @@ export default function SellerProfile() {
   useEffect(() => {
     const fetchSeller = async () => {
       try {
-        // 🔥 FETCH SELLER INFO
+        // Fetch seller info
         const userRes = await api.get(`/users/${id}`);
         setSeller(userRes.data);
 
-        // 🔥 FETCH SELLER LISTINGS
+        // Fetch seller listings
         const listingsRes = await api.get(`/listings/user/${id}`);
         setListings(listingsRes.data);
       } catch (err) {
@@ -45,7 +45,7 @@ export default function SellerProfile() {
   function ListingCard({ item }) {
     console.log("SELLER LISTING RAW DATA:", item);
 
-    // 🔥 FULL SAFE IMAGE HANDLING
+    // Safe image handling (prepend backend path if needed)
 
     let rawImage = null;
 

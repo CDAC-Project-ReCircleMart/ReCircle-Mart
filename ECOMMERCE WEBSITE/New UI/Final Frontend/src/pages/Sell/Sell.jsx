@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { categories } from "../../data/categories";
-import { toast } from "react-toastify"; // 🔴 NEW
+import { toast } from "react-toastify"; // toast notifications
 import "./Sell.css";
 
 export default function Sell() {
@@ -10,7 +10,7 @@ export default function Sell() {
 
   const navigate = useNavigate();
 
-  // 🔴 PROTECT PAGE – ONLY LOGGED IN USERS CAN SELL
+  // Protect page (only logged-in users can sell)
   useEffect(() => {
     const token = localStorage.getItem("token");
 

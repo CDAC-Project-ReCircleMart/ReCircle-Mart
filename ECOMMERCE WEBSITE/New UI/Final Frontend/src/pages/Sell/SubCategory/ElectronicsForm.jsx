@@ -103,7 +103,7 @@ export default function ElectronicsForm() {
     setPhotos(updated);
   };
 
-  // 🔴 SUBMIT
+  // Submit
   const handleSubmit = async () => {
     if (!form.subCategory) {
       toast.error("Please select a sub category");
@@ -111,7 +111,7 @@ export default function ElectronicsForm() {
     }
 
     try {
-      // 🔴 DESCRIPTION
+      // Description
       const description = `
 Brand:${form.brand},
 Model:${form.model},
@@ -119,10 +119,10 @@ Condition:${form.condition},
 Notes:${form.descriptionText}
       `;
 
-      // 🔴 LOCATION
+      // Location
       const location = `${form.state}, ${form.city}, ${form.landmark}`;
 
-      // 🔴 FORM DATA
+      // Prepare FormData
       const formData = new FormData();
 
       formData.append("title", form.title);
@@ -133,7 +133,7 @@ Notes:${form.descriptionText}
       formData.append("year", form.yearOfPurchase);
       formData.append("description", description);
 
-      // 🔴 MULTIPLE IMAGES
+      // Handle multiple images
       photos.forEach((p) => {
         if (p) {
           formData.append("images", p.file);

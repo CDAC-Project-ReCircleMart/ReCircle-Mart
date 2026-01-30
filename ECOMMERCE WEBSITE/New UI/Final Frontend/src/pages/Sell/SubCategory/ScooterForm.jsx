@@ -52,7 +52,7 @@ export default function ScooterForm() {
     "Puducherry",
   ];
 
-  // 🔒 PROTECT PAGE – ONLY LOGGED IN USERS
+  // Protect page (redirect to login if not authenticated)
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -99,7 +99,7 @@ export default function ScooterForm() {
     setPhotos(updated);
   };
 
-  // ✅ SUBMIT TO BACKEND
+  // Submit to backend
   const handleSubmit = async () => {
     if (!form.subCategory) {
       toast.error("Please select a sub category");
@@ -107,7 +107,7 @@ export default function ScooterForm() {
     }
 
     try {
-      // 🔴 GROUP SCOOTER DATA INTO DESCRIPTION
+      // Group scooter fields into description
       const description = `
 Brand:${form.brand},
 Model:${form.model},
@@ -117,10 +117,10 @@ Owners:${form.owners},
 Notes:${form.descriptionText}
       `;
 
-      // 🔴 COMBINE LOCATION
+      // Combine location
       const location = `${form.state}, ${form.city}, ${form.landmark}`;
 
-      // 🔴 FORM DATA
+      // Prepare form data
       const formData = new FormData();
 
       formData.append("title", form.title);
@@ -131,14 +131,14 @@ Notes:${form.descriptionText}
       formData.append("year", form.yearOfPurchase);
       formData.append("description", description);
 
-      // 🔴 MULTIPLE IMAGES
+      // Append multiple images
       photos.forEach((p) => {
         if (p) {
           formData.append("images", p.file);
         }
       });
 
-      // 🔴 SEND TO BACKEND
+      // Send to backend
       await api.post("/listings", formData, {
         headers: {
           "Content-Type": "multipart/form-data",

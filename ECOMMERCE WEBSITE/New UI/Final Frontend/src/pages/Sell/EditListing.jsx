@@ -20,7 +20,7 @@ export default function EditListing() {
 
   const [loading, setLoading] = useState(false);
 
-  // 🔴 FETCH EXISTING LISTING DATA
+  // Fetch existing listing data
   useEffect(() => {
     const fetchListing = async () => {
       try {
@@ -46,12 +46,12 @@ export default function EditListing() {
     fetchListing();
   }, [id, navigate]);
 
-  // 🔴 HANDLE INPUT CHANGE
+  // Handle input change
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // 🔴 SUBMIT UPDATE
+  // Submit updated listing
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -61,7 +61,7 @@ export default function EditListing() {
 
       toast.success("Listing updated successfully!");
 
-      // 🔴 GO BACK TO PROFILE
+      // Navigate back to profile
       navigate("/profile");
     } catch (err) {
       console.error("UPDATE ERROR FULL:", err);

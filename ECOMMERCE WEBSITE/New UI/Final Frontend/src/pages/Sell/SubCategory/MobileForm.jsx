@@ -50,7 +50,7 @@ export default function MobileForm() {
     "Puducherry",
   ];
 
-  // 🔒 PROTECT PAGE
+  // Protect page (redirect to login if not authenticated)
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -95,7 +95,7 @@ export default function MobileForm() {
     setPhotos(updated);
   };
 
-  // 🔴 SUBMIT
+  // Submit form
   const handleSubmit = async () => {
     if (!form.subCategory) {
       toast.error("Please select a sub category");
@@ -103,13 +103,13 @@ export default function MobileForm() {
     }
 
     try {
-      // 🔴 DESCRIPTION
+      // Description
       const description = `Brand:${form.brand}, Model:${form.model}, Condition:${form.condition}, Notes:${form.descriptionText}`;
 
-      // 🔴 LOCATION
+      // Location string
       const location = `${form.state}, ${form.city}, ${form.landmark}`;
 
-      // 🔴 FORM DATA
+      // Prepare form data
       const formData = new FormData();
 
       formData.append("title", form.title);
@@ -120,7 +120,7 @@ export default function MobileForm() {
       formData.append("year", form.yearOfPurchase);
       formData.append("description", description);
 
-      // 🔴 MULTIPLE IMAGES
+      // Append multiple images
       photos.forEach((p) => {
         if (p) {
           formData.append("images", p.file);

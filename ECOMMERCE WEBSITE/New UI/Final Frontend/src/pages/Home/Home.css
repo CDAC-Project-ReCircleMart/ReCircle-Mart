@@ -245,7 +245,7 @@
   border-color: #7a3cff;
 }
 
-/* 🔥 PRICE FILTER BUTTON */
+/* price filter button */
 .price-filter-btn {
   padding: 8px 16px;
   border-radius: 6px;
@@ -263,7 +263,7 @@
   color: #7a3cff;
 }
 
-/* 🔥 PRICE FILTER CONTAINER */
+/* price filter container */
 .price-filter-container {
   display: flex;
   gap: 8px;
@@ -296,7 +296,7 @@
   color: #999;
 }
 
-/* 🔥 APPLY FILTER BUTTON */
+/* apply filter button */
 .apply-filter-btn {
   padding: 8px 20px;
   background: #7a3cff;

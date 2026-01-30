@@ -21,7 +21,7 @@ import { toast } from "react-toastify";
 
 import "./Home.css";
 
-// CATEGORY CAROUSEL DATA (UNCHANGED)
+// Category carousel data
 const categories = [
   {
     name: "Cars",
@@ -53,7 +53,7 @@ const categories = [
   },
 ];
 
-// ICON STRIP DATA
+// Icon categories for quick filters
 const iconCategories = [
   { name: "Cars", icon: faCar },
   { name: "Bikes", icon: faMotorcycle },
@@ -73,7 +73,7 @@ export default function Home() {
   const [sortBy, setSortBy] = useState("recent");
   const [loading, setLoading] = useState(false);
 
-  // NEW FILTER STATE
+  // Filter state variables
   const [selectedDays, setSelectedDays] = useState(null);
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
@@ -84,7 +84,7 @@ export default function Home() {
 
   const carouselRef = useRef(null);
 
-  // FETCH LISTINGS (ONLY APPROVED) - Backend filters by status='approved'
+  // Fetch approved listings from backend
   useEffect(() => {
     const fetchListings = async () => {
       setLoading(true);
@@ -105,7 +105,7 @@ export default function Home() {
     fetchListings();
   }, []);
 
-  // SEARCH FILTER (UNCHANGED)
+  // Apply search and city filters from URL
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const city = params.get("city");
@@ -135,7 +135,7 @@ export default function Home() {
       });
     }
 
-    // DATE FILTER (from navbar pills)
+    // Filter by date range
     if (days) {
       const daysNum = parseInt(days);
       const cutoffDate = new Date();
@@ -155,7 +155,7 @@ export default function Home() {
     setCurrentPage(1);
   }, [location.search, allListings]);
 
-  // PRICE FILTER HANDLER
+  // Apply price range filter
   const applyPriceFilter = () => {
     let filtered = [...allListings];
 
@@ -198,7 +198,7 @@ export default function Home() {
     setShowPriceFilter(false);
   };
 
-  // CATEGORY CLICK (UNCHANGED LOGIC)
+  // Handle category selection
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
     setCurrentPage(1);
@@ -207,7 +207,7 @@ export default function Home() {
     setFilteredListings(filtered);
   };
 
-  // SORTING
+  // Sort listings based on selected option
   const getSortedListings = () => {
     let sorted = [...filteredListings];
 
@@ -226,7 +226,7 @@ export default function Home() {
 
   const sortedListings = getSortedListings();
 
-  /* ---------------- PAGINATION ---------------- */
+  // Pagination calculations
 
   const totalPages = Math.ceil(sortedListings.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -237,7 +237,7 @@ export default function Home() {
     if (page >= 1 && page <= totalPages) setCurrentPage(page);
   };
 
-  // AUTO SCROLL CAROUSEL
+  // Auto-scroll category carousel
   useEffect(() => {
     const interval = setInterval(() => {
       if (carouselRef.current) {

@@ -15,7 +15,7 @@ export default function ProductDetail() {
   const [loading, setLoading] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // 🔴 FETCH SINGLE LISTING
+  // Fetch single listing
   useEffect(() => {
     const fetchListing = async () => {
       setLoading(true);
@@ -44,7 +44,7 @@ export default function ProductDetail() {
     );
   }
 
-  // 🔴 PREPARE IMAGES WITH FULL BACKEND PATH
+  // Prepare image URLs (prepend backend path if necessary)
   const images =
     listing.images && listing.images.length > 0
       ? listing.images.map((img) =>
@@ -60,12 +60,12 @@ export default function ProductDetail() {
     setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   };
 
-  // 🔴 SHOW ONLY CITY
+  // Display only city portion of location
   const cityOnly = listing.location
     ? listing.location.split(",")[1]?.trim()
     : "Unknown";
 
-  // 🔥 COMMON CHAT FUNCTION (USED BY BOTH BUTTONS)
+  // Start chat helper (used by chat & make-offer buttons)
   const startChat = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -76,7 +76,7 @@ export default function ProductDetail() {
         return;
       }
 
-      // 🔥🔥🔥 ONLY FIXED LINE (BUG FIX) 🔥🔥🔥
+      // API request: start or fetch chat
       const res = await api.post("/messages/start", {
         listingId: listing.id,
         sellerId: listing.seller?.id || listing.seller_id,
@@ -84,7 +84,7 @@ export default function ProductDetail() {
 
       const { chatId } = res.data;
 
-      // 🔴 OPEN MESSAGES PAGE WITH THIS CHAT
+      // Navigate to messages page and open the created chat
       navigate("/messages", {
         state: { chatId },
       });
@@ -172,7 +172,7 @@ export default function ProductDetail() {
           <div className="price-card">
             <h2 className="price">₹ {listing.price}</h2>
 
-            {/* 🔥 MAKE OFFER ALSO OPENS CHAT */}
+            {/* Make offer also opens chat */}
             <button className="offer-btn" onClick={startChat}>
               Make Offer
             </button>
@@ -203,7 +203,7 @@ export default function ProductDetail() {
               </div>
             </div>
 
-            {/* 🔥 CHAT BUTTON */}
+            {/* Chat button */}
             <button className="chat-btn" onClick={startChat}>
               <i className="fa-solid fa-comment-dots"></i> Chat with seller
             </button>

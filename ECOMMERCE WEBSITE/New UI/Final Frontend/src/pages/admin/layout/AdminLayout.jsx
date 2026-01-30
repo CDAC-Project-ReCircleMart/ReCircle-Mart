@@ -4,7 +4,7 @@ import "./AdminLayout.css";
 export default function AdminLayout() {
   const navigate = useNavigate();
 
-  // 🔥 GET LOGGED IN ADMIN FROM LOCAL STORAGE
+  // Get logged-in admin from localStorage
   const user = JSON.parse(localStorage.getItem("user"));
 
   const handleLogout = () => {

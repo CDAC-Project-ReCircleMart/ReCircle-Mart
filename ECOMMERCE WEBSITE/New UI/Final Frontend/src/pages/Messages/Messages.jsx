@@ -21,11 +21,11 @@ export default function Messages() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
 
-  // 🔥 MENU STATE
+  // Menu visibility state
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef(null);
 
-  /* -------------------- CLOSE MENU WHEN CLICK OUTSIDE -------------------- */
+  // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -40,11 +40,11 @@ export default function Messages() {
     };
   }, []);
 
-  /* -------------------- FETCH ALL CHATS -------------------- */
+  // Fetch all chats on mount
   useEffect(() => {
     const fetchChats = async () => {
       try {
-        // 🔥🔥🔥 FIXED ROUTE 🔥🔥🔥
+        // API request: get all chats
         const res = await api.get("/messages");
 
         const fixedChats = res.data.map((chat) => ({
@@ -83,13 +83,13 @@ export default function Messages() {
     fetchChats();
   }, [chatFromProduct]);
 
-  /* -------------------- FETCH MESSAGES (POLLING) -------------------- */
+  // Poll messages for the active chat
   useEffect(() => {
     if (!activeChat || !activeChat.id) return;
 
     const fetchMessages = async () => {
       try {
-        // 🔥🔥🔥 FIXED ROUTE 🔥🔥🔥
+        // API request: get messages for chat
         const res = await api.get(`/messages/${activeChat.id}/messages`);
         setMessages(res.data);
       } catch (err) {
@@ -112,12 +112,12 @@ export default function Messages() {
     return () => clearInterval(interval);
   }, [activeChat]);
 
-  /* -------------------- SEND MESSAGE -------------------- */
+  // Send a new message for the active chat
   const handleSend = async () => {
     if (!newMessage.trim() || !activeChat) return;
 
     try {
-      // 🔥🔥🔥 FIXED ROUTE 🔥🔥🔥
+      // API request: post new message
       const res = await api.post(`/messages/${activeChat.id}/messages`, {
         message: newMessage,
       });
@@ -136,7 +136,7 @@ export default function Messages() {
     }
   };
 
-  /* -------------------- DELETE CHAT -------------------- */
+  // Delete the currently selected chat
   const handleDeleteChat = async () => {
     if (!activeChat) return;
 
@@ -146,7 +146,7 @@ export default function Messages() {
     if (!confirm) return;
 
     try {
-      // 🔥🔥🔥 FIXED ROUTE 🔥🔥🔥
+      // API request: delete chat
       await api.delete(`/messages/${activeChat.id}`);
 
       toast.success("Chat deleted");
@@ -171,7 +171,7 @@ export default function Messages() {
 
   return (
     <div className="chat-root">
-      {/* ---------------- LEFT SIDEBAR ---------------- */}
+      {/* Left sidebar */}
       <div className="chat-sidebar">
         {chats.length === 0 ? (
           <p style={{ padding: "10px" }}>No chats yet</p>
@@ -187,13 +187,13 @@ export default function Messages() {
         )}
       </div>
 
-      {/* ---------------- RIGHT CHAT WINDOW ---------------- */}
+      {/* Main chat window */}
       <div className="chat-main">
         {!activeChat ? (
           <div style={{ padding: "20px" }}>Select a chat</div>
         ) : (
           <>
-            {/* HEADER */}
+            {/* Chat header */}
             <div className="chat-top">
               {activeChat.otherUser && (
                 <div
@@ -262,7 +262,7 @@ export default function Messages() {
               )}
             </div>
 
-            {/* MESSAGES */}
+            {/* Messages list */}
             <div className="chat-body">
               {messages.map((msg) => (
                 <ChatBubble
@@ -281,7 +281,7 @@ export default function Messages() {
               ))}
             </div>
 
-            {/* INPUT */}
+            {/* Message input */}
             <div className="chat-bottom">
               <input
                 className="chat-input"

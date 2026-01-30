@@ -52,7 +52,7 @@ export default function BikeForm() {
     "Puducherry",
   ];
 
-  // 🔒 PROTECT PAGE
+  // Protect page (redirect to login if not authenticated)
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -97,7 +97,7 @@ export default function BikeForm() {
     setPhotos(updated);
   };
 
-  // 🔴 SUBMIT
+  // Submit form
   const handleSubmit = async () => {
     if (!form.subCategory) {
       toast.error("Please select a sub category");
@@ -105,7 +105,7 @@ export default function BikeForm() {
     }
 
     try {
-      // 🔴 GROUP BIKE DATA INTO DESCRIPTION
+      // Group bike fields into description
       const description = `
 Brand:${form.brand},
 Model:${form.model},
@@ -114,10 +114,10 @@ KMDriven:${form.kmDriven},
 Notes:${form.descriptionText}
       `;
 
-      // 🔴 LOCATION
+      // Location string
       const location = `${form.state}, ${form.city}, ${form.landmark}`;
 
-      // 🔴 FORM DATA
+      // Prepare form data
       const formData = new FormData();
 
       formData.append("title", form.title);

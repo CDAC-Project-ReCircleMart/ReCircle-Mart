@@ -1,12 +1,12 @@
 import api from "./api";
 
-// 🔴 GET ALL CHATS OF CURRENT USER
+// Get all chats for current user
 export const getMyChats = async () => {
   const res = await api.get("/chats");
   return res.data;
 };
 
-// 🔴 START CHAT (FROM PRODUCT DETAIL)
+// Start chat (from product detail)
 export const startChat = async (listingId, sellerId) => {
   const res = await api.post("/chats/start", {
     listingId,
@@ -16,13 +16,13 @@ export const startChat = async (listingId, sellerId) => {
   return res.data; // { chatId }
 };
 
-// 🔴 GET MESSAGES OF A CHAT
+// Get messages for a chat
 export const getMessages = async (chatId) => {
   const res = await api.get(`/chats/${chatId}/messages`);
   return res.data;
 };
 
-// 🔴 SEND MESSAGE
+// Send a message
 export const sendMessage = async (chatId, text) => {
   const res = await api.post(`/chats/${chatId}/messages`, {
     text,

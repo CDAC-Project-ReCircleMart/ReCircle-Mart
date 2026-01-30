@@ -17,5 +17,3 @@ const iconData = [
 ];
 
 export default iconData;
-
-// export default iconData;

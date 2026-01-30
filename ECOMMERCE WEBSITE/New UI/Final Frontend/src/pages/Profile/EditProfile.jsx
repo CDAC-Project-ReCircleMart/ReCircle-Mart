@@ -14,7 +14,7 @@ export default function EditProfile() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // 🔴 LOAD USER ONCE ONLY
+  // Load current user once on mount
   useEffect(() => {
     if (!localUser) {
       navigate("/login");
@@ -37,7 +37,7 @@ export default function EditProfile() {
         ...(password && { password }),
       });
 
-      // 🔴 UPDATE LOCAL STORAGE CORRECTLY
+      // Update localStorage with new user data
       const updatedUser = {
         ...localUser,
         first_name: firstName,

@@ -87,7 +87,7 @@
   border-radius: 12px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
   overflow: hidden;
-  min-width: 260px; /* 🔥 wide */
+  min-width: 260px; /* wide */
   z-index: 200;
   border: 1px solid #e5e7eb;
 }
@@ -106,7 +106,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  color: #111111; /* 🔥 FORCE DARK TEXT */
+  color: #111111; /* force dark text */
 }
 
 .chat-menu-box i {
@@ -208,7 +208,7 @@
 .chat-input {
   flex: 1;
   padding: 14px 20px;
-  border-radius: 999px; /* 🔥 SUPER ROUND */
+  border-radius: 999px; /* super round */
   border: 1px solid #ddd;
   outline: none;
   font-size: 14px;

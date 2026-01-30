@@ -96,7 +96,7 @@ export default function FashionForm() {
     setPhotos(updated);
   };
 
-  // 🔴 SUBMIT
+  // Submit form
   const handleSubmit = async () => {
     if (!form.subCategory) {
       toast.error("Please select a sub category");
@@ -104,7 +104,7 @@ export default function FashionForm() {
     }
 
     try {
-      // 🔴 DESCRIPTION
+      // Description
       const description = `
 Brand:${form.brand},
 Type:${form.productType},
@@ -113,10 +113,10 @@ Condition:${form.condition},
 Notes:${form.descriptionText}
       `;
 
-      // 🔴 LOCATION
+      // Location string
       const location = `${form.state}, ${form.city}, ${form.landmark}`;
 
-      // 🔴 FORM DATA
+      // Prepare form data
       const formData = new FormData();
 
       formData.append("title", form.title);
@@ -127,7 +127,7 @@ Notes:${form.descriptionText}
       formData.append("year", form.yearOfPurchase);
       formData.append("description", description);
 
-      // 🔴 MULTIPLE IMAGES
+      // Append multiple images
       photos.forEach((p) => {
         if (p) {
           formData.append("images", p.file);

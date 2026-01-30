@@ -9,7 +9,7 @@ export default function Register() {
   const navigate = useNavigate();
   const [form, setForm] = useState({});
   const [selectedIcon, setSelectedIcon] = useState(iconData[0]);
-  const [avatarFile, setAvatarFile] = useState(null); // 🔴 NEW
+  const [avatarFile, setAvatarFile] = useState(null); // selected avatar file
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
@@ -21,7 +21,7 @@ export default function Register() {
     setLoading(true);
 
     try {
-      // 🔴 USE FORMDATA (FOR FILE UPLOAD)
+      // Use FormData for file upload
       const formData = new FormData();
 
       formData.append("firstName", form.firstName);
@@ -29,11 +29,11 @@ export default function Register() {
       formData.append("email", form.email);
       formData.append("password", form.password);
 
-      // 🔴 IF USER UPLOADED IMAGE → SEND FILE
+      // If avatar file selected, send file
       if (avatarFile) {
         formData.append("avatar", avatarFile);
       } else {
-        // 🔴 OTHERWISE SEND ICON URL
+        // Otherwise send selected icon URL
         formData.append("icon", selectedIcon);
       }
 
@@ -72,14 +72,14 @@ export default function Register() {
                 className={`icon-img ${selectedIcon === icon ? "active" : ""}`}
                 onClick={() => {
                   setSelectedIcon(icon);
-                  setAvatarFile(null); // 🔴 RESET FILE IF ICON SELECTED
+                  setAvatarFile(null); // reset file if icon selected
                 }}
               />
             ))}
           </div>
         </div>
 
-        {/* 🔴 OPTIONAL UPLOAD PHOTO (SMALL ADD, DOES NOT BREAK UI) */}
+        {/* Optional upload photo (small add, doesn't break UI) */}
         <div style={{ marginBottom: "10px", textAlign: "center" }}>
           <label style={{ cursor: "pointer", color: "#008b8b" }}>
             Or upload your own photo

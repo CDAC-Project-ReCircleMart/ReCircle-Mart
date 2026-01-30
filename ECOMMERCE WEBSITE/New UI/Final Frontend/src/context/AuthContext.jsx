@@ -9,7 +9,7 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // 🔴 LOAD USER FROM LOCAL STORAGE ON APP START
+  // Load logged-in user from localStorage on app start
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
     const token = localStorage.getItem("token");
@@ -21,7 +21,7 @@ export function AuthProvider({ children }) {
     setLoading(false);
   }, []);
 
-  // 🔴 LOGIN FUNCTION
+  // Login function
   const login = async (email, password) => {
     const res = await api.post("/auth/login", { email, password });
 
@@ -37,14 +37,14 @@ export function AuthProvider({ children }) {
     return user;
   };
 
-  // 🔴 REGISTER FUNCTION
+  // Register function
   const register = async (data) => {
     // data = { firstName, lastName, email, password, avatar }
     const res = await api.post("/auth/register", data);
     return res.data;
   };
 
-  // 🔴 LOGOUT FUNCTION
+  // Logout function
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");

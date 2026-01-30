@@ -30,7 +30,7 @@ export default function Calendar() {
   for (let i = 0; i < firstDay; i++) daysArray.push(null);
   for (let day = 1; day <= totalDays; day++) daysArray.push(day);
 
-  /* 🔥 LOAD EVENTS OF SELECTED DATE */
+  /* Load events for selected date */
   useEffect(() => {
     loadEvents(selectedDate);
   }, [selectedDate]);

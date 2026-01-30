@@ -12,7 +12,7 @@ export default function Profile() {
   const [userListings, setUserListings] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 🔴 LOAD USER FROM LOCALSTORAGE FIRST
+  // Load user from localStorage first
   useEffect(() => {
     const localUser = JSON.parse(localStorage.getItem("user"));
 
@@ -23,7 +23,7 @@ export default function Profile() {
 
     setUser(localUser);
 
-    // 🔴 FETCH USER LISTINGS
+    // Fetch user listings
     const fetchListings = async () => {
       try {
         const listingsRes = await api.get("/listings/user/me");
@@ -40,7 +40,7 @@ export default function Profile() {
     fetchListings();
   }, [navigate]);
 
-  // 🔴 DELETE LISTING
+  // Delete listing
   const handleDelete = async (id) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this listing?",
@@ -65,7 +65,7 @@ export default function Profile() {
     ? new Date(user.created_at).toLocaleString()
     : null;
 
-  // 🔴 INTERNAL LISTING CARD
+  // Internal listing card component
   function MyListingCard({ item }) {
     const imageSrc = item.image
       ? item.image.startsWith("/uploads")

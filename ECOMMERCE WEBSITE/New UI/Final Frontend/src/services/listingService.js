@@ -1,18 +1,18 @@
 import api from "./api";
 
-// 🔴 GET ALL LISTINGS (HOME PAGE)
+// Get all listings (home page)
 export const getAllListings = async () => {
   const res = await api.get("/listings");
   return res.data;
 };
 
-// 🔴 GET SINGLE LISTING (PRODUCT DETAIL)
+// Get single listing (product detail)
 export const getListingById = async (id) => {
   const res = await api.get(`/listings/${id}`);
   return res.data;
 };
 
-// 🔴 CREATE NEW LISTING (SELL FORMS – WITH IMAGES)
+// Create a new listing (sell forms, with images)
 export const createListing = async (formData) => {
   // formData must be FormData (multipart)
   const res = await api.post("/listings", formData, {
@@ -24,13 +24,13 @@ export const createListing = async (formData) => {
   return res.data;
 };
 
-// 🔴 GET MY LISTINGS (PROFILE PAGE)
+// Get my listings (profile page)
 export const getMyListings = async () => {
   const res = await api.get("/listings/my");
   return res.data;
 };
 
-// 🔴 DELETE MY LISTING (OPTIONAL – LATER)
+// Delete my listing (optional)
 export const deleteListing = async (id) => {
   const res = await api.delete(`/listings/${id}`);
   return res.data;

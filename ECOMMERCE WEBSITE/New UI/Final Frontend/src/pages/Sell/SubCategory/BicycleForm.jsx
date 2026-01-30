@@ -58,7 +58,7 @@ export default function BicycleForm() {
     "Puducherry",
   ];
 
-  // 🔒 PROTECT PAGE
+  // Protect page (redirect to login if not authenticated)
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -104,7 +104,7 @@ export default function BicycleForm() {
     setPhotos(updated);
   };
 
-  // 🔴 SUBMIT
+  // Submit form
   const handleSubmit = async () => {
     if (!form.subCategory) {
       toast.error("Please select a sub category");
@@ -112,7 +112,7 @@ export default function BicycleForm() {
     }
 
     try {
-      // 🔴 GROUP ALL CYCLE DATA INTO DESCRIPTION
+      // Group bicycle fields into description
       const description = `
 Brand:${form.brand},
 Type:${form.bicycleType},
@@ -122,10 +122,10 @@ Material:${form.material},
 Condition:${form.condition}
       `;
 
-      // 🔴 LOCATION
+      // Location string
       const location = `${form.state}, ${form.city}, ${form.landmark}`;
 
-      // 🔴 FORM DATA
+      // Prepare form data
       const formData = new FormData();
 
       formData.append("title", form.title);

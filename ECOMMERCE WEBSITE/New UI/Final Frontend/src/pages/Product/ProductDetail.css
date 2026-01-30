@@ -231,7 +231,7 @@
    ========================= */
 
 .close-btn {
-  position: fixed; /* 🔥 STICKS TO SCREEN */
+  position: fixed; /* fixed to screen */
   top: 90px;
   left: 50px;
 

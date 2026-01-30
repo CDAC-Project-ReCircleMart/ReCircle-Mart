@@ -43,7 +43,7 @@ import ProtectedRoute from "./ProtectedRoute";
 // EDIT LISTING
 import EditListing from "../pages/Sell/EditListing";
 
-/* 🔥 ADMIN */
+/* Admin routes */
 import AdminRoutes from "./AdminRoutes";
 import AdminLayout from "../pages/admin/layout/AdminLayout";
 import Dashboard from "../pages/admin/Dashboard";
@@ -108,7 +108,7 @@ export default function PublicRoutes() {
         }
       />
 
-      {/* 🔴 SELL MAIN */}
+      {/* Sell main route */}
       <Route
         path="/sell"
         element={
@@ -118,7 +118,7 @@ export default function PublicRoutes() {
         }
       />
 
-      {/* 🔴 SELL SUB FORMS */}
+      {/* Sell sub-forms */}
 
       <Route
         path="/sell/cars"
@@ -231,7 +231,7 @@ export default function PublicRoutes() {
         </Route>
       </Route>
 
-      {/* 🔥 404 – MUST BE LAST */}
+      {/* 404 - must be last */}
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
