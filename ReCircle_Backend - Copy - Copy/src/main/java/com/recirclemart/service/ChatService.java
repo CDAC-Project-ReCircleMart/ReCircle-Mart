@@ -156,6 +156,7 @@ public class ChatService {
                         m.getCiphertext(),
                         m.getTag(),
                         m.getEncKeyForReceiver(),
+                        m.getEncKeyForSender(),
 
                         m.getCreatedAt()
                 ))
@@ -217,6 +218,7 @@ public class ChatService {
                         .ciphertext(req.getCiphertext())
                         .tag(req.getTag())
                         .encKeyForReceiver(req.getEncKeyForReceiver())
+                        .encKeyForSender(req.getEncKeyForSender())
                         .build()
         );
 
@@ -231,6 +233,7 @@ public class ChatService {
                 saved.getCiphertext(),
                 saved.getTag(),
                 saved.getEncKeyForReceiver(),
+                saved.getEncKeyForSender(),
                 saved.getCreatedAt()
         );
     }

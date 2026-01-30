@@ -52,4 +52,8 @@ public class Message {
     private User receiver;
     
     
+    @Column(columnDefinition="LONGTEXT")
+    private String encKeyForSender; // base64 (RSA-OAEP encrypted AES key for sender)
+
+    
 }

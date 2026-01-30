@@ -20,6 +20,8 @@ public class MessageResponseDTO {
     private String ciphertext;
     private String tag;
     private String encKeyForReceiver;
+    
+    private String encKeyForSender;
 
     private LocalDateTime createdAt;
 }

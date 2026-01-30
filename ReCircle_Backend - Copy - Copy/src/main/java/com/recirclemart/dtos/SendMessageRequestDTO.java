@@ -10,4 +10,7 @@ public class SendMessageRequestDTO {
     private String ciphertext;           // base64
     private String tag;                  // base64
     private String encKeyForReceiver;    // base64 (RSA-OAEP(aesKey))
+
+    private String encKeyForSender;
+    
 }
