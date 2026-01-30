@@ -9,10 +9,12 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "admin_events")
-@Data
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Getter
+@Setter
 public class AdminEvent {
 
     @Id

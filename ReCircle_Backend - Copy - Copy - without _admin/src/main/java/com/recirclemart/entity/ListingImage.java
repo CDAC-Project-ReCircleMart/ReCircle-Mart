@@ -1,13 +1,14 @@
 package com.recirclemart.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.*;
 import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "listing_images")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -17,6 +18,7 @@ public class ListingImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "listing_id", nullable = false)
     private Listing listing;
@@ -24,4 +26,7 @@ public class ListingImage {
     @NotBlank
     @Column(name = "image_path", columnDefinition = "TEXT", nullable = false)
     private String imagePath;
+
+    @Column(name = "created_at", insertable = false, updatable = false)
+    private LocalDateTime createdAt;
 }

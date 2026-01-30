@@ -30,66 +30,48 @@ public class SecurityConfig {
     @Autowired
     private JwtFilter jwtFilter;
 
+    // 🔥 USE EXISTING PasswordEncoder from PasswordConfig
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    // ================= AUTHENTICATION MANAGER =================
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
 
-        AuthenticationManagerBuilder builder =
+        AuthenticationManagerBuilder authManagerBuilder =
                 http.getSharedObject(AuthenticationManagerBuilder.class);
 
-        builder
+        // 🔥 THIS LINE FIXES LOGIN
+        authManagerBuilder
                 .userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder);
 
-        return builder.build();
+        return authManagerBuilder.build();
     }
 
-    // ================= CORS CONFIG =================
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);
 
-        CorsConfiguration config = new CorsConfiguration();
-
-        config.setAllowedOrigins(List.of("http://localhost:5173"));
-        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source =
-                new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 
-    // ================= SECURITY FILTER CHAIN =================
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
             .csrf(csrf -> csrf.disable())
             .cors(Customizer.withDefaults())
-
+            .authorizeHttpRequests(req -> req.anyRequest().permitAll())
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            )
-
-            .authorizeHttpRequests(auth -> auth
-                // ✅ PUBLIC ENDPOINTS
-                .requestMatchers(
-                        "/api/auth/**",
-                        "/uploads/**"
-                ).permitAll()
-
-                // 🔒 EVERYTHING ELSE NEEDS AUTH
-                .anyRequest().authenticated()
-            )
-
-            // ❌ DO NOT APPLY JWT FILTER TO UPLOADS
-            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+            );
 
         return http.build();
     }

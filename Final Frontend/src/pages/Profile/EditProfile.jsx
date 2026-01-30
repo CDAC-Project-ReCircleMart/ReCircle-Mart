@@ -7,56 +7,43 @@ import "./EditProfile.css";
 export default function EditProfile() {
   const navigate = useNavigate();
 
-  // ✅ READ USER ONCE
   const localUser = JSON.parse(localStorage.getItem("user"));
 
   const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // ✅ PREFILL DATA (SUPPORT BOTH old + new STORAGE KEYS)
+  // 🔴 LOAD USER ONCE ONLY
   useEffect(() => {
     if (!localUser) {
       navigate("/login");
       return;
     }
 
-    setFirstName(localUser.firstName || localUser.first_name || "");
-    setLastName(localUser.lastName || localUser.last_name || "");
+    // IMPORTANT FIX — SUPPORT BOTH NAMING STYLES
+    setFirstName(localUser.first_name || localUser.firstName || "");
     setEmail(localUser.email || "");
-  }, []);
+  }, []); // ⚠️ DO NOT PUT localUser IN DEPENDENCY (THIS WAS LOCKING INPUT)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // ✅ FRONTEND VALIDATION
-    if (!firstName.trim() || !lastName.trim()) {
-      toast.error("First name and last name are required");
-      return;
-    }
-
     setLoading(true);
 
     try {
-      await api.put("/auth/update-profile", {
-        firstName,
-        lastName,
-        email,
-        password: password || ""
+      const res = await api.put("/auth/update-profile", {
+        first_name: firstName,
+        email: email,
+        ...(password && { password }),
       });
 
-      // ✅ NORMALIZE LOCAL STORAGE (camelCase only)
+      // 🔴 UPDATE LOCAL STORAGE CORRECTLY
       const updatedUser = {
         ...localUser,
-        firstName,
-        lastName,
-        email
+        first_name: firstName,
+        firstName: firstName,
+        email: email,
       };
-
-      delete updatedUser.first_name;
-      delete updatedUser.last_name;
 
       localStorage.setItem("user", JSON.stringify(updatedUser));
 
@@ -84,21 +71,12 @@ export default function EditProfile() {
 
         <form onSubmit={handleSubmit} className="edit-form">
           <div className="form-group">
-            <label>First Name</label>
+            <label>Name</label>
             <input
               type="text"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Last Name</label>
-            <input
-              type="text"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
+              placeholder="Enter your name"
               required
             />
           </div>
@@ -109,6 +87,7 @@ export default function EditProfile() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
               required
             />
           </div>

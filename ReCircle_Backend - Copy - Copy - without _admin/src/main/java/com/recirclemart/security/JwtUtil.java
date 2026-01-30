@@ -1,69 +1,87 @@
-package com.recirclemart.security;
-
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
-
-import org.springframework.stereotype.Component;
-import org.springframework.security.core.Authentication;
+ package com.recirclemart.security;
 
 import java.security.Key;
 import java.util.Date;
-import java.util.Map;
-import java.util.function.Function;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.stereotype.Component;
+
+import com.recirclemart.entity.User;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 
 @Component
 public class JwtUtil {
 
-    // ✅ MUST be at least 32 chars for HS256
-    private static final String SECRET =
-            "recircle-secret-key-32-chars-minimum!";
+	@Value("${jwt.token.expiration.millis}")
+	private long jwtExpiration;
 
-    private final Key key = Keys.hmacShaKeyFor(SECRET.getBytes());
+	@Value("${jwt.token.secret}")
+	private String jwtSecret;
 
-    // ================= CREATE TOKEN =================
-    public String createToken(Authentication authentication) {
+	private Key jwtKey;
 
-        Map<String, Object> claims = Map.of(
-                "role", authentication.getAuthorities()
-                        .iterator().next().getAuthority()
-        );
+	@PostConstruct
+	public void init() {
+		jwtKey = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+	}
 
-        return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(authentication.getName()) // email
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
-    }
+	// ===================== CREATE TOKEN =====================
+	public String createToken(Authentication auth) {
 
-    // ================= EXTRACT USERNAME =================
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
-    }
+		User user = (User) auth.getPrincipal();
 
-    // ================= VALIDATE TOKEN =================
-    public boolean validateToken(String token, String username) {
-        return extractUsername(token).equals(username) && !isTokenExpired(token);
-    }
+		// ✅ FIX: STORE EMAIL IN JWT SUBJECT
+		String subject = user.getEmail();
 
-    // ================= CLAIM HELPERS =================
-    public <T> T extractClaim(String token, Function<Claims, T> resolver) {
-        return resolver.apply(extractAllClaims(token));
-    }
+		String roles = user.getAuthorities().stream()
+				.map(authority -> authority.getAuthority())
+				.collect(Collectors.joining(","));
 
-    private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-    }
+		System.out.println("JWT subject (email): " + subject);
 
-    private boolean isTokenExpired(String token) {
-        return extractClaim(token, Claims::getExpiration)
-                .before(new Date());
-    }
+		return Jwts.builder()
+				.setSubject(subject) // ✅ EMAIL
+				.setIssuedAt(new Date())
+				.setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
+				.claim("role", roles)
+				.signWith(jwtKey, SignatureAlgorithm.HS256)
+				.compact();
+	}
+
+	// ===================== VALIDATE TOKEN =====================
+	public Authentication validateToken(String token) {
+
+		JwtParser parser = Jwts.parserBuilder()
+				.setSigningKey(jwtKey)
+				.build();
+
+		Claims claims = parser
+				.parseClaimsJws(token)
+				.getBody();
+
+		// ✅ NOW THIS IS EMAIL
+		String email = claims.getSubject();
+
+		String roles = (String) claims.get("role");
+		List<GrantedAuthority> authorities =
+				AuthorityUtils.commaSeparatedStringToAuthorityList(roles);
+
+		return new UsernamePasswordAuthenticationToken(
+				email, // principal = EMAIL
+				null,
+				authorities
+		);
+	}
 }

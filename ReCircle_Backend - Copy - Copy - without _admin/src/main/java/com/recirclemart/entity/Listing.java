@@ -42,6 +42,9 @@ public class Listing {
 
     @Column(columnDefinition = "TEXT")
     private String description;
+    
+    @Column(name = "status")
+    private String status = "pending"; 
 
     @NotNull
     @ManyToOne

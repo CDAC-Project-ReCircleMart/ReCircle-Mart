@@ -33,4 +33,7 @@ public interface AdminEventRepository extends JpaRepository<AdminEvent, Integer>
 
     // Search by title (optional future feature)
     List<AdminEvent> findByTitleContainingIgnoreCase(String keyword);
+    
+    List<AdminEvent> findAllByOrderByEventDateAsc();
+    List<AdminEvent> findByEventDateOrderByCreatedAt(LocalDate date);
 }

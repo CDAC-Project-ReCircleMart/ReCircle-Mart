@@ -85,35 +85,25 @@ export default function Home() {
   const carouselRef = useRef(null);
 
   // FETCH LISTINGS (ONLY APPROVED) - Backend filters by status='approved'
- useEffect(() => {
-  let isMounted = true; // ✅ prevent state update after unmount
+  useEffect(() => {
+    const fetchListings = async () => {
+      setLoading(true);
+      try {
+        const res = await api.get("/listings");
+        // Only approved listings are returned by backend
+        setAllListings(res.data);
 
-  const fetchListings = async () => {
-    setLoading(true);
-    try {
-      const res = await api.get("/listings");
-
-      if (!isMounted) return;
-
-      setAllListings(res.data);
-      const shuffled = [...res.data].sort(() => 0.5 - Math.random());
-      setFilteredListings(shuffled);
-    } catch (err) {
-      // ✅ DO NOT show toast on first-load auth/server warmup issues
-      if (err?.response && err.response.status !== 401) {
+        const shuffled = [...res.data].sort(() => 0.5 - Math.random());
+        setFilteredListings(shuffled);
+      } catch {
         toast.error("Failed to load listings from server");
+      } finally {
+        setLoading(false);
       }
-    } finally {
-      if (isMounted) setLoading(false);
-    }
-  };
+    };
 
-  fetchListings();
-
-  return () => {
-    isMounted = false;
-  };
-}, []);
+    fetchListings();
+  }, []);
 
   // SEARCH FILTER (UNCHANGED)
   useEffect(() => {

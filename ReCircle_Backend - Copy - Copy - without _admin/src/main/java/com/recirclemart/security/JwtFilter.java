@@ -1,69 +1,57 @@
 package com.recirclemart.security;
 
+import java.io.IOException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
-
-import java.io.IOException;
-
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private JwtUtil jwtUtil;
+	@Autowired
+	private JwtUtil jwtUtil;
 
-    @Autowired
-    private UserDetailsService userDetailsService;
+	// @Override
+	// protected boolean shouldNotFilter(HttpServletRequest request) throws
+	// ServletException {
+	// System.out.println("asd");
+	// String path = request.getServletPath();
+	// System.out.println(path);
+	// return path.equals("/api/users/register/") ||
+	// path.startsWith("/authenticate");
+	// }
 
-    @Override
-    protected void doFilterInternal(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain
-    ) throws ServletException, IOException {
+	@Override
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+			throws ServletException, IOException {
+		// TODO Auto-generated method stub
 
-        String authHeader = request.getHeader("Authorization");
-        String token = null;
-        String username = null;
+		String authHeader = request.getHeader(("Authorization"));
+		System.out.println("Authentication Header : " + authHeader);
+		boolean validHeader = authHeader != null && authHeader.startsWith("Bearer");
+		Authentication auth = null;
+		if (validHeader) {
+			String token = authHeader.replace("Bearer", "").trim();
+			System.out.println("Token is : " + token);
+			auth = jwtUtil.validateToken(token);
 
-        // ✅ Extract JWT
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            token = authHeader.substring(7);
-            username = jwtUtil.extractUsername(token);
-        }
+		}
 
-        // ✅ Authenticate user
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+		if (auth != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+			SecurityContextHolder.getContext().setAuthentication(auth);
 
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+		}
 
-            if (jwtUtil.validateToken(token, userDetails.getUsername())) {
+		filterChain.doFilter(request, response);
 
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(
-                                userDetails,
-                                null,
-                                userDetails.getAuthorities()
-                        );
+	}
 
-                authentication.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request)
-                );
-
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
-        }
-
-        filterChain.doFilter(request, response);
-    }
 }

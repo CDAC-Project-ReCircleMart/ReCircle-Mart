@@ -60,4 +60,23 @@ public class NotificationService {
 
         notificationRepository.delete(n);
     }
+    
+//    public void createNotification(Long userId,
+//            String type,
+//            String title,
+//            String message,
+//            Long listingId) {
+//    	 Notification n = Notification.builder()
+//                
+//                 .type(type)
+//                 .title(title)
+//                 .message(message)
+//                
+//                 .isRead(false)
+//                 .build();
+//
+//         notificationRepository.save(n);
+//// TODO: insert into notifications table using JPA repo
+//// Keeping as stub because your Node code calls controller function.
+//}
 }
