@@ -111,15 +111,25 @@ public class ChatService {
 
     /* -------------------- GET MY CHATS -------------------- */
     public List<ChatListResponseDTO> getMyChats() {
-        
-    	User req_buyer = userRepository.findByEmail(SecurityUtil.getCurrentEmail())
-    	.orElseThrow(() -> new RuntimeException("Buyer not found"));
+        User req_buyer = userRepository.findByEmail(SecurityUtil.getCurrentEmail())
+                .orElseThrow(() -> new RuntimeException("Buyer not found"));
 
+        Integer userId = req_buyer.getId();
 
-    	Integer userId = req_buyer.getId();
-
-        return chatQueryRepository.getMyChats(userId);
+        return chatQueryRepository.getMyChats(userId).stream()
+                .map(v -> ChatListResponseDTO.builder()
+                        .id(v.getId())
+                        .listingId(v.getListingId())
+                        .buyerId(v.getBuyerId())
+                        .sellerId(v.getSellerId())
+                        .title(v.getTitle())
+                        .otherId(v.getOtherId())
+                        .otherName(v.getOtherName())
+                        .otherAvatar(v.getOtherAvatar())
+                        .build())
+                .toList();
     }
+
 
 
     /* -------------------- GET MESSAGES -------------------- */

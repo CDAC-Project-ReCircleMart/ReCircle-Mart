@@ -1,11 +1,10 @@
 package com.recirclemart.repository;
 
-
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 
-import com.recirclemart.dtos.ChatListResponseDTO;
+import com.recirclemart.dtos.ChatListView;
 
 import java.util.List;
 
@@ -42,5 +41,5 @@ public interface ChatQueryRepository extends Repository<com.recirclemart.entity.
       WHERE c.buyer_id = :userId OR c.seller_id = :userId
       ORDER BY c.id DESC
     """, nativeQuery = true)
-    List<ChatListResponseDTO> getMyChats(@Param("userId") Integer userId);
+    List<ChatListView> getMyChats(@Param("userId") Integer userId);
 }
