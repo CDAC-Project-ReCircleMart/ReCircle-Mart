@@ -11,7 +11,7 @@ import org.springframework.data.repository.query.Param;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface VisitRepository extends JpaRepository<Visit, Long> {
+public interface VisitRepository extends JpaRepository<Visit, Integer> {
 
     @Query(value = "SELECT COUNT(*) FROM visits WHERE DATE(created_at) = :today", nativeQuery = true)
     long countToday(@Param("today") LocalDate today);

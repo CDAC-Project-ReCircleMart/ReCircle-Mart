@@ -81,14 +81,14 @@ public class AdminController {
     }
 
     @PutMapping("/users/{id}")
-    public ResponseEntity<Map<String, String>> updateUser(@PathVariable Long id,
+    public ResponseEntity<Map<String, String>> updateUser(@PathVariable Integer id,
                                                          @RequestBody AdminUserUpdateRequest req) {
         adminService.updateUser(id, req);
         return ResponseEntity.ok(Map.of("message", "User updated successfully"));
     }
 
     @DeleteMapping("/users/{id}")
-    public ResponseEntity<Map<String, String>> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<Map<String, String>> deleteUser(@PathVariable Integer id) {
         adminService.deleteUser(id);
         return ResponseEntity.ok(Map.of("message", "User deleted successfully"));
     }

@@ -110,10 +110,7 @@ public class ListingService {
     public List<Listing> getAllIdsRepo(){
     	List<Listing> ans = listingRepository.getAllId();
     	
-    	for(Listing i : ans) {
-    		System.out.println(i);
-    		
-    	}
+    	
     	return ans; 
     }
 

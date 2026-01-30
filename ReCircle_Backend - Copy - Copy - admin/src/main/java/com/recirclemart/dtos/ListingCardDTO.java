@@ -13,6 +13,7 @@ public class ListingCardDTO {
     private Double price;
     private String category;
     private String subcategory;
+  
     private String location;
     private Integer year;
     private String description;

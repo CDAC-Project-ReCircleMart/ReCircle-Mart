@@ -1,7 +1,9 @@
 package com.recirclemart.dtos;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public interface AdminListingRow {
-    Long getId();
+    Integer getId();
     String getTitle();
     Double getPrice();
     String getCategory();
@@ -10,8 +12,16 @@ public interface AdminListingRow {
     Integer getYear();
     String getDescription();
     String getStatus();
-
+    
+    @JsonProperty("created_at")
+    String getCreatedAt();
+   
+    @JsonProperty("seller_name")
     String getSellerName();
+    
+    @JsonProperty("seller_email")
     String getSellerEmail();
     String getImage();
+    
+    
 }

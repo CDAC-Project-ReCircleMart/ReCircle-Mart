@@ -66,7 +66,7 @@ public class ChatService {
     	}
 
     public Integer startChat(Integer listingId, Integer sellerId) {
-
+    	
     	User req_buyer = userRepository.findByEmail(SecurityUtil.getCurrentEmail())
     	.orElseThrow(() -> new RuntimeException("Buyer not found"));
 

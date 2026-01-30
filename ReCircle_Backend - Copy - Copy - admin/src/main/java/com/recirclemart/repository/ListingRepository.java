@@ -5,6 +5,9 @@ import com.recirclemart.dtos.CategoryChartPoint;
 import com.recirclemart.dtos.ListingsChartPoint;
 import com.recirclemart.entity.Listing;
 import com.recirclemart.entity.User;
+
+import jakarta.transaction.Transactional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -30,7 +33,7 @@ public interface ListingRepository extends JpaRepository<Listing, Integer> {
 	// Search (title LIKE %keyword%)
 	List<Listing> findByTitleContainingIgnoreCase(String keyword);
 
-	@Query(value = "select * from listings", nativeQuery = true)
+	@Query(value = "select * from listings where status = 'approved'", nativeQuery = true)
 	List<Listing> getAllId();
 
 	// Admin dashboard
@@ -93,8 +96,9 @@ public interface ListingRepository extends JpaRepository<Listing, Integer> {
 			""", nativeQuery = true)
 	List<AdminListingRow> adminListings();
 
+	@Transactional
 	@Modifying
 	@Query(value = "UPDATE listings SET status = :status WHERE id = :id", nativeQuery = true)
-	void updateStatus(@Param("id") Long id, @Param("status") String status);
+	void updateStatus(@Param("id") Integer id, @Param("status") String status);
 
 }

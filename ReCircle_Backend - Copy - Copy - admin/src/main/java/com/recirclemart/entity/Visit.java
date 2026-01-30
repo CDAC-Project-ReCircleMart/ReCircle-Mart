@@ -17,10 +17,9 @@ public class Visit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
+    @Column(name="user_id")
+    private Integer userId; // nullable
+    
     @Column(name = "ip_address")
     private String ipAddress;
 

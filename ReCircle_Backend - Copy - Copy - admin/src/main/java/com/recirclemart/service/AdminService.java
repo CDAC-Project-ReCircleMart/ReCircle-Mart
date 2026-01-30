@@ -17,6 +17,7 @@ import com.recirclemart.entity.AdminEvent;
 import com.recirclemart.entity.Listing;
 import com.recirclemart.entity.User;
 import com.recirclemart.repository.*;
+import com.recirclemart.security.SecurityUtil;
 import com.recirclemart.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -80,14 +81,14 @@ public class AdminService {
     }
 
     public AdminEventResponse addEvent(AdminEventCreateRequest req) {
-        if (req.title() == null || req.title().isBlank() || req.eventDate() == null || req.eventDate().isBlank()) {
+        if (req.getTitle() == null || req.getTitle().isBlank() || req.getEventDate() == null || req.getEventDate().isBlank()) {
             throw new IllegalArgumentException("Title and date are required");
         }
 
         AdminEvent e = new AdminEvent();
-        e.setTitle(req.title());
-        e.setEventDate(LocalDate.parse(req.eventDate()));
-        e.setDescription(req.description());
+        e.setTitle(req.getTitle());
+        e.setEventDate(LocalDate.parse(req.getEventDate()));
+        e.setDescription(req.getDescription());
 
         AdminEvent saved = adminEventRepository.save(e);
         return AdminEventResponse.from(saved);
@@ -104,7 +105,7 @@ public class AdminService {
         return new UsersListResponse(rows, rows.size(), 1, 1);
     }
 
-    public void updateUser(Long id, AdminUserUpdateRequest req) {
+    public void updateUser(Integer id, AdminUserUpdateRequest req) {
         // Required validation like your Node code
         if (req.firstName() == null || req.firstName().isBlank() || req.email() == null || req.email().isBlank()) {
             throw new IllegalArgumentException("First name and email are required");
@@ -128,22 +129,27 @@ public class AdminService {
         userRepository.save(u);
     }
 
-    public void deleteUser(Long id) {
+    public void deleteUser(Integer id) {
         // Equivalent to: if (Number(id) === req.user.id) block
-        Long currentUserId = getCurrentUserIdOrNull();
-        if (currentUserId != null && currentUserId.equals(id)) {
+    	User current_user = userRepository.findByEmail(SecurityUtil.getCurrentEmail())
+    	    	.orElseThrow(() -> new RuntimeException("User not found"));
+
+
+    	Integer currentUserId= current_user.getId();
+       
+        if (currentUserId != null && currentUserId== id) {
             throw new IllegalArgumentException("You cannot delete yourself");
         }
         userRepository.deleteById(id);
     }
 
-    private Long getCurrentUserIdOrNull() {
-        // You must set this in your JWT auth filter (e.g., principal contains id)
-        // If you don’t yet have it, return null for now.
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserPrincipal p) return p.id();
-        return null;
-    }
+//    private Long getCurrentUserIdOrNull() {
+//        // You must set this in your JWT auth filter (e.g., principal contains id)
+//        // If you don’t yet have it, return null for now.
+//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        if (principal instanceof UserPrincipal p) return p.id();
+//        return null;
+//    }
 
     /* ===================== LISTINGS ===================== */
 
@@ -156,6 +162,7 @@ public class AdminService {
         listingRepository.deleteById(id);
     }
 
+    
     public void updateListingStatus(Integer id, String status) {
         if (!List.of("pending", "approved", "rejected").contains(status)) {
             throw new IllegalArgumentException("Invalid status value");
@@ -164,16 +171,17 @@ public class AdminService {
         Listing listing = listingRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Listing not found"));
 
-        listingRepository.updateStatus(Long.parseLong(id+""), status);
+        listingRepository.updateStatus(id, status);
 
+        
         // notification logic like your Node code
         if ("approved".equals(status)) {
-            notificationService.createNotification(null, status, status, status, null, null);
+            notificationService.createNotification(listing.getSeller().getId(), "product_"+status, status, "Your product "+listing.getTitle()+" has been approved and is now visible to buyers.", listing.getId(), null);
         } else if ("rejected".equals(status)) {
-            notificationService.createNotification(null, status, status, status, null, null);
+            notificationService.createNotification(listing.getSeller().getId(), "product_"+status, status, "Your product "+listing.getTitle()+" has been rejected. Please review and resubmit.", listing.getId(), null);
         }
     }
 
     /* Dummy principal record (replace with your real one) */
-    public record UserPrincipal(Long id) {}
+   
 }

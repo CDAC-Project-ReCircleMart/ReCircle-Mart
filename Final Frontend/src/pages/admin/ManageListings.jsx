@@ -35,6 +35,7 @@ export default function ManageListings() {
   const fetchListings = async () => {
     try {
       const res = await getListings();
+      console.log(res)
       setAllListings(res.data.listings || res.data || []);
     } catch (err) {
       toast.error("Failed to load listings");
