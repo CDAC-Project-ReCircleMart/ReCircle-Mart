@@ -50,7 +50,7 @@ export default function EditProfile() {
       toast.success("Profile updated successfully");
       navigate("/profile");
     } catch (err) {
-      console.error("❌ UPDATE PROFILE ERROR:", err);
+      console.error(" UPDATE PROFILE ERROR:", err);
 
       const message =
         err.response?.data?.message ||
