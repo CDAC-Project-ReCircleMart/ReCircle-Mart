@@ -7,8 +7,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "favourites",
-       uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "listing_id"}))
+@Table(name = "favourites", uniqueConstraints = @UniqueConstraint(columnNames = { "user_id", "listing_id" }))
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,6 +28,7 @@ public class Favourite {
     @JoinColumn(name = "listing_id", nullable = false)
     private Listing listing;
 
-    @Column(name = "created_at", insertable = false, updatable = false)
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 }

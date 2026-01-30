@@ -27,6 +27,7 @@ public class ListingImage {
     @Column(name = "image_path", columnDefinition = "TEXT", nullable = false)
     private String imagePath;
 
-    @Column(name = "created_at", insertable = false, updatable = false)
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 }

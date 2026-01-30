@@ -31,6 +31,7 @@ public class AdminEvent {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "created_at", insertable = false, updatable = false)
+     @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 }

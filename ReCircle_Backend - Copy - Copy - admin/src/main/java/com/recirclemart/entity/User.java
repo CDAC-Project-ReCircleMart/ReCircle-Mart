@@ -17,7 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User implements UserDetails{
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,24 +42,17 @@ public class User implements UserDetails{
     @Column(columnDefinition = "TEXT")
     private String avatar;
 
-    @Column(name = "created_at", insertable = false, updatable = false)
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
-
 
     @Column(columnDefinition = "ENUM('user','admin') DEFAULT 'user'")
     private String role;
-    
-    
-    @Column(nullable= false ,  length = 500)
-    
-    private String publicKey ; 
-    
-    
-    
-    
-    
-    
-    
+
+    @Column(nullable = false, length = 500)
+
+    private String publicKey;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return AuthorityUtils.createAuthorityList(role);
@@ -93,9 +86,9 @@ public class User implements UserDetails{
     }
 
     // ✅ User enabled only if status = ACTIVE
-//    @Override
-//    public boolean isEnabled() {
-//        return status != null && "ACTIVE".equalsIgnoreCase(status.getStatusName());
-//    }
-    
+    // @Override
+    // public boolean isEnabled() {
+    // return status != null && "ACTIVE".equalsIgnoreCase(status.getStatusName());
+    // }
+
 }

@@ -17,12 +17,13 @@ public class Visit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name="user_id")
+    @Column(name = "user_id")
     private Integer userId; // nullable
-    
+
     @Column(name = "ip_address")
     private String ipAddress;
 
-    @Column(name = "created_at", insertable = false, updatable = false)
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 }

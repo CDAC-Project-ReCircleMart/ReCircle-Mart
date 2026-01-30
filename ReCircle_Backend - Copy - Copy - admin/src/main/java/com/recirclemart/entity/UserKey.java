@@ -34,5 +34,7 @@ public class UserKey {
     @Column(columnDefinition = "LONGTEXT", nullable = false)
     private String publicKey; // base64 or PEM
 
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 }
