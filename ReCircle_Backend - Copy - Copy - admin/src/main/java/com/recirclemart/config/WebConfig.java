@@ -11,6 +11,6 @@ public class WebConfig implements WebMvcConfigurer {
 
         // Makes: http://localhost:8080/uploads/filename.jpg work
         registry.addResourceHandler("/uploads/**")
-                .addResourceLocations("file:src/main/resources/static/uploads/");
+                .addResourceLocations("file:uploads/");
     }
 }

@@ -6,6 +6,8 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 @Entity
 @Table(name = "favourites", uniqueConstraints = @UniqueConstraint(columnNames = { "user_id", "listing_id" }))
 @Data

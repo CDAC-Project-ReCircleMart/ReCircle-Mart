@@ -40,7 +40,7 @@ public interface ListingRepository extends JpaRepository<Listing, Integer> {
 	@Query("SELECT COUNT(l) FROM Listing l")
 	long countTotalListings();
 
-	@Query(value = "SELECT * FROM listings ORDER BY created_at DESC", nativeQuery = true)
+	@Query(value = "SELECT * FROM listings ORDER BY created_at DESC ", nativeQuery = true)
 	List<Listing> findAllOrderByCreatedAtDesc();
 
 	// Node: ownership check
