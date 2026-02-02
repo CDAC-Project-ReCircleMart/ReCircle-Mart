@@ -8,3 +8,8 @@
   min-height: 100vh;
   background-color: #ffffff;
 }
+
+.page-disabled {
+  pointer-events: none;
+  user-select: none;
+}

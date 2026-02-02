@@ -45,11 +45,12 @@
 .listings-grid.compact {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 10px; /* tighter gap */
+  gap: 10px;
+  /* tighter gap */
 }
 
 /* shrink each card visually */
-.listings-grid.compact > div {
+.listings-grid.compact>div {
   transform: scale(0.92);
   transform-origin: top center;
 }
@@ -134,6 +135,7 @@
   outline: 3px solid #002f34;
   transform: scale(1.04);
 }
+
 /* =========================
    CAROUSEL TEXT OVERLAY
    ========================= */
@@ -162,7 +164,8 @@
 
 .category-strip {
   display: flex;
-  justify-content: space-between; /* equidistant */
+  justify-content: space-between;
+  /* equidistant */
   margin: 0 auto 30px;
   max-width: 900px;
   padding-bottom: 12px;
@@ -335,7 +338,8 @@
 /* Large screens → 5 cards per row */
 .listings-grid.compact {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* FORCE 5 */
+  grid-template-columns: repeat(5, 1fr);
+  /* FORCE 5 */
   gap: 10px;
 }
 
@@ -364,4 +368,11 @@
   .listings-grid.compact {
     grid-template-columns: 1fr;
   }
+}
+
+
+
+.home-disabled {
+  pointer-events: none;
+  user-select: none;
 }

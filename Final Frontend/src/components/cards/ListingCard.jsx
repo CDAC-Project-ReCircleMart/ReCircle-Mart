@@ -59,9 +59,9 @@ export default function ListingCard({ item }) {
           <div className="info-item1">
             {item.created_at
               ? new Date(item.created_at).toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })
+                hour: "2-digit",
+                minute: "2-digit",
+              })
               : ""}
           </div>
           <div className="info-item1">

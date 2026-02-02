@@ -244,11 +244,11 @@ export default function Messages() {
       const aes = await encryptAESGCM(newMessage);
 
       // 3) RSA encrypt AES key for receiver
-      const encKeyForReceiver = await rsaEncryptKey(aes.aesKeyRaw, receiverPublicKey);
+      let encKeyForReceiver = await rsaEncryptKey(aes.aesKeyRaw, receiverPublicKey);
 
       // OPTIONAL (recommended): encrypt AES key for sender too, so you can decrypt your own history after refresh
       // This requires backend+entity+DTO support for encKeyForSender.
-      const encKeyForSender = await rsaEncryptKey(aes.aesKeyRaw, myPublicKey);
+      let encKeyForSender = await rsaEncryptKey(aes.aesKeyRaw, myPublicKey);
       try {
         const myPubKey = await importPublicKeyB64(myPublicKeyB64);
         encKeyForSender = await rsaEncryptKey(aes.aesKeyRaw, myPubKey);

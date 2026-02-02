@@ -25,19 +25,30 @@ export default function NotificationItem({ item, onRead }) {
     });
   };
 
+
+
   return (
     <div
-      className={`list-group-item notification-item ${
-        !item.read && !item.is_read ? "unread" : ""
-      }`}
-      onClick={() => onRead(item.id)}
+      className={`list-group-item notification-item ${!item.read && !item.is_read ? "unread" : ""
+        }`}
+      onClick={() => {
+        onRead(item.id);
+
+      }}
     >
       <div className="d-flex justify-content-between align-items-center">
-        <h6 className="fw-semibold mb-0">{item.title}</h6>
+        <div>
+          <h6 className="fw-semibold mb-1">{item.title}</h6>
+          <p className="mb-0 text-muted text-truncate" style={{ maxWidth: "350px" }}>
+            {item.message}
+          </p>
+        </div>
+
         <small className="text-muted ms-2">
           {formatDate(item.created_at || item.time)}
         </small>
       </div>
     </div>
   );
+
 }

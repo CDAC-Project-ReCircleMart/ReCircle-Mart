@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
+import Login from "../auth/Login"; // adjust path to your Login component
 
 import {
   faCar,
@@ -83,6 +84,17 @@ export default function Home() {
   const itemsPerPage = 10;
 
   const carouselRef = useRef(null);
+
+
+
+
+  const [showLogin, setShowLogin] = useState(false);
+
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+  //   if (!token) setShowLogin(true);
+  // }, []);
+
 
   // FETCH LISTINGS (ONLY APPROVED) - Backend filters by status='approved'
   useEffect(() => {
@@ -257,7 +269,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="home-page">
+      <div className={`home-page ${showLogin ? " home-disabled" : ""}`}>
         <div className="main-layout no-sidebar">
           <section className="listings">
             {/* IMAGE CAROUSEL */}
@@ -265,9 +277,8 @@ export default function Home() {
               {categories.map((cat) => (
                 <div
                   key={cat.name}
-                  className={`carousel-card ${
-                    selectedCategory === cat.name ? "active" : ""
-                  }`}
+                  className={`carousel-card ${selectedCategory === cat.name ? "active" : ""
+                    }`}
                   onClick={() => handleCategorySelect(cat.name)}
                 >
                   <img src={cat.img} alt={cat.name} />
@@ -285,9 +296,8 @@ export default function Home() {
               {iconCategories.map((cat) => (
                 <div
                   key={cat.name}
-                  className={`strip-item ${
-                    selectedCategory === cat.name ? "active" : ""
-                  }`}
+                  className={`strip-item ${selectedCategory === cat.name ? "active" : ""
+                    }`}
                   onClick={() => handleCategorySelect(cat.name)}
                 >
                   <FontAwesomeIcon icon={cat.icon} className="strip-icon" />
@@ -402,9 +412,11 @@ export default function Home() {
             )}
           </section>
         </div>
-      </div>
+      </div >
 
       <Footer />
+      {showLogin && <Login onClose={() => setShowLogin(false)} />}
+
     </>
   );
 }
