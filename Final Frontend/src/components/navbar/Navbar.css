@@ -1,0 +1,14 @@
+.btn.btn-primary {
+  background: linear-gradient(135deg, #6a5af9, #00c6ff);
+  border: none;
+  border-radius: 999px;
+  padding: 0.55rem 1.25rem;
+  box-shadow: 0 6px 18px rgba(106, 90, 249, 0.35);
+  transition: all 0.3s ease;
+}
+
+.btn.btn-primary:hover {
+  background: linear-gradient(135deg, #5a4df5, #00b4ff);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(106, 90, 249, 0.45);
+}
