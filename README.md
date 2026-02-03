@@ -8,7 +8,7 @@ This project was developed as part of a **CDAC academic project** to demonstrate
 ##  Team Members
 
 - Prashant Kumar  
-- Rohit Kavethekar  
+- Rohit Kavathekar  
 - Harsh Kumar  
 - Om Dhavale  
 
