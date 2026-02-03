@@ -127,7 +127,7 @@ export default function Home() {
 
     let filtered = [...allListings];
 
-    if (city) {
+    if (city && city.trim() !== "") {
       filtered = filtered.filter(
         (item) =>
           item.location &&
@@ -135,7 +135,7 @@ export default function Home() {
       );
     }
 
-    if (q) {
+    if (q && q.trim() !== "") {
       filtered = filtered.filter((item) => {
         const searchText = q.toLowerCase();
 
