@@ -47,6 +47,8 @@
 
 package com.recirclemart.user.service;
 
+import com.recirclemart.exception.BadRequestException;
+import com.recirclemart.user.dto.request.UserRegisterRequestDTO;
 import com.recirclemart.user.entity.User;
 import com.recirclemart.user.repository.UserRepository;
 
@@ -71,31 +73,28 @@ public class AuthService {
 
 	private static final String UPLOAD_DIR = "uploads/avatars/";
 
-	public void registerUser(String firstName, String lastName, String email, String password, String icon,
-			MultipartFile avatarFile, String publicKey
+	public void registerUser(UserRegisterRequestDTO userRegister) {
 
-	) {
-
-		if (userRepository.existsByEmail(email)) {
-			throw new RuntimeException("Email already exists!");
+		if (userRepository.existsByEmail(userRegister.getEmail())) {
+			throw new BadRequestException("Email already exists!");
 		}
 
 		String avatarPath;
 
 		// ✅ Case 1: User uploaded image file
-		if (avatarFile != null && !avatarFile.isEmpty()) {
-			avatarPath = saveAvatarFile(avatarFile);
+		if (userRegister.getAvatar() != null && !userRegister.getAvatar().isEmpty()) {
+			avatarPath = saveAvatarFile(userRegister.getAvatar());
 		}
 		// ✅ Case 2: User selected predefined icon
 		else {
-			if (icon == null || icon.isBlank()) {
-				throw new RuntimeException("Please select an avatar or icon!");
+			if (userRegister.getIcon() == null || userRegister.getIcon().isBlank()) {
+				throw new BadRequestException("Please select an avatar or icon!");
 			}
-			avatarPath = icon;
+			avatarPath = userRegister.getIcon();
 		}
 
-		User user = User.builder().firstName(firstName).lastName(lastName).email(email)
-				.password(passwordEncoder.encode(password)).avatar(avatarPath).role("user").publicKey(publicKey)
+		User user = User.builder().firstName(userRegister.getFirstName()).lastName(userRegister.getLastName()).email(userRegister.getEmail())
+				.password(passwordEncoder.encode(userRegister.getPassword())).avatar(avatarPath).role("user").publicKey(userRegister.getPublicKey())
 				.active(true)
 				.build();
 

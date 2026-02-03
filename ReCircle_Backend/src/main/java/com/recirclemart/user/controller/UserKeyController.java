@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.recirclemart.exception.ResourceNotFoundException;
 import com.recirclemart.security.SecurityUtil;
 import com.recirclemart.user.entity.User;
 import com.recirclemart.user.entity.UserKey;
@@ -49,7 +50,7 @@ public class UserKeyController {
     @GetMapping("/public-key/{userId}")
     public ResponseEntity<?> getPublicKey(@PathVariable Integer userId) {
         UserKey key = userKeyRepository.findByUser_Id(userId)
-                .orElseThrow(() -> new RuntimeException("Public key not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Public key not found"));
 
         return ResponseEntity.ok(Map.of("publicKey", key.getPublicKey()));
     }

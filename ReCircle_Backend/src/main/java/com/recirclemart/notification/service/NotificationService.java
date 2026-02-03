@@ -1,5 +1,6 @@
 package com.recirclemart.notification.service;
 
+import com.recirclemart.exception.UnauthorizedException;
 import com.recirclemart.notification.entity.Notification;
 import com.recirclemart.notification.repository.NotificationRepository;
 
@@ -43,7 +44,7 @@ public class NotificationService {
     @Transactional
     public void markAsRead(Integer userId, Integer id) {
         Notification n = notificationRepository.findByIdAndUserId(id, userId)
-                .orElseThrow(() -> new RuntimeException("Not authorized"));
+                .orElseThrow(() -> new UnauthorizedException("Not authorized"));
 
         n.setIsRead(true);
         notificationRepository.save(n);
@@ -57,27 +58,10 @@ public class NotificationService {
     @Transactional
     public void deleteNotification(Integer userId, Integer id) {
         Notification n = notificationRepository.findByIdAndUserId(id, userId)
-                .orElseThrow(() -> new RuntimeException("Not authorized"));
+                .orElseThrow(() -> new UnauthorizedException("Not authorized"));
 
         notificationRepository.delete(n);
     }
 
-    // public void createNotification(Long userId,
-    // String type,
-    // String title,
-    // String message,
-    // Long listingId) {
-    // Notification n = Notification.builder()
-    //
-    // .type(type)
-    // .title(title)
-    // .message(message)
-    //
-    // .isRead(false)
-    // .build();
-    //
-    // notificationRepository.save(n);
-    //// TODO: insert into notifications table using JPA repo
-    //// Keeping as stub because your Node code calls controller function.
-    // }
+   
 }
