@@ -15,12 +15,34 @@ export function AuthProvider({ children }) {
     const token = localStorage.getItem("token");
 
     if (savedUser && token) {
-      setUser(JSON.parse(savedUser));
+      try {
+        const decoded = jwtDecode(token);
+        const isExpired = decoded.exp < Date.now() / 1000;
+
+        if (isExpired) {
+          // Token is dead: Clean up storage
+
+
+          localStorage.removeItem("user");
+          localStorage.removeItem("token");
+          localStorage.removeItem("e2ee_pub");
+          localStorage.removeItem("e2ee_priv");
+          setUser(null);
+        } else {
+          // Token is alive: Resume session
+          setUser(JSON.parse(savedUser));
+        }
+      } catch (error) {
+        // Invalid token format: Clean up
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        localStorage.removeItem("e2ee_pub");
+        localStorage.removeItem("e2ee_priv");
+      }
     }
 
     setLoading(false);
   }, []);
-
   // 🔴 LOGIN FUNCTION
   const login = async (email, password) => {
     const res = await api.post("/auth/login", { email, password });
