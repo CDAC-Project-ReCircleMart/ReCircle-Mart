@@ -96,6 +96,7 @@ public class AuthService {
 
 		User user = User.builder().firstName(firstName).lastName(lastName).email(email)
 				.password(passwordEncoder.encode(password)).avatar(avatarPath).role("user").publicKey(publicKey)
+				.active(true)
 				.build();
 
 		userRepository.save(user);
@@ -132,10 +133,9 @@ public class AuthService {
 
 	// LOGIN
 	public User login(String email, String password) {
-		
+
 		System.out.println(email + "  " + password);
 		User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
-		
 
 		// PLAIN TEXT CHECK
 

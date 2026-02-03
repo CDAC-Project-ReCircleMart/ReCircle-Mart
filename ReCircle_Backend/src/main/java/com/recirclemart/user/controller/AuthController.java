@@ -47,7 +47,9 @@ public class AuthController {
                         @RequestParam String password,
                         @RequestParam(required = false) String icon,
                         @RequestPart(required = false) MultipartFile avatar,
-                        @RequestParam(required = false) String publicKey) {
+                        @RequestParam(required = false) String publicKey
+
+        ) {
 
                 authService.registerUser(firstName, lastName, email, password, icon, avatar, publicKey);
 
@@ -76,13 +78,13 @@ public class AuthController {
 
                 String token = jwtUtil.createToken(auth);
                 User authenticatedUser = (User) auth.getPrincipal();
-                System.out.println("asdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffdaffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\nadsffffffffffffffffffffffffffffffff");
-               
-                
+                System.out.println(
+                                "asdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffdaffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\nadsffffffffffffffffffffffffffffffff");
+
                 // is user is deleted , then he should be no longer being able to login
                 System.out.println(authenticatedUser.getActive());
-                if(!authenticatedUser.getActive()) {
-                	throw new RuntimeException("User no longer member of ReCircleMart");
+                if (!authenticatedUser.getActive()) {
+                        throw new RuntimeException("User no longer member of ReCircleMart");
                 }
 
                 String pubKey = userKeyRepository.findByUser_Id(authenticatedUser.getId())

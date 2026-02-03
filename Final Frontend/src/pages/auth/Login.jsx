@@ -183,11 +183,15 @@ export default function Login({ onClose }) {
 
         <p className="login-note">
           New user?{" "}
-          <span className="resend" onClick={() => navigate("/register")}>
+          <span className="resend" onClick={() => {
+            if (onClose) onClose();
+            navigate("/register")
+          }
+          }>
             Register here
           </span>
         </p>
       </div>
-    </div>
+    </div >
   );
 }
