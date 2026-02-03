@@ -12,6 +12,8 @@ import com.recirclemart.user.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,76 +24,71 @@ import java.util.List;
 @RequestMapping("/api/listings")
 public class ListingController {
 
-    @Autowired
-    private ListingService listingService;
+	@Autowired
+	private ListingService listingService;
 
-    @Autowired
-    private UserRepository userRepository;
+	@Autowired
+	private UserRepository userRepository;
 
-    /* ===================== CREATE ===================== */
+	
+	
 
-    @PostMapping(consumes = "multipart/form-data")
-    public ResponseEntity<CreateListingResponse> create(
-            @ModelAttribute Listing listing,
-            @RequestParam(required = false) List<MultipartFile> images,
-            Principal principal) throws Exception {
+	@PostMapping(consumes = "multipart/form-data")
+	public ResponseEntity<CreateListingResponse> create(@ModelAttribute Listing listing,
+			@RequestParam(required = false) List<MultipartFile> images, Principal principal) throws Exception {
 
-        User seller = userRepository.findByEmail(principal.getName()).orElseThrow();
-        listing.setSeller(seller);
+		User seller = userRepository.findByEmail(principal.getName()).orElseThrow();
+		listing.setSeller(seller);
 
-        return ResponseEntity.ok(listingService.createListing(listing, images));
-    }
+		return ResponseEntity.ok(listingService.createListing(listing, images));
+	}
 
-    /* ===================== PUBLIC ===================== */
+	/* ===================== PUBLIC ===================== */
 
-    @GetMapping
-    public ResponseEntity<List<ListingCardDTO>> getAll() {
-        return ResponseEntity.ok(listingService.getAllListingsCards());
-    }
+	@GetMapping
+	public ResponseEntity<List<ListingCardDTO>> getAll() {
+		return ResponseEntity.ok(listingService.getAllListingsCards());
+	}
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ListingDetailDTO> getOne(@PathVariable Integer id) {
-        return ResponseEntity.ok(listingService.getSingleListing(id));
-    }
+	@GetMapping("/{id}")
+	public ResponseEntity<ListingDetailDTO> getOne(@PathVariable Integer id) {
+		return ResponseEntity.ok(listingService.getSingleListing(id));
+	}
 
-    /* ===================== SELLER ===================== */
+	/* ===================== SELLER ===================== */
 
-    @GetMapping("/user/me")
-    public ResponseEntity<List<ListingCardDTO>> myListings(Principal principal) {
-        User user = userRepository.findByEmail(principal.getName()).orElseThrow();
-        return ResponseEntity.ok(listingService.getMyListings(user.getId()));
-    }
+	@GetMapping("/user/me")
+	public ResponseEntity<List<ListingCardDTO>> myListings(Principal principal) {
+		User user = userRepository.findByEmail(principal.getName()).orElseThrow();
+		return ResponseEntity.ok(listingService.getMyListings(user.getId()));
+	}
 
-    @GetMapping("/user/{id}")
-    public ResponseEntity<List<ListingCardDTO>> userListings(@PathVariable Integer id) {
-        return ResponseEntity.ok(listingService.getUserListingsById(id));
-    }
+	@GetMapping("/user/{id}")
+	public ResponseEntity<List<ListingCardDTO>> userListings(@PathVariable Integer id) {
+		return ResponseEntity.ok(listingService.getUserListingsById(id));
+	}
 
-    /* ===================== UPDATE / DELETE ===================== */
+	/* ===================== UPDATE / DELETE ===================== */
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ApiMessageResponse> update(
-            @PathVariable Integer id,
-            @RequestBody Listing updated,
-            Principal principal) {
+	@PutMapping("/{id}")
+	public ResponseEntity<ApiMessageResponse> update(@PathVariable Integer id, @RequestBody Listing updated,
+			Principal principal) {
 
-        User user = userRepository.findByEmail(principal.getName()).orElseThrow();
-        return ResponseEntity.ok(listingService.updateListing(id, user.getId(), updated));
-    }
+		User user = userRepository.findByEmail(principal.getName()).orElseThrow();
+		return ResponseEntity.ok(listingService.updateListing(id, user.getId(), updated));
+	}
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<ApiMessageResponse> delete(
-            @PathVariable Integer id,
-            Principal principal) {
+	@DeleteMapping("/{id}")
+	public ResponseEntity<ApiMessageResponse> delete(@PathVariable Integer id, Principal principal) {
 
-        User user = userRepository.findByEmail(principal.getName()).orElseThrow();
-        return ResponseEntity.ok(listingService.deleteListing(id, user.getId()));
-    }
+		User user = userRepository.findByEmail(principal.getName()).orElseThrow();
+		return ResponseEntity.ok(listingService.deleteListing(id, user.getId()));
+	}
 
-    /* ===================== SEARCH ===================== */
+	/* ===================== SEARCH ===================== */
 
-    @GetMapping("/search")
-    public ResponseEntity<List<Listing>> search(@RequestParam String q) {
-        return ResponseEntity.ok(listingService.search(q));
-    }
+	@GetMapping("/search")
+	public ResponseEntity<List<Listing>> search(@RequestParam String q) {
+		return ResponseEntity.ok(listingService.search(q));
+	}
 }

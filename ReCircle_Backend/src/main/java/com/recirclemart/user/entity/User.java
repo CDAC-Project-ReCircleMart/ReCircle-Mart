@@ -53,12 +53,9 @@ public class User implements UserDetails {
     @Column(nullable = false, length = 500)
 
     private String publicKey;
-    
-    
-    
-    @Column(nullable = false)
-    private Boolean active = true;   // or "deleted" = false
 
+    @Column(nullable = true)
+    private Boolean active = true; // or "deleted" = false
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

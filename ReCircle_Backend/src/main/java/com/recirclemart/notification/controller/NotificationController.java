@@ -2,6 +2,7 @@ package com.recirclemart.notification.controller;
 
 import com.recirclemart.user.entity.User;
 import com.recirclemart.user.repository.UserRepository;
+import com.recirclemart.exception.ResourceNotFoundException;
 import com.recirclemart.notification.service.NotificationService;
 import com.recirclemart.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class NotificationController {
     private User getCurrentUser() {
         String email = SecurityUtil.getCurrentEmail();
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
     // GET /api/notifications

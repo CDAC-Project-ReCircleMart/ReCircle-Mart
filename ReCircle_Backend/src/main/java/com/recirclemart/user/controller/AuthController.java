@@ -1,6 +1,8 @@
 package com.recirclemart.user.controller;
 
+import com.recirclemart.exception.ResourceNotFoundException;
 import com.recirclemart.security.JwtUtil;
+import com.recirclemart.user.dto.request.UserRegisterRequestDTO;
 import com.recirclemart.user.dto.response.LoginResponse;
 import com.recirclemart.user.dto.response.UserResponse;
 import com.recirclemart.user.entity.User;
@@ -40,25 +42,20 @@ public class AuthController {
         private UserKeyRepository userKeyRepository;
 
         @PostMapping(value = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-        public ResponseEntity<?> register(
-                        @RequestParam String firstName,
-                        @RequestParam String lastName,
-                        @RequestParam String email,
-                        @RequestParam String password,
-                        @RequestParam(required = false) String icon,
-                        @RequestPart(required = false) MultipartFile avatar,
-                        @RequestParam(required = false) String publicKey) {
+        public ResponseEntity<?> register(UserRegisterRequestDTO userRegister)
 
-                authService.registerUser(firstName, lastName, email, password, icon, avatar, publicKey);
+        {
 
-                if (publicKey != null && !publicKey.isBlank()) {
-                        User created = userRepository.findByEmail(email)
-                                        .orElseThrow(() -> new RuntimeException("User not found after registration"));
+                authService.registerUser(userRegister);
+
+                if (userRegister.getPublicKey() != null && !userRegister.getPublicKey().isBlank()) {
+                        User created = userRepository.findByEmail(userRegister.getEmail())
+                                        .orElseThrow(() -> new ResourceNotFoundException("User not found after registration"));
 
                         UserKey key = userKeyRepository.findByUser_Id(created.getId())
                                         .orElse(UserKey.builder().user(created).build());
 
-                        key.setPublicKey(publicKey);
+                        key.setPublicKey(userRegister.getPublicKey());
                         userKeyRepository.save(key);
                 }
 
@@ -76,13 +73,11 @@ public class AuthController {
 
                 String token = jwtUtil.createToken(auth);
                 User authenticatedUser = (User) auth.getPrincipal();
-                System.out.println("asdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffdaffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\nadsffffffffffffffffffffffffffffffff");
-               
                 
-                // is user is deleted , then he should be no longer being able to login
+                // if user is deleted , then he/she should be no longer being able to login
                 System.out.println(authenticatedUser.getActive());
-                if(!authenticatedUser.getActive()) {
-                	throw new RuntimeException("User no longer member of ReCircleMart");
+                if (!authenticatedUser.getActive()) {
+                        throw new ResourceNotFoundException("User no longer member of ReCircleMart");
                 }
 
                 String pubKey = userKeyRepository.findByUser_Id(authenticatedUser.getId())
@@ -103,8 +98,5 @@ public class AuthController {
                 return ResponseEntity.ok(response);
         }
 
-        @GetMapping("/hello")
-        public ResponseEntity<?> hello() {
-                return ResponseEntity.ok("Auth OK");
-        }
+       
 }
