@@ -27,7 +27,7 @@ public class FavouriteController {
 
     private final UserRepository userRepository;
 
-    // POST /api/favourites (heart click)
+    
     @PostMapping
     public ResponseEntity<ApiResponse> addFavourite(@Valid @RequestBody FavouriteRequest req,
             Authentication auth) {
@@ -39,7 +39,7 @@ public class FavouriteController {
         return ResponseEntity.ok(new ApiResponse("Added to favourites"));
     }
 
-    // DELETE /api/favourites/{listingId}
+   
     @DeleteMapping("/{listingId}")
     public ResponseEntity<ApiResponse> removeFavourite(@PathVariable Integer listingId,
             Authentication auth) {
@@ -51,7 +51,7 @@ public class FavouriteController {
         return ResponseEntity.ok(new ApiResponse("Removed from favourites"));
     }
 
-    // GET /api/favourites
+   
     @GetMapping
     public ResponseEntity<List<FavouriteListingResponse>> getMyFavourites(Authentication auth) {
 

@@ -22,7 +22,7 @@ public class ListingsChartPoint {
     private final LocalDate date;
     private final long listings;
 
-    // ✅ SINGLE constructor with exactly 2 params (matches query)
+ 
     public ListingsChartPoint(Date date, long listings) {
         this.date = date.toLocalDate();
         this.listings = listings;

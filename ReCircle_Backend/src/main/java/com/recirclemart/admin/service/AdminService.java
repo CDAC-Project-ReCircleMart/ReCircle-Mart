@@ -50,7 +50,7 @@ public class AdminService {
     private final ChatRepository chatRepository ; 
     
 
-    /* ===================== DASHBOARD ===================== */
+    
 
     public DashboardStatsResponse getDashboardStats() {
         long totalUsers = userRepository.count();
@@ -65,7 +65,7 @@ public class AdminService {
                 todayListings);
     }
 
-    /* ===================== CHART APIS ===================== */
+
 
     public UsersListingsChartResponse getUsersListingsChart() {
         List<UsersChartPoint> users = userRepository.usersPerDay();
@@ -73,7 +73,7 @@ public class AdminService {
         return new UsersListingsChartResponse(users, listings);
     }
 
-    // 🔥 FIXED: manual conversion from java.sql.Date → LocalDate
+    
     public List<VisitsChartPoint> getVisitsChart() {
         return visitRepository.visitsPerDayRaw()
                 .stream()
@@ -87,7 +87,7 @@ public class AdminService {
         return listingRepository.categoryCounts();
     }
 
-    /* ===================== EVENTS ===================== */
+   
 
     public List<AdminEventResponse> getAllEvents() {
         return adminEventRepository.findAllByOrderByEventDateAsc()
@@ -153,7 +153,7 @@ public class AdminService {
         userRepository.save(u);
     }
 
-    // 🔥 FIXED: FK-safe delete
+    
     @Transactional
     public void deleteUser(Integer id) {
 
@@ -164,16 +164,14 @@ public class AdminService {
             throw new IllegalArgumentException("You cannot delete yourself");
         }
 
-//        userKeyRepository.deleteByUserId(id); // delete child first
-//        userRepository.deleteById(id); // then parent
+//        userKeyRepository.deleteByUserId(id); // 
+//        userRepository.deleteById(id); //
         
         User target = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Cant delete this user"));
         
         target.setActive(false);
 
-        // Optional: also remove/disable their key so they can’t participate in new E2EE chats
-        // userKeyRepository.deleteByUserId(id);  // optional
-        // OR better: keep it, but block login anyway
+        
 
         userRepository.save(currentUser);
     }

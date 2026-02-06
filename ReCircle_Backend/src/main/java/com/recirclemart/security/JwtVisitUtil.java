@@ -40,12 +40,12 @@ public class JwtVisitUtil {
 
             if (id == null) return null;
 
-            // handle both string and number
+         
             if (id instanceof Number n) return n.intValue();
             return Integer.parseInt(id.toString());
 
         } catch (Exception e) {
-            // token invalid -> guest
+           
             return null;
         }
     }

@@ -42,22 +42,22 @@ public class Message {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    private String alg; // "AES-256-GCM"
+    private String alg; 
     @Column(columnDefinition = "TEXT")
-    private String iv; // base64
+    private String iv; 
     @Column(columnDefinition = "LONGTEXT")
-    private String ciphertext; // base64
+    private String ciphertext; 
     @Column(columnDefinition = "TEXT")
-    private String tag; // base64
+    private String tag; 
     @Column(columnDefinition = "LONGTEXT")
-    private String encKeyForReceiver; // base64 (RSA-OAEP encrypted AES key)
+    private String encKeyForReceiver; // 
 
-    // optional (helps for debugging / multi receiver)
+    
     @ManyToOne
     @JoinColumn(name = "receiver_id")
     private User receiver;
 
     @Column(columnDefinition = "LONGTEXT")
-    private String encKeyForSender; // base64 (RSA-OAEP encrypted AES key for sender)
+    private String encKeyForSender; 
 
 }

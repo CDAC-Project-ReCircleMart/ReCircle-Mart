@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface FavouriteRepository extends JpaRepository<Favourite, Long> {
 
-    // MySQL "INSERT IGNORE" equivalent
+    
     @Modifying
     @Query(value = "INSERT IGNORE INTO favourites (user_id, listing_id) VALUES (:userId, :listingId)", nativeQuery = true)
     int insertIgnore(@Param("userId") Integer userId, @Param("listingId") Integer listingId);
@@ -42,7 +42,7 @@ public interface FavouriteRepository extends JpaRepository<Favourite, Long> {
             """, nativeQuery = true)
     List<FavouriteListingProjection> findMyFavourites(@Param("userId") Integer userId);
 
-    // Projection for native query mapping
+    
     interface FavouriteListingProjection {
         Integer getId();
 

@@ -74,7 +74,7 @@ public class AuthController {
                 String token = jwtUtil.createToken(auth);
                 User authenticatedUser = (User) auth.getPrincipal();
                 
-                // if user is deleted , then he/she should be no longer being able to login
+               
                 System.out.println(authenticatedUser.getActive());
                 if (!authenticatedUser.getActive()) {
                         throw new ResourceNotFoundException("User no longer member of ReCircleMart");

@@ -25,14 +25,14 @@ public class AdminController {
 
     private final AdminService adminService;
 
-    /* ===================== DASHBOARD ===================== */
+  
 
     @GetMapping("/dashboard")
     public ResponseEntity<DashboardStatsResponse> getDashboardStats() {
         return ResponseEntity.ok(adminService.getDashboardStats());
     }
 
-    /* ===================== CHART APIS ===================== */
+    
 
     @GetMapping("/chart/users-listings")
     public ResponseEntity<UsersListingsChartResponse> getUsersListingsChart() {
@@ -49,7 +49,7 @@ public class AdminController {
         return ResponseEntity.ok(adminService.getCategoryChart());
     }
 
-    /* ===================== CALENDAR (EVENTS) ===================== */
+    
 
     @GetMapping("/events")
     public ResponseEntity<List<AdminEventResponse>> getAllEvents() {
@@ -72,7 +72,7 @@ public class AdminController {
         return ResponseEntity.ok(Map.of("message", "Event deleted successfully"));
     }
 
-    /* ===================== MANAGE USERS ===================== */
+    
 
     @GetMapping("/users")
     public ResponseEntity<UsersListResponse> getAllUsers() {
@@ -92,7 +92,7 @@ public class AdminController {
         return ResponseEntity.ok(Map.of("message", "User deleted successfully"));
     }
 
-    /* ===================== LISTINGS MANAGEMENT ===================== */
+   
 
     @GetMapping("/listings")
     public ResponseEntity<Map<String, Object>> getAllListings() {

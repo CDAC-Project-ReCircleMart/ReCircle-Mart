@@ -36,7 +36,7 @@ public class SecurityConfig {
     @Autowired
     private JwtFilter jwtFilter;
 
-    // 🔥 USE EXISTING PasswordEncoder from PasswordConfig
+    
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -46,7 +46,7 @@ public class SecurityConfig {
         AuthenticationManagerBuilder authManagerBuilder =
                 http.getSharedObject(AuthenticationManagerBuilder.class);
 
-        // 🔥 THIS LINE FIXES LOGIN
+     
         authManagerBuilder
                 .userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder);

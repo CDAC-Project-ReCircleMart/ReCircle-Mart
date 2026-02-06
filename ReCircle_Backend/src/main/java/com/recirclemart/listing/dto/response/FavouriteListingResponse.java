@@ -21,6 +21,6 @@ public class FavouriteListingResponse {
     private String description;
     private LocalDateTime createdAt;
 
-    // first image (like your subquery)
+    
     private String image;
 }

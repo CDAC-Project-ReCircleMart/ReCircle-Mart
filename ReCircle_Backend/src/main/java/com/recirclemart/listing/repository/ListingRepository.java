@@ -18,7 +18,7 @@ import java.util.Optional;
 
 public interface ListingRepository extends JpaRepository<Listing, Integer> {
 
-    /* ===================== PUBLIC (APPROVED ONLY) ===================== */
+    
 
     @Query("""
                 SELECT l FROM Listing l
@@ -27,7 +27,7 @@ public interface ListingRepository extends JpaRepository<Listing, Integer> {
             """)
     List<Listing> findApprovedListings();
 
-    /* ===================== SELLER ===================== */
+
 
     List<Listing> findBySeller(User seller);
 
@@ -40,7 +40,7 @@ public interface ListingRepository extends JpaRepository<Listing, Integer> {
             """, nativeQuery = true)
     List<Listing> findBySellerIdOrderByCreatedAtDesc(@Param("sellerId") Integer sellerId);
 
-    /* ===================== SEARCH ===================== */
+   
 
     @Query("""
                 SELECT l FROM Listing l
@@ -52,7 +52,7 @@ public interface ListingRepository extends JpaRepository<Listing, Integer> {
             """)
     List<Listing> search(@Param("q") String q);
 
-    /* ===================== ADMIN ===================== */
+    
 
     @Query("SELECT COUNT(l) FROM Listing l")
     long countTotalListings();
@@ -73,7 +73,7 @@ public interface ListingRepository extends JpaRepository<Listing, Integer> {
     @Query(value = "UPDATE listings SET status = :status WHERE id = :id", nativeQuery = true)
     void updateStatus(@Param("id") Integer id, @Param("status") String status);
 
-    /* ===================== DASHBOARD STATS ===================== */
+    
 
     @Query(value = """
                 SELECT COUNT(*) FROM listings WHERE DATE(created_at) = :today

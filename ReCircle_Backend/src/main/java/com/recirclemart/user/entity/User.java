@@ -55,20 +55,20 @@ public class User implements UserDetails {
     private String publicKey;
 
     @Column(nullable = true)
-    private Boolean active = true; // or "deleted" = false
+    private Boolean active = true; 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return AuthorityUtils.createAuthorityList(role);
     }
 
-    // ✅ Username for authentication (email)
+    
     @Override
     public String getUsername() {
         return this.email;
     }
 
-    // 🔥 REQUIRED: return BCrypt password
+    
     @Override
     public String getPassword() {
         return this.password;
@@ -89,10 +89,5 @@ public class User implements UserDetails {
         return true;
     }
 
-    // ✅ User enabled only if status = ACTIVE
-    // @Override
-    // public boolean isEnabled() {
-    // return status != null && "ACTIVE".equalsIgnoreCase(status.getStatusName());
-    // }
-
+   
 }

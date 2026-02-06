@@ -50,12 +50,12 @@ public class ChatService {
 
                 Object principal = authentication.getPrincipal();
 
-                // Case 1: principal is custom UserDetails
+               
                 if (principal instanceof User userDetails) {
                         return userDetails.getId();
                 }
 
-                // Case 2: principal is userId stored as String
+                
                 if (principal instanceof String userIdStr) {
                         return Integer.parseInt(userIdStr + "");
                 }
@@ -77,7 +77,7 @@ public class ChatService {
                         throw new IllegalArgumentException("You cannot chat with yourself");
                 }
 
-                // check existing (both directions)
+                
                 Optional<Chat> existing = chatRepository.findExisting(listingId, buyerId, sellerId);
                 if (existing.isPresent())
                         return existing.get().getId();
@@ -100,7 +100,7 @@ public class ChatService {
                 return chatRepository.save(chat).getId();
         }
 
-        /* -------------------- GET MY CHATS -------------------- */
+        
         public List<ChatListResponseDTO> getMyChats() {
                 User req_buyer = userRepository.findByEmail(SecurityUtil.getCurrentEmail())
                                 .orElseThrow(() -> new RuntimeException("Buyer not found"));
@@ -121,10 +121,10 @@ public class ChatService {
                                 .toList();
         }
 
-        /* -------------------- GET MESSAGES -------------------- */
+      
         public List<MessageResponseDTO> getMessages(Integer chatId) {
 
-                // 1) Auth: current user
+                
                 String email = SecurityUtil.getCurrentEmail();
                 if (email == null)
                         throw new RuntimeException("Unauthorized");
@@ -133,7 +133,7 @@ public class ChatService {
                                 .orElseThrow(() -> new RuntimeException("User not found"))
                                 .getId();
 
-                // 2) Chat exists + authorization (must be buyer or seller)
+                
                 Chat chat = chatRepository.findById(chatId)
                                 .orElseThrow(() -> new RuntimeException("Chat not found"));
 
@@ -143,7 +143,7 @@ public class ChatService {
                 if (!allowed)
                         throw new SecurityException("Not allowed");
 
-                // 3) Fetch messages + return encrypted payload (server never decrypts)
+                
                 return messageRepository.findByChat_IdOrderByIdAsc(chatId)
                                 .stream()
                                 .map(m -> new MessageResponseDTO(
@@ -163,15 +163,15 @@ public class ChatService {
                                 .toList();
         }
 
-        /* -------------------- SEND MESSAGE -------------------- */
+        
         public MessageResponseDTO sendMessage(Integer chatId, SendMessageRequestDTO req) {
 
-                // 1) Get current user (sender)
+                
                 User sender = userRepository.findByEmail(SecurityUtil.getCurrentEmail())
                                 .orElseThrow(() -> new RuntimeException("Sender not found"));
                 Integer senderId = sender.getId();
 
-                // 2) Basic validation
+               
                 if (chatId == null)
                         throw new IllegalArgumentException("chatId missing");
                 if (req == null)
@@ -188,7 +188,7 @@ public class ChatService {
                         throw new IllegalArgumentException("Missing encrypted payload fields");
                 }
 
-                // 3) Load chat + authorization
+                
                 Chat chat = chatRepository.findById(chatId)
                                 .orElseThrow(() -> new RuntimeException("Chat not found"));
 
@@ -196,7 +196,7 @@ public class ChatService {
                 if (!allowed)
                         throw new SecurityException("Not allowed to send in this chat");
 
-                // 4) Load receiver + validate receiver is the other party
+              
                 User receiver = userRepository.findById(req.getReceiverId())
                                 .orElseThrow(() -> new RuntimeException("Receiver not found"));
 
@@ -209,13 +209,13 @@ public class ChatService {
                 if (!receiverValid)
                         throw new SecurityException("Receiver must be the other participant");
 
-                // 5) Save encrypted message (server never decrypts)
+
                 Message saved = messageRepository.save(
                                 Message.builder()
                                                 .chat(chat)
                                                 .sender(sender)
                                                 .receiver(receiver)
-                                                .message(null) // legacy plaintext not used
+                                                .message(null) 
                                                 .alg(req.getAlg())
                                                 .iv(req.getIv())
                                                 .ciphertext(req.getCiphertext())
@@ -224,7 +224,7 @@ public class ChatService {
                                                 .encKeyForSender(req.getEncKeyForSender())
                                                 .build());
 
-                // 6) Return encrypted response
+               
                 return new MessageResponseDTO(
                                 saved.getId(),
                                 chat.getId(),
@@ -239,7 +239,7 @@ public class ChatService {
                                 saved.getCreatedAt());
         }
 
-        /* -------------------- DELETE CHAT -------------------- */
+        
         @Transactional
         public void deleteChat(Integer chatId) {
                 Integer userId = getCurrentUserId();

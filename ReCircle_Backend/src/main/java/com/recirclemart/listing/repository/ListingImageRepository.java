@@ -10,15 +10,8 @@ import com.recirclemart.listing.entity.ListingImage;
 
 import java.util.List;
 
-//
-//public interface ListingImageRepository extends JpaRepository<ListingImage, Integer> {
-//
-//    // Get all images for listing
-//    List<ListingImage> findByListing(Listing listing);
-//
-//    // Delete when listing deleted
-//    void deleteByListing(Listing listing);
-//}
+
+
 public interface ListingImageRepository extends JpaRepository<ListingImage, Integer> {
 
 	@Query(value = """

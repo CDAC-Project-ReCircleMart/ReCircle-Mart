@@ -19,15 +19,6 @@ public class JwtFilter extends OncePerRequestFilter {
 	@Autowired
 	private JwtUtil jwtUtil;
 
-	// @Override
-	// protected boolean shouldNotFilter(HttpServletRequest request) throws
-	// ServletException {
-	// System.out.println("asd");
-	// String path = request.getServletPath();
-	// System.out.println(path);
-	// return path.equals("/api/users/register/") ||
-	// path.startsWith("/authenticate");
-	// }
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)

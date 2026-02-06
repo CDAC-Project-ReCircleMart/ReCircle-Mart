@@ -14,7 +14,7 @@ public interface VisitRepository extends JpaRepository<Visit, Integer> {
     @Query(value = "SELECT COUNT(*) FROM visits WHERE DATE(created_at) = :today", nativeQuery = true)
     long countToday(@Param("today") LocalDate today);
 
-    // 🔥 FIX: return Object[] instead of DTO
+    
     @Query(value = """
             SELECT DATE(created_at) AS date, COUNT(*) AS visits
             FROM visits

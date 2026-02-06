@@ -32,7 +32,7 @@ public class ListingService {
         this.listingImageRepository = listingImageRepository;
     }
 
-    /* ===================== CREATE ===================== */
+  
 
     @Transactional
     public CreateListingResponse createListing(Listing listing, List<MultipartFile> images) throws Exception {
@@ -49,7 +49,7 @@ public class ListingService {
         return new CreateListingResponse("Listing created successfully", saved.getId());
     }
 
-    /* ===================== PUBLIC (APPROVED ONLY) ===================== */
+    
 
     public List<ListingCardDTO> getAllListingsCards() {
         List<Listing> listings = listingRepository.findApprovedListings();
@@ -62,7 +62,7 @@ public class ListingService {
         return out;
     }
 
-    /* ===================== SELLER ===================== */
+    
 
     public List<ListingCardDTO> getMyListings(Integer userId) {
         List<Listing> listings = listingRepository.findBySellerIdOrderByCreatedAtDesc(userId);
@@ -79,7 +79,7 @@ public class ListingService {
         return getMyListings(sellerId);
     }
 
-    /* ===================== DETAILS ===================== */
+
 
     public ListingDetailDTO getSingleListing(Integer id) {
         Listing listing = listingRepository.findById(id)
@@ -106,7 +106,7 @@ public class ListingService {
                         seller.getAvatar()));
     }
 
-    /* ===================== UPDATE ===================== */
+  
 
     @Transactional
     public ApiMessageResponse updateListing(Integer listingId, Integer userId, Listing updated) {
@@ -125,7 +125,7 @@ public class ListingService {
         return new ApiMessageResponse("Listing updated successfully");
     }
 
-    /* ===================== DELETE ===================== */
+   
 
     @Transactional
     public ApiMessageResponse deleteListing(Integer listingId, Integer userId) {
@@ -138,13 +138,13 @@ public class ListingService {
         return new ApiMessageResponse("Listing deleted successfully");
     }
 
-    /* ===================== SEARCH ===================== */
+   
 
     public List<Listing> search(String q) {
         return listingRepository.search(q);
     }
 
-    /* ===================== HELPERS ===================== */
+    
 
     private ListingCardDTO toCardDTO(Listing l, String firstImage) {
         return new ListingCardDTO(

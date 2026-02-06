@@ -16,7 +16,7 @@ public class NotificationService {
 
     private final NotificationRepository notificationRepository;
 
-    // Equivalent to Node createNotification()
+    
     public void createNotification(Integer userId, String type, String title, String message,
             Integer listingId, Integer relatedUserId) {
 

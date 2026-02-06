@@ -12,7 +12,7 @@ public class ApiErrorResponse {
     private String message;
     private String path;
 
-    // Optional: for validation errors (field -> message)
+    
     private Map<String, String> fieldErrors;
 
     public ApiErrorResponse() {}

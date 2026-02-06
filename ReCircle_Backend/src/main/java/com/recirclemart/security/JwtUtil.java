@@ -37,12 +37,12 @@ public class JwtUtil {
 		jwtKey = Keys.hmacShaKeyFor(jwtSecret.getBytes());
 	}
 
-	// ===================== CREATE TOKEN =====================
+	
 	public String createToken(Authentication auth) {
 
 		User user = (User) auth.getPrincipal();
 
-		// ✅ FIX: STORE EMAIL IN JWT SUBJECT
+		
 		String subject = user.getEmail();
 
 		String roles = user.getAuthorities().stream()
@@ -52,7 +52,7 @@ public class JwtUtil {
 		System.out.println("JWT subject (email): " + subject);
 
 		return Jwts.builder()
-				.setSubject(subject) // ✅ EMAIL
+				.setSubject(subject) 
 				.setIssuedAt(new Date())
 				.setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
 				.claim("role", roles)
@@ -60,7 +60,7 @@ public class JwtUtil {
 				.compact();
 	}
 
-	// ===================== VALIDATE TOKEN =====================
+	
 	public Authentication validateToken(String token) {
 
 		JwtParser parser = Jwts.parserBuilder()
@@ -71,14 +71,14 @@ public class JwtUtil {
 				.parseClaimsJws(token)
 				.getBody();
 
-		// ✅ NOW THIS IS EMAIL
+		
 		String email = claims.getSubject();
 
 		String roles = (String) claims.get("role");
 		List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(roles);
 
 		return new UsernamePasswordAuthenticationToken(
-				email, // principal = EMAIL
+				email, 
 				null,
 				authorities);
 	}

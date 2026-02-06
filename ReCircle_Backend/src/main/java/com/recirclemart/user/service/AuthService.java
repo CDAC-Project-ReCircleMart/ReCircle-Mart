@@ -81,11 +81,11 @@ public class AuthService {
 
 		String avatarPath;
 
-		// ✅ Case 1: User uploaded image file
+		
 		if (userRegister.getAvatar() != null && !userRegister.getAvatar().isEmpty()) {
 			avatarPath = saveAvatarFile(userRegister.getAvatar());
 		}
-		// ✅ Case 2: User selected predefined icon
+		
 		else {
 			if (userRegister.getIcon() == null || userRegister.getIcon().isBlank()) {
 				throw new BadRequestException("Please select an avatar or icon!");
@@ -125,24 +125,24 @@ public class AuthService {
 		}
 	}
 
-	// REGISTER
+	
 	public User register(User user) {
-		return userRepository.save(user); // stores plain password
+		return userRepository.save(user); 
 	}
 
-	// LOGIN
+	
 	public User login(String email, String password) {
 
 		System.out.println(email + "  " + password);
 		User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
 
-		// PLAIN TEXT CHECK
+		
 
 		System.out.println(email + "  " + passwordEncoder.encode(password));
 		if (!user.getPassword().equals(password)) {
 			throw new RuntimeException("Invalid password");
 		}
 
-		return user; // success
+		return user; 
 	}
 }

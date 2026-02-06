@@ -33,23 +33,11 @@ public class VisitLoggingFilter extends OncePerRequestFilter {
             Integer userId = null;
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-            // If JwtFilter has set auth, extract the user id
+            
             if (auth != null && auth.isAuthenticated() && auth.getPrincipal() != null) {
 
-                // OPTION A: If your principal is your UserDetails implementation
-                // and it has getId(), cast and read it.
-
-                // Example:
-                // if (auth.getPrincipal() instanceof MyUserDetails u) userId = u.getId();
-
-                // OPTION B (works immediately): if you stored userId in auth.getName()
-                // or as a claim and set it as principal string.
-                // (depends on your jwtUtil.validateToken implementation)
-                String name = auth.getName(); // often email/username
-                // If name is numeric in your project, parse it:
-                // userId = Integer.parseInt(name);
-
-                // If not numeric, keep userId null OR implement Option A properly.
+                String name = auth.getName(); 
+                
             }
 
             visitRepository.save(

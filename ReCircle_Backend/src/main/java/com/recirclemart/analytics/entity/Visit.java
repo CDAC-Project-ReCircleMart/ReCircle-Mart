@@ -20,7 +20,7 @@ public class Visit {
     private Integer id;
 
     @Column(name = "user_id")
-    private Integer userId; // nullable
+    private Integer userId; 
 
     @Column(name = "ip_address")
     private String ipAddress;

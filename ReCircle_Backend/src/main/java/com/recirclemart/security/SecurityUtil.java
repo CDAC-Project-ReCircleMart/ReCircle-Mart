@@ -6,6 +6,6 @@ public class SecurityUtil {
     public static String getCurrentEmail() {
         var auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null || auth.getPrincipal() == null) return null;
-        return auth.getPrincipal().toString(); // because principal = email
+        return auth.getPrincipal().toString(); 
     }
 }

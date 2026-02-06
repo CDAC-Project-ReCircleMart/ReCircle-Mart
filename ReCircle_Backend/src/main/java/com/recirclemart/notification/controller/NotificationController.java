@@ -33,7 +33,7 @@ public class NotificationController {
                 "notifications", notificationService.getUserNotifications(me.getId())));
     }
 
-    // GET /api/notifications/unread/count
+    
     @GetMapping("/unread/count")
     public ResponseEntity<?> getUnreadCount() {
         User me = getCurrentUser();
@@ -41,7 +41,7 @@ public class NotificationController {
                 "unreadCount", notificationService.getUnreadCount(me.getId())));
     }
 
-    // PUT /api/notifications/{id}/read
+    
     @PutMapping("/{id}/read")
     public ResponseEntity<?> markAsRead(@PathVariable Integer id) {
         User me = getCurrentUser();
@@ -49,7 +49,7 @@ public class NotificationController {
         return ResponseEntity.ok(Map.of("message", "Notification marked as read"));
     }
 
-    // PUT /api/notifications
+
     @PutMapping
     public ResponseEntity<?> markAllAsRead() {
         User me = getCurrentUser();
@@ -57,7 +57,7 @@ public class NotificationController {
         return ResponseEntity.ok(Map.of("message", "All notifications marked as read"));
     }
 
-    // DELETE /api/notifications/{id}
+    
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteNotification(@PathVariable Integer id) {
         User me = getCurrentUser();

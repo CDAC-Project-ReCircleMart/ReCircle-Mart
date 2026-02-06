@@ -17,5 +17,5 @@ public class UserResponse {
     private LocalDateTime created_at;
     private String role;
 
-    private String e2eePublicKey; // ✅ add this
+    private String e2eePublicKey; 
 }

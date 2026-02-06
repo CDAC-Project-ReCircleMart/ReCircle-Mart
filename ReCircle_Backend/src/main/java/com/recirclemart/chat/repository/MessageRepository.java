@@ -12,6 +12,6 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
 
     void deleteByChat_Id(Integer chatId);
 
-    // Load full chat messages in order
+   
     List<Message> findByChatOrderByCreatedAtAsc(Chat chat);
 }
