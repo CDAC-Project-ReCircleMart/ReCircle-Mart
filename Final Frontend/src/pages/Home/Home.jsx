@@ -27,31 +27,31 @@ import "./Home.css";
 const categories = [
   {
     name: "Cars",
-    img: "https://images.unsplash.com/photo-1503376780353-7e6692767b70",
+    img: "https://www.shutterstock.com/image-photo/seattle-washington-usa-march-31-600nw-2284495465.jpg",
   },
   {
     name: "Bikes",
-    img: "https://images.unsplash.com/photo-1518655048521-f130df041f66",
+    img: "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmlrZXxlbnwwfHwwfHx8MA%3D%3D",
   },
   {
     name: "Electronics",
-    img: "https://images.unsplash.com/photo-1518770660439-4636190af475",
+    img: "https://images.unsplash.com/photo-1562408590-e32931084e23?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8ZWxlY3Ryb25pY3N8ZW58MHx8MHx8fDA%3D",
   },
   {
     name: "Mobiles",
-    img: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9",
+    img: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bW9iaWxlfGVufDB8fDB8fHww",
   },
   {
     name: "Fashion",
-    img: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d",
+    img: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fGZhc2hpb258ZW58MHx8MHx8fDA%3D",
   },
   {
     name: "Pets",
-    img: "https://images.unsplash.com/photo-1517849845537-4d257902454a",
+    img: "https://plus.unsplash.com/premium_photo-1707353402061-c31b6ba8562e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cGV0c3xlbnwwfHwwfHx8MA%3D%3D",
   },
   {
     name: "Sports & Hobbies",
-    img: "https://images.unsplash.com/photo-1508609349937-5ec4ae374ebf",
+    img: "https://images.unsplash.com/photo-1628779238951-be2c9f2a59f4?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8c3BvcnRzfGVufDB8fDB8fHww",
   },
 ];
 

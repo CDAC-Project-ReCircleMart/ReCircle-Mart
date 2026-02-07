@@ -1,9 +1,3 @@
-/**
- * Notifications Page
- * - Shows all notifications fetched from API
- * - Mark single / all as read
- */
-
 import { useState, useEffect } from "react";
 import NotificationList from "../../components/notifications/NotificationList";
 import {
