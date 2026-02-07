@@ -1,5 +1,3 @@
-//
-
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import api from "../../services/api";
@@ -48,8 +46,8 @@ export default function ProductDetail() {
   const images =
     listing.images && listing.images.length > 0
       ? listing.images.map((img) =>
-          img.startsWith("/uploads") ? `http://localhost:8080${img}` : img,
-        )
+        img.startsWith("/uploads") ? `http://localhost:8080${img}` : img,
+      )
       : ["/no-image.png"];
 
   const prevImage = () => {
@@ -98,9 +96,9 @@ export default function ProductDetail() {
     <div className="product-page">
       {/* IMAGE SECTION */}
       <div className="image-section">
-      <button className="close-btn" onClick={() => navigate("/")}>
-  <i className="fa-solid fa-xmark"></i>
-</button>
+        <button className="close-btn" onClick={() => navigate("/")}>
+          <i className="fa-solid fa-xmark"></i>
+        </button>
 
         {images.length > 1 && (
           <button className="arrow left-arrow" onClick={prevImage}>

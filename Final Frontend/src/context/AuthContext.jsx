@@ -1,5 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import api from "../services/api";
+import { jwtDecode } from "jwt-decode";
+
 
 // CREATE CONTEXT
 const AuthContext = createContext();
@@ -22,7 +24,7 @@ export function AuthProvider({ children }) {
         if (isExpired) {
           // Token is dead: Clean up storage
 
-
+          console.log("this message is from in if statement ")
           localStorage.removeItem("user");
           localStorage.removeItem("token");
           localStorage.removeItem("e2ee_pub");
@@ -34,6 +36,7 @@ export function AuthProvider({ children }) {
         }
       } catch (error) {
         // Invalid token format: Clean up
+        console.log("this message from catch block")
         localStorage.removeItem("user");
         localStorage.removeItem("token");
         localStorage.removeItem("e2ee_pub");
