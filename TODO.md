@@ -7,7 +7,7 @@ A structured plan to enhance the overall look, feel, and usability of the applic
 ## ✅ Tasks & Steps
 
 ### 1. Install & Configure UI Framework
-- [ ] Install **Bootstrap** for improved layout and components  
+- [ ] Install **Bootstrap** for improved layout and components  for better user interaction 
 - [ ] Import Bootstrap stylesheet in `main.jsx`
 
 ### 2. Navbar Enhancements
