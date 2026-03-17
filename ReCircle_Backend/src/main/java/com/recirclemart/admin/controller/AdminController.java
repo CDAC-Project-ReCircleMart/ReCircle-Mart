@@ -34,15 +34,18 @@ public class AdminController {
 
     
 
-    @GetMapping("/chart/users-listings")
-    public ResponseEntity<UsersListingsChartResponse> getUsersListingsChart() {
-        return ResponseEntity.ok(adminService.getUsersListingsChart());
-    }
-
+   
     @GetMapping("/chart/visits")
     public ResponseEntity<List<VisitsChartPoint>> getVisitsChart() {
         return ResponseEntity.ok(adminService.getVisitsChart());
     }
+
+
+     @GetMapping("/chart/users-listings")
+    public ResponseEntity<UsersListingsChartResponse> getUsersListingsChart() {
+        return ResponseEntity.ok(adminService.getUsersListingsChart());
+    }
+
 
     @GetMapping("/chart/categories")
     public ResponseEntity<List<CategoryChartPoint>> getCategoryChart() {
