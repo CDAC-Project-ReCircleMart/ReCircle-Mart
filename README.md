@@ -47,8 +47,9 @@ This project was developed as part of a **CDAC academic project** to demonstrate
 - Image Upload Functionality
 - User Profile Management
 - Real-time Chat between Buyers and Sellers
+ - REST API–based backend integration
 - Responsive and User-Friendly Interface
-- REST API–based backend integration
+
 
 ---
 
